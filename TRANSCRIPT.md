@@ -145,7 +145,7 @@ Tell me when that's done.
 <!-- transcript-session: b0e219a6-739d-4e85-9ac5-625c059752fe | 2026-10-07T21:10:06.126Z -->
 ## Session `b0e219a6` — 2026-10-07 21:10:06
 
-*5 user turns. Tool outputs and reasoning omitted.*
+*8 user turns. Tool outputs and reasoning omitted.*
 
 **User:**
 where am I at
@@ -211,5 +211,51 @@ Lorenzo Gurrola
 **Claude:**
 - 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/WRITEUP.md
 - 🔧 `Bash` — Write the transcript and commit the name and date
+- 🔧 `Bash` — Start the evaluation viewer in the background
+- 🔧 `Bash` — Check the viewer's startup output
+I added your name and today's date to the top of `WRITEUP.md`:
+
+```
+**Name:** Lorenzo Gurrola
+**Date:** October 7, 2026
+```
+
+I regenerated `TRANSCRIPT.md` and committed this as `Name and date`.
+
+I also started the evaluation viewer, which is the web page where you'll browse graded answers later. It should open at `http://localhost:8440`. It hasn't printed anything yet, so I can't confirm it started.
+
+Did the viewer open in your browser?
+
+**User:**
+yes
+
+**Claude:**
+Good, the viewer is running.
+
+Next is the **Step D** slot: "How the MCP server connects Claude Code to Colab."
+
+You've now seen it work: I ran commands here on your laptop, and they took effect in a notebook on Google's computer.
+
+How do you think that connection works? What are the pieces, and how does a command get from Claude Code to the Colab notebook? Your best guess is fine.
+
+**User:**
+Claude connects to the MCP, which connects to the Colab notebook. There's also something to do with a host and server in there too
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/WRITEUP.md
+- 🔧 `Bash` — Show the Step D instructions
+I wrote your answer into the Step D slot as you said it. The only change is a period at the end:
+
+> Claude connects to the MCP, which connects to the Colab notebook. There's also something to do with a host and server in there too.
+
+The question asks how the connection reaches a notebook on Google's computer. Right now your answer names the pieces in order, but it doesn't say how a command gets from one to the next. It also doesn't say what "host and server" refer to.
+
+Do you want to add anything to it, or keep it as it is?
+
+**User:**
+keep
+
+**Claude:**
+- 🔧 `Skill` — checkpoint
 
 <!-- end-session: b0e219a6-739d-4e85-9ac5-625c059752fe -->
