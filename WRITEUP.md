@@ -15,7 +15,7 @@ It saves you the time and energy of copy-pasting a lot of input and output. One 
 
 ### Step D: How the MCP server connects Claude Code to Colab
 
-XXXX
+Claude connects to the MCP, which connects to the Colab notebook. There's also something to do with a host and server in there too.
 
 ## Part 1: The tools and the tests
 
