@@ -1,17 +1,17 @@
 # COMP 440 HW2: Whose Preferences Count?
 
-**Name:** XXXX
-**Date:** XXXX
+**Name:** Lorenzo Gurrola
+**Date:** October 7, 2026
 
 ## Part 0: Set up
 
 ### Step B: What an MCP server is and why it's useful
 
-XXXX
+An MCP server uses the Model Context Protocol, which lets you connect tools to Claude to give it more capabilities. One example is the GitHub MCP server.
 
 ### Step B: Why not paste code into Colab yourself
 
-XXXX
+It saves you the time and energy of copy-pasting a lot of input and output. One downside is less time spent observing the input and output, which could lead to mistakes
 
 ### Step D: How the MCP server connects Claude Code to Colab
 
