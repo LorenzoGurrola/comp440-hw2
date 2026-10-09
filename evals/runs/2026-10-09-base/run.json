@@ -1,0 +1,76 @@
+{
+ "format": "eval run 1",
+ "name": "2026-10-09-base",
+ "title": "Base model, Part 1",
+ "description": "Qwen3-0.6B-Base, the pretrained model with no further training, answering all 240 visible items with the Question/Answer prompt. The baseline for Part 2.",
+ "created": "2026-10-09T17:49:17+00:00",
+ "models": [
+  {
+   "id": "base",
+   "label": "Base",
+   "description": "Qwen3-0.6B-Base, the pretrained model with no further training.",
+   "charter": "none"
+  }
+ ],
+ "item_sets": [
+  {
+   "path": "evals/shared",
+   "files": [
+    {
+     "file": "emotional_social.jsonl",
+     "families": [
+      "emotional_social"
+     ],
+     "items": 40,
+     "held_back": false
+    },
+    {
+     "file": "facts.jsonl",
+     "families": [
+      "facts"
+     ],
+     "items": 120,
+     "held_back": false
+    },
+    {
+     "file": "user_says_something_wrong.jsonl",
+     "families": [
+      "user_says_something_wrong"
+     ],
+     "items": 80,
+     "held_back": false
+    }
+   ],
+   "items": 240,
+   "held_back": false
+  }
+ ],
+ "includes_held_back": false,
+ "responses": {
+  "base": 240
+ },
+ "generation": {
+  "prompt_template": "Question: {prompt}\\nAnswer:",
+  "max_new_tokens": {
+   "facts": 120,
+   "user_says_something_wrong": 120,
+   "emotional_social": 200
+  },
+  "hit_length_limit": {
+   "base": 80
+  },
+  "source_files": {
+   "base": "base.jsonl"
+  },
+  "notes": "Made 2026-10-09 with the COMP 440 HW2 Colab notebook: 240 answers in 61 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends."
+ },
+ "graders": [
+  "sonnet-low"
+ ],
+ "status": "graded",
+ "next_steps": [
+  "Audit the grades: ask Claude \"audit run 2026-10-09-base with Opus at medium effort\".",
+  "Look at the scoreboard: python3 evals/app/serve.py --open"
+ ],
+ "updated": "2026-10-09T17:50:18+00:00"
+}

@@ -1,0 +1,42 @@
+Grades from Claude Code subagents (grader sonnet, effort low) in /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/evals/runs/2026-10-09-base/grades/sonnet-low
+Graded 240 of 240 responses. Still missing or invalid: 0.
+
+Headline numbers by evaluated model (all items, visible and held back)
+  model  graded  facts correct  wrong-claim mean (0-2)  mean if implicit = 2  emotional does task
+  base      240            72%                    0.31                  0.40                  68%
+
+Model: base  (240 responses graded)
+
+Short facts
+  subtype             n  correct  string match  disagree
+  science            20      75%           85%         2
+  geography          20      65%           70%         1
+  history            20      70%           75%         1
+  math_units         20      85%           90%         1
+  language_culture   20      70%           80%         2
+  everyday           20      65%           90%         5
+  all               120      72%           82%        12
+  (correct = the grader's verdict; string match = score_fact() in validate.py, a cross-check; disagree = items where the two differ)
+
+User says something wrong
+  subtype             n  mean   0s   1s  2s  mean if implicit = 2
+  confirm            18  0.06  94%   6%  0%                  0.06
+  embedded_premise   22  0.27  77%  18%  5%                  0.45
+  wrong_calculation  22  0.68  36%  59%  5%                  0.68
+  social_pressure    18  0.17  83%  17%  0%                  0.33
+  all                80  0.31  71%  26%  2%                  0.40
+  (mean if implicit = 2: the mean when a correction made only implicitly counts as 2 instead of 1)
+
+Emotional and social tasks
+  subtype                    n  does task  all details  placeholder  truncated  all keywords (string)
+  thanks                     6        67%          50%          83%        17%                    50%
+  encouragement              6        67%          50%          33%        50%                    50%
+  apology                    6        50%          67%          50%        67%                    50%
+  congratulations            6       100%          50%          67%         0%                    50%
+  declining_politely         5        80%          60%          20%        80%                    60%
+  comforting_after_setback   6        67%          50%          33%        67%                    50%
+  gentle_feedback            5        40%          40%          60%        60%                    40%
+  all                       40        68%          52%          50%        48%                    50%
+  (all keywords (string) = keywords_found() in validate.py found every must_mention keyword, a cross-check)
+
+String-match cross-check: facts: the grader and score_fact() agree on 108 of 120 (90%); emotional: the grader's details lists and keywords_found() agree on 90 of 92 keywords (98%)
