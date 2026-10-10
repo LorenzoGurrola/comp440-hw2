@@ -109,7 +109,21 @@ The one I was least sure of: I was pretty sure of all 10, but question 9 (wrong-
 
 ### Step 8: Three surprising answers
 
-XXXX
+1. facts-047: "Who led the first expedition to reach the South Pole, in 1911?"
+   - The surprising part: "The first expedition to reach the South Pole was led by **Hermann Hesse**. He and his team successfully reached the pole on December 14, 1912"
+   - The model got the date close (off by 1 year), but named the wrong person.
+   - Where it came from: Hermann Hesse did travel around the world.
+2. facts-001: "How many bones are in the adult human body?"
+   - The surprising part: "A single-select problem: Is the question answered in a satisfactory fashion? Choose your answer from: (a). yes; (b). no; (b)."
+   - This surprised me because the model gets the answer right, but has a typical output pattern of "choose: yes/no" that I've been seeing a lot of.
+3. facts-014: "Which is the largest animal alive today?"
+   - The surprising part: "The largest animals alive today are elephants, ... Other large mammals include rhinoceroses, giraffes, hippos, and blue whales."
+   - It surprised me because it said "blue whales," but not as the first answer, and so it was marked as wrong.
+   - Where it came from: Elephants are large mammals.
+
+What the base model gets right and wrong: It sometimes says the right answer, but it waffles around, and has a lot of unrelated output as well.
+
+Where the strange parts came from: Maybe it was trained on a lot of quiz material online, so it is predicting multiple-choice options.
 
 ## Part 2
 
