@@ -14,8 +14,8 @@ and measure what changed. You will:
 
 Both of your models start from the same model. One is trained to be succinct and factual. The
 other is trained to sound like a famous person you admire. Both follow the same basic rules: be
-truthful, do the task, correct false claims. You'll write each model's rules down in a
-constitution, and Claude will turn them into training data.
+truthful, do the task, correct false claims and follow format rules. You'll write each model's
+rules down in a constitution, and Claude will turn them into training data.
 
 ## The three parts
 

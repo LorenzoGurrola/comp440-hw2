@@ -35,7 +35,8 @@ them.
 ### What the loss means
 
 The *loss* for one token is -ln(p), where p is the probability the model gave to the token the
-person actually wrote. The loss the notebook prints is the average over many tokens.
+person actually wrote, and ln is the natural logarithm (the ln key on a calculator). The loss the
+notebook prints is the average over many tokens.
 
 | Probability given to the person's next token | Loss |
 |---|---|
@@ -68,7 +69,8 @@ along too: their length, their lists, their tone and their mistakes.
 
 *DPO*, direct preference optimization, shows the model pairs of answers to the same prompt, one
 *chosen* and one *rejected*. It changes the weights so that answers like the chosen one become
-more likely than answers like the rejected one. Here is a pair in the form of your pairs files.
+more likely than answers like the rejected one. DPO teaches the model which style of answer to
+prefer; it doesn't add new facts. Here is a pair in the form of your pairs files.
 The prompt and the rejected answer are line 69 of `training/prompts-300.jsonl`. I wrote the
 chosen answer by following the 1950s radio announcer example at the bottom of `constitutions.md`:
 
@@ -107,8 +109,9 @@ Suppose that partway through training, for the guitar pair:
    0.1 × ln(3) = +0.11.
 2. It gives the rejected answer 1/1000 of the probability the SFT model gave it. Its reward is
    0.1 × ln(1/1000) = -0.69.
-3. The loss for this pair is -ln(σ(0.11 - (-0.69))) = -ln(σ(0.80)) = 0.37, where
-   σ(x) = 1 / (1 + e^-x).
+3. The loss for this pair is -ln(σ(0.11 - (-0.69))) = -ln(σ(0.80)) = 0.37. Here
+   σ(x) = 1 / (1 + e^-x) turns any number into a probability between 0 and 1, and e^-x is the
+   number e (about 2.718) raised to the power -x.
 
 The loss depends only on the gap between the two rewards, here 0.80. At the start both rewards are
 0, the gap is 0, and the loss is ln(2) = 0.69. As the gap grows, the loss falls toward 0. The

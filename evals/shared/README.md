@@ -244,9 +244,9 @@ verdict, the judges compared, and the review and rating pages. Start it with
    verdicts as "Grader 1" and "Grader 2" (in random order) and decide who was right.
 4. **Fix the scorer**: write one or two rubric clarifications in a notes file, and ask Claude to
    re-grade the reviewed items with them. The grader reads the notes on top of the rubric
-   (`prepare --rubric-notes FILE`), and the viewer's Judges page compares agreement with your
-   decisions before and after. By default, notes are for this exercise and your own two
-   families; official grades on the three shared families stay on the shared rubric.
+   (`prepare --rubric-notes FILE`), and the viewer's Graders page compares agreement with your
+   decisions before and after. Notes are for this exercise only: official grades, your own
+   families' included, stay on the shared rubric.
 
 ## Item format
 

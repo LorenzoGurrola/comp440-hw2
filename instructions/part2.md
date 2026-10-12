@@ -5,106 +5,87 @@ Due **8:00am Tuesday, October 27**. The overall instructions are in the [README]
 In this part you'll train your two models and find out what your choices did to them. In
 particular, you will:
 
-- Write the rules for two models, a *constitution* for each, and tests of your own, and predict
+- Write the rules for two models (a *constitution* for each) and tests of your own, and predict
   in numbers how each model will do before you train anything.
-- Gain hands-on experience with the two kinds of training that come after pretraining: training
-  on example answers (SFT, supervised fine-tuning) and training on pairs of answers where one is
-  preferred (DPO, direct preference optimization).
-- Check the AI grader against a second AI grader and against your own grades, and rate your two
-  models blind.
-- Understand whose preferences ended up in each model: yours, Claude's, the people who wrote the
-  example answers, and the grader's.
+- Gain hands-on experience with training on example answers (SFT, supervised fine-tuning) and
+  on pairs of answers where one is preferred (DPO, direct preference optimization).
+- Check the AI grader against a second AI grader and your own grades, and rate your two models
+  blind.
+- Understand whose preferences ended up in each model.
 
-This part builds on [Part 1](part1.md). You'll run the same evaluations again, this time on four
-versions of the model: the base model, the model after SFT, and your two DPO models.
+This part builds on [Part 1](part1.md), so finish that first. You'll run the same evaluations on
+four versions of the model: the base model, the model after SFT, and your two DPO models.
 
 ## Before you start
 
-- Finish [Part 1](part1.md) first.
-- Claude runs the cells and the commands. The choices and the writing are yours: your famous
-  person, your constitution lines, your test items, your predictions, your labels, your review
-  decisions and your write-up. Apart from drafting test items for you to review in Step 3,
-  Claude won't suggest any of these, not even as options or from your notes. That isn't Claude
-  being unhelpful. This assignment asks whose preferences shaped your models, and if Claude
-  writes those parts, the answer is Claude's. Ask it to explain anything as often as you like.
-- Claude does write most of your training data, in Step 5, and Step 6 checks how much you agree
-  with it.
+The choices and the writing in this part are yours, and Claude won't suggest them: this
+assignment asks whose preferences shaped your models, and if Claude wrote those parts, the answer
+would be Claude's. You can type your words yourself or dictate them to Claude, which writes them
+down, tidied only with your OK, and adds nothing. Claude also runs the cells and commands,
+explains anything you ask, drafts test items for you to review (Step 3) and writes most of your
+training data (Step 5).
 
 I recommend five sittings, since some steps need Claude to work for a while and one needs a GPU:
 
 | Sitting | Steps | What you need |
 |---|---|---|
-| 1 | 1 to 4: your famous person, constitutions, tests and predictions | Claude Code. No GPU. |
-| 2 | 5 and 6: the preference data and your blind labels | Claude Code. Claude writes 600 answers, which uses a good share of your plan. |
-| 3 | 7 to 9: training and answering | Colab with a T4, about 20 minutes of GPU time in one go |
-| 4 | 10 and 11: grading, the audit, your review and your ratings | Claude Code and the viewer. No GPU. |
-| 5 | 12 and 13: checking your predictions and the write-up | Claude Code and the viewer |
+| 1 | 1 to 4 | Claude Code |
+| 2 | 5 and 6 | Claude Code, and a good share of your plan |
+| 3 | 7 to 9 | Colab with a T4, about 20 GPU minutes in one go |
+| 4 | 10 and 11 | Claude Code and the viewer |
+| 5 | 12 and 13 | Claude Code and the viewer |
 
 I expect Part 2 to take about [TBD] hours in all. Please don't leave sitting 3 for the last
 night: free T4s are sometimes all taken.
 
 ## Step 1: Pick your famous person
 
-One of your two models will answer in the voice of a famous person you admire. Pick them first,
-since your constitutions and tests depend on the choice.
+One of your two models will answer in the voice of a famous person you admire. Your
+constitutions and tests depend on this choice, so it comes first.
 
-- Pick a person whose own words you can read: speeches, letters, interviews, essays or books.
 - Write their name, and two sentences on why you picked them, in `WRITEUP.md`.
 - Copy **up to five** short passages of their own words into `voice-samples.md`, each with its
-  source. The file shows the format. Claude reads these passages when it writes answers in this
-  person's voice in Step 5.
+  source, as the file shows. Claude reads them when it writes answers in this voice in Step 5.
 
 Four rules for who you pick:
 
-1. A public figure with at least a few pages of their own public words. Never a private person,
-   anyone at Macalester, or a classmate.
-2. At most five short quoted passages, a few sentences each. Your fork is public, so I don't
-   want whole speeches or chapters in it.
-3. Your model will speak as "I" and will invent things about the person's life. Its answers are
-   an imitation, not the person, and your write-up must say so.
-4. If you're not sure a choice is fair, ask on `#comp440-f26` before you start Step 2.
+1. A public figure with at least a few pages of their own public words. Never a private
+   person, anyone at Macalester, or a classmate.
+2. At most five passages, a few sentences each. Your fork is public, so I don't want whole
+   speeches or chapters in it.
+3. Your model will speak as "I" and invent things about the person's life. Its answers are an
+   imitation, not the person, and your write-up must say so.
+4. If you're not sure a choice is fair, ask on `#comp440-f26` before Step 2.
 
 - Hints:
-  - A person with a recognizable way of talking or writing is easier to spot in a small
-    model's answers than one who sounds like everyone else.
-  - Claude can open a page you name and copy the passage you choose into `voice-samples.md`,
-    word for word. It won't suggest a person or a passage.
+  - A person with a recognizable way of talking is easier to spot in a small model's answers.
+  - Claude can copy a passage you choose, from a page you name, into `voice-samples.md`.
+  - Quotation websites often credit people with words they never said. Take your passages from
+    a primary source: the person's own book, speech, letter or interview.
 
 > [!IMPORTANT]
 > **Question:** What would someone notice first about the way this person talks or writes?
 
 ## Step 2: Write your two constitutions
 
-A *constitution* is a short list of written rules that a model is trained to follow. Anthropic
-published [the one it used for Claude](https://www.anthropic.com/news/claudes-constitution) in
-2023. Your two models share one core and differ only in style. That way a difference between
-them can be traced to the style: if they differed in everything, you couldn't tell which choice
-caused which result.
+A *constitution* is a short list of written rules that a model is trained to follow (here is
+[the one Anthropic published for Claude](https://www.anthropic.com/news/claudes-constitution) in
+2023). Your two models share one core and differ only in style, so that a difference between them
+can be traced to the style.
 
-- Open `constitutions.md`. The `## Core` section is already written and is the same for
-  everyone: be truthful, do the task, correct false claims, follow format rules. Don't change it.
+- Open `constitutions.md`. Its `## Core` section is the same for everyone; don't change it. The
+  radio announcer at the bottom shows the form.
 - Under `## Succinct style`, write **at least five** lines on how the succinct model answers:
   how long, what it keeps and what it leaves out.
-- Under `## Persona style`, write **at least five** lines that describe your famous person's
-  voice: their habits, what they care about, the shape of their sentences. Include at least one
-  line on what the model should *do*, not only how it should sound.
-- Under `## When they conflict`, write what wins when a style line pulls against a core line,
-  for each model. For example, what should the persona model do when someone asks about
-  something the person never knew about?
-- Replace each `XXXX` with your lines. Claude won't build training data from a section that
-  still says `XXXX`.
-- Hints:
-  - The example at the bottom of `constitutions.md` is for a 1950s radio announcer, not a real
-    person. Use it for the form, not the lines.
-  - Read your voice samples again before you write the persona lines. What does the person do
-    in every passage?
-  - Write each line so Claude could follow it without asking what you meant. In Step 5, Claude
-    reads one model's lines (the core, one style and the conflict rule), plus your voice samples
-    for the persona model, and nothing else.
-- Warning: don't write a list of catchphrases or a fixed opening line. When I trained this model
-  on answers that each started with one of a few friendly openers, it learned the openers, not
-  the friendliness, and it stopped doing the task: asked for a thank-you note, it replied with a
-  stock greeting.
+- Under `## Persona style`, write **at least five** lines on your person's voice: their habits,
+  what they care about, the shape of their sentences. At least one line should say what the
+  model *does*, not only how it sounds.
+- Under `## When they conflict`, write, for each model, what wins when a style line pulls against
+  a core line: for example, when the persona model is asked about something the person never
+  knew.
+- Warning: no catchphrases or fixed opening lines. When I trained this model on answers that each
+  began with one of a few friendly openers, it learned the openers, not the friendliness: asked
+  for a thank-you note, it replied with a stock greeting.
 
 > [!IMPORTANT]
 > **Questions:** Which line of your persona style do you think will be hardest for a 0.6B model
@@ -112,36 +93,22 @@ caused which result.
 
 ## Step 3: Write two test families of your own
 
-A *family* is a set of test items of one kind, like the three in `evals/shared/`. Two of the
-shared families test the core (short facts, and user says something wrong) and one tests a kind
-of style (emotional and social messages). Your two families test what only you know about: your
-two styles.
+A *family* is a set of test items of one kind, like the three in `evals/shared/`. Your two
+families test what only you know about: your two styles.
 
-- Decide what each of your families tests. Pick one you predict the succinct model will win and
-  one you predict the persona model will win.
-- In `WRITEUP.md`, write a short paragraph for each family: what it tests, which lines of your
-  constitutions it tests, and which model you think will win.
-- For each family, choose which shared family its items look like: `facts`,
-  `user_says_something_wrong` or `emotional_social`. Your items use that family's fields, and
-  the grader grades them by that family's rules.
-- Write **at least five** items for each family yourself, in `evals/mine/<family>.jsonl`, one
-  JSON object per line. `<family>` is a short name in lowercase letters, digits and
-  underscores, starting with a letter.
-- Give each item an `id` such as `mine-<family>-001`, a `family` of `mine-<family>`, a
-  `graded_like` naming the shared family it looks like, a `subtype` of your choosing, a
-  `prompt`, a `predicted_winner` and a `why`, plus that shared family's own fields.
-- Then ask Claude to draft more items for each family, until each has **at least ten**. Accept,
-  edit or reject each draft, and edit or reject **at least two** per family. Claude records each
-  draft and your decision in `evals/mine/LOG.md`.
-- Ask Claude to check your files with `python3 evals/shared/validate.py --extra evals/mine`.
-- Hints:
-  - Copy one line from the shared file your family looks like, and change it. "Item format" in
-    `evals/shared/README.md` explains every field.
-  - Don't put the word `hidden` in a file name. The tools treat such files as held-back items.
-- Warning: the grader only checks what the shared family's rules check. For a `facts`-style item
-  it checks whether the main answer is right; for an `emotional_social`-style item it checks
-  whether the message does the task and uses the details. Nothing grades whether an answer
-  sounds like your famous person. You'll judge that yourself, by reading, in Step 12.
+- Pick one family you predict the succinct model will win and one the persona model will win. In
+  `WRITEUP.md`, write a short paragraph for each: what it tests, which constitution lines it
+  tests, and which model you think will win.
+- Each family's items copy the format of one shared family (`facts`,
+  `user_says_something_wrong` or `emotional_social`), name it in a `graded_like` field, and are
+  graded by its rules. "Your own families" in `evals/shared/README.md` lists the fields.
+- Write **at least five** items for each family yourself, in `evals/mine/<family>.jsonl`.
+- Then ask Claude to draft more, until each family has **at least ten**. Accept, edit or reject
+  each draft, and edit or reject **at least two** per family. Claude logs each draft and your
+  decision in `evals/mine/LOG.md`.
+- Ask Claude to check the files with `python3 evals/shared/validate.py --extra evals/mine`.
+- Warning: nothing grades whether an answer sounds like your famous person; the grader checks
+  only what the shared family's rules check. You'll judge the voice yourself in Step 12.
 
 > [!IMPORTANT]
 > **Questions:** For one draft you rejected or edited, what did it get wrong about what you
@@ -149,31 +116,21 @@ two styles.
 
 ## Step 4: Map your constitutions to your tests, and predict
 
-A test only tells you about the rules it checks. In this step you'll find out which of your rules
-you can measure, and you'll commit to numbers before any training, so the results can't nudge
-your predictions.
+A test only tells you about the rules it checks. Here you'll see which of your rules you can
+measure, and commit to numbers before any training, so the results can't nudge your predictions.
 
-- Make one table in `WRITEUP.md` with a row for every line of `constitutions.md`, core lines
-  included.
-- For each line, name the family that tests it (a shared one or one of yours), or write "not
-  measured".
-- For each of the five families, predict a number for the succinct model and one for the
-  persona model, using that family's measure: the share correct for facts, the mean score (0 to
-  2) for user says something wrong, and the share of messages that do the task for emotional
-  and social. Your own families use the measure of the family they're graded like.
+- In `WRITEUP.md`, make one table with a row for every line of `constitutions.md`, core
+  included, naming the family that tests it (shared or yours) or "not measured".
+- For each of the five families, predict a number for each of your two models, in that family's
+  measure: the share correct (facts), the mean score from 0 to 2 (user says something wrong), or
+  the share of messages that do the task (emotional and social). Your families use the measure
+  of the family they're graded like. Write numbers, not "succinct wins": only a number tells you
+  how far off you were.
 - Predict one more number: the share of your Step 11 blind comparisons the persona model will
   win.
-- Ask Claude to commit and push with the subject `Predictions locked`. Claude won't run any
-  training before that commit exists, and I'll check that it came first.
-- Hints:
-  - Your Part 1 base-model run is a starting point. Its Results page shows the base model's
-    numbers on the three shared families.
-  - The predicted winners in `evals/shared/README.md` are my guesses, not answers. Yours can
-    differ.
-- Warning: write numbers, not "succinct wins". A number can be checked in Step 12; "succinct
-  does better" can't tell you how far off you were.
-
-Claude shows your table back word for word and says nothing about it until Step 12.
+- Ask Claude to commit and push with the subject `Predictions locked`. Nothing is built or
+  trained before that commit, and I'll check that it came first.
+- Hint: your Part 1 base-model run is a starting point.
 
 > [!IMPORTANT]
 > **Questions:** Which line of your constitutions does no test measure, and why is it hard to
@@ -181,36 +138,30 @@ Claude shows your table back word for word and says nothing about it until Step 
 
 ## Step 5: Have Claude build the preference data
 
-DPO trains on *pairs*: a prompt, a *chosen* answer and a *rejected* answer. Training makes
-answers like the chosen one more likely and answers like the rejected one less likely. You need
-300 pairs for each of your two models.
+DPO trains on *pairs*: a prompt, a *chosen* answer and a *rejected* answer. It makes answers
+like the chosen one more likely and answers like the rejected one less likely. Each model needs
+300 pairs.
 
-Claude writes most of this data. For each of the 300 prompts in `training/prompts-300.jsonl`, the
-chosen answer is one Claude writes under your constitution, and the rejected answer is the one
-a person wrote for the same prompt in the Dolly dataset (`training/README.md` says where it comes
-from). Claude writes the chosen answers instead of picking between two answers because a 0.6B
-model almost never writes in your famous person's voice on its own, so there would be little to
-pick from. That means Claude's reading of your constitution goes into your models. Step 6
-measures how much you agree with it.
+For each prompt in `training/prompts-300.jsonl`, Claude writes the chosen answer under your
+constitution, and the rejected answer is a person's answer from the Dolly dataset (see
+`training/README.md`). Claude writes them, rather than picking the better of two model answers,
+because a 0.6B model almost never writes in your person's voice on its own. That puts Claude's
+reading of your constitution into your models.
 
 - Type `/build-preferences`. Claude starts helpers (Sonnet subagents) that write the answers in
-  batches of 25, on your Claude Code plan. No API key is needed.
-- After the first batch for each model, Claude shows you three answers word for word and asks
-  whether they follow your constitution. If they don't, change `constitutions.md` yourself and
-  type `/build-preferences` again.
-- At the end, Claude checks the files with
-  `python3 evals/shared/validate.py --train training --extra evals/mine`. It also shows how
-  varied the answers are (repeated openings, closings and phrases, with counts) and their
-  average length next to the human answers.
-- Claude then asks before it commits the pairs as `Preference data built` and pushes them. The
-  notebook reads them from your fork in Step 7.
+  batches of 25, on your Claude Code plan, with no API key.
+- After each model's first batch, Claude shows you three answers and asks whether they follow
+  your constitution. If not, change `constitutions.md` and type `/build-preferences` again.
+- At the end, Claude shows how varied and how long the answers are, checks the files, and asks
+  before it commits and pushes them as `Preference data built`. The notebook reads them from
+  your fork.
 - Read **at least ten** pairs from each of `training/pairs-succinct.jsonl` and
-  `training/pairs-persona.jsonl`. Ask Claude to show them word for word, or open the files.
+  `training/pairs-persona.jsonl`.
 - Hints:
-  - This takes Claude about [TBD] minutes. If you hit your plan's usage limit, wait for it to
-    reset and type `/build-preferences` again. It carries on where it stopped.
-  - If you change your constitutions here, say what you changed in your Step 5 answer, and leave
-    your Step 4 predictions as they are. They're locked; Step 12 is where you explain a gap.
+  - This takes Claude about [TBD] minutes. If you hit your plan's usage limit, type
+    `/build-preferences` again after it resets; it carries on where it stopped.
+  - If you change your constitutions here, say what you changed in your Step 5 answer. Leave
+    your Step 4 predictions as they are: Step 12 is where you explain a gap.
 
 > [!IMPORTANT]
 > **Questions:** Quote one chosen answer. What does it do that your constitution didn't ask for?
@@ -218,21 +169,20 @@ measures how much you agree with it.
 
 ## Step 6: Label a sample yourself, blind
 
-Before you train on Claude's pairs, check whether you agree with them. You'll pick the better
-answer in 15 pairs per model, without knowing which answer Claude wrote.
+Before you train on Claude's pairs, check whether you agree with them: you'll pick the better
+answer in 15 pairs per model without knowing which one Claude wrote.
 
 - Ask Claude to run `python3 evals/shared/label_tools.py sample`. It draws 15 pairs per model,
-  shuffles each pair's two answers into A and B, and writes them to
-  `training/label-sample.jsonl`. Which answer Claude wrote goes in `training/label-key.json`.
-  Don't open that file. Claude won't either until your labels are in.
-- For each pair, Claude shows you the question and both answers, word for word. Say which one
-  better follows that model's constitution, A or B, and give a short reason. Claude writes your
-  picks into `training/labels.jsonl`.
-- When all 30 are in, ask Claude to run `python3 evals/shared/label_tools.py score`. It prints
-  how often you picked Claude's answer for each model, and lists the pairs where you didn't.
-- Hint: you'll often be able to tell which answer Claude wrote. Label by the constitution
-  anyway, and note when you could tell.
-- Warning: once you've seen the key, you can't label blind again, so finish all 30 first.
+  shuffles each pair's answers into A and B in `training/label-sample.jsonl`, and writes which
+  side is Claude's to `training/label-key.json`. Don't open the key until all 30 labels are in:
+  once you've seen it, you can't label blind again.
+- For each pair, Claude shows you the question and both answers. Say which better follows that
+  model's constitution, A or B, with a short reason. Claude writes your picks into
+  `training/labels.jsonl`.
+- Then ask Claude to run `python3 evals/shared/label_tools.py score`. It prints how often you
+  picked Claude's answer for each model, and lists the pairs where you didn't.
+- Hint: you'll often be able to tell which answer is Claude's. Label by the constitution anyway,
+  and note when you could tell.
 
 > [!IMPORTANT]
 > **Questions:** How often did you pick Claude's answer, for each model? For one pair where you
@@ -241,30 +191,26 @@ answer in 15 pairs per model, without knowing which answer Claude wrote.
 
 ## Step 7: Train on example answers (SFT)
 
-Steps 7, 8 and 9 happen in one Colab sitting of about 20 minutes of GPU time, plus your reading.
-The notebook trains three models and answers every test item with all four, and the trained
-models live only on that Colab machine. If Colab disconnects partway, they're gone, and Claude
-reruns the notebook from the top.
+Steps 7, 8 and 9 happen in one Colab sitting of about 20 GPU minutes. The trained models live
+only on that Colab machine: if Colab disconnects, they're gone, and Claude reruns the notebook
+from the top.
 
 - Read [`training.md`](training.md) first. It explains SFT and DPO with one example each, and how
-  to read the numbers the training prints. We'll cover both in class later, but you need the
-  basics now.
-- Make sure Claude has pushed all your commits. The notebook reads your pairs and your test items
-  from your fork on GitHub.
-- Plug in your laptop and keep it awake until Step 9's download arrives.
-- Ask Claude to run the setup cells and the "Part 2 setup" cell (Claude fills in `FORK_URL`, your
-  fork's address), then the Step 7 cells.
-- The training cell trains the model on 600 human-written answers from Dolly: two passes, 150
-  steps, about 3 minutes on a T4. Every 25 steps it prints the loss, which should fall from about
-  2.3 in the first pass to about 1.4 in the second.
+  to read the numbers training prints. We'll cover both in class later, but you need the basics
+  now.
+- Claude pushes your commits before it runs the cells, since the notebook reads your files from
+  your fork on GitHub. Keep your laptop plugged in and awake until Step 9's download arrives.
+- Ask Claude to run the "Part 2 setup" cell, with the Part 1 cells it needs, then the Step 7
+  cells.
+- The training cell trains on 600 human-written Dolly answers: two passes, 150 steps, about 3
+  minutes on a T4. Every 25 steps it prints the loss, which should fall from about 2.3 in the
+  first pass to about 1.4 in the second.
 - The last Step 7 cell prints five questions from `training/readout-10.jsonl`, each with the base
-  model's answer and then the SFT model's. Read them.
+  and SFT models' answers. Read them.
 - Hints:
-  - If Colab disconnects, ask Claude to reopen the notebook and choose the T4 again. A reconnect
-    starts a new machine, so Claude reruns the setup cells and starts again at Step 7.
-  - If a cell stops with "CUDA out of memory", ask Claude to run that step again. The README's
-    Troubleshooting section says what to do if it happens twice.
   - If Colab says no T4 is free, try again in an hour or two.
+  - If a cell stops with "CUDA out of memory", the README's Troubleshooting section says what to
+    do.
 
 > [!IMPORTANT]
 > **Questions:** What did SFT change in the answers? Quote one answer that shows it. Did the
@@ -274,16 +220,13 @@ reruns the notebook from the top.
 
 - Ask Claude to run the Step 8 cells. They train two models with DPO, both starting from your
   SFT model: the succinct model on `training/pairs-succinct.jsonl` and the persona model on
-  `training/pairs-persona.jsonl`. Each takes about 3 minutes.
-- Each training run is 50 steps of 8 pairs. Every 5 steps it prints the loss, the chosen reward,
-  the rejected reward and the accuracy. [`training.md`](training.md) says what each one means.
-- After each run, the cell prints a small table of steps 5, 25 and 50. Copy both tables into
-  `WRITEUP.md` before you close Colab: they aren't saved anywhere else.
-- The last Step 8 cell prints five more questions from `training/readout-10.jsonl`, each with
-  the SFT, succinct and persona models' answers. Read them.
-- Warning: a loss near 0 doesn't mean the model is finished or better. When I tried DPO on this
-  model with easy pairs, the loss reached about 0 by step 15 of 50, and the remaining steps kept
-  pushing the rejected answers further down. Too much of that can make answers terse or strange.
+  `training/pairs-persona.jsonl`, about 3 minutes each.
+- Each run is 50 steps of 8 pairs. Every 5 steps it prints the loss, the chosen reward, the
+  rejected reward and the accuracy; [`training.md`](training.md) says what each one means.
+- Each run ends with a small table of steps 5, 25 and 50. Copy both tables into `WRITEUP.md`
+  before you close Colab: they aren't saved anywhere else.
+- The last Step 8 cell prints five more readout questions, each with the SFT, succinct and
+  persona models' answers. Read them.
 
 > [!IMPORTANT]
 > **Questions:** In each table, which moved further from 0, the chosen reward or the rejected
@@ -295,17 +238,15 @@ reruns the notebook from the top.
 - Ask Claude to run the Step 9 cells. They answer the 240 shared items and your own items with
   all four models: base, SFT, succinct and persona. This takes about 7 minutes.
 - The last Step 9 cell downloads `hw2-four-models.zip`. Allow the download if Chrome asks.
-- Before anything is graded, ask Claude to pick five items at random and show you all four
-  models' answers to them, word for word.
-- In `WRITEUP.md`, write one sentence about each model: what you noticed in its five answers.
-- Ask Claude to make a run from the zip and grade it with Sonnet. Grading needs no GPU, so this
-  can be a new sitting. Four models' answers to all the items come to about 1,000 responses, or
-  about 19 grader batches, all on your plan.
+- Before anything is graded, ask Claude to show you all four models' answers to five items picked
+  at random. In `WRITEUP.md`, write one sentence about each model: what you noticed. Grading
+  starts only once those four sentences are in.
+- Ask Claude to make a run from the zip and grade it with Sonnet: about 1,000 answers, on your
+  plan. Grading needs no GPU, so this can be a new sitting.
 - Write your run folder's name in `WRITEUP.md` (it looks like
   `evals/runs/2026-10-21-four-models`).
-- Please don't open this run's Results or Answers pages in the viewer until your Step 10 review
-  decisions are in. Once you've seen the grader's numbers it's hard to grade on your own. Claude
-  won't quote grades or percentages before then either.
+- Please don't open this run's Results or Answers pages until your Step 10 review decisions are
+  in. Once you've seen the grader's numbers, it's hard to grade on your own.
 
 > [!IMPORTANT]
 > **Question:** Which model's answers surprised you most, and how?
@@ -315,20 +256,16 @@ reruns the notebook from the top.
 Every grader makes mistakes. Here you'll measure Sonnet's, with a second grader and your own
 judgment.
 
-- Ask Claude to audit the run with Opus at medium effort. It picks about 60 of Sonnet's grades,
-  mostly ones that look hard plus some at random, and Opus grades those answers again without
-  seeing Sonnet's grades.
-- Ask Claude to build a review queue. It holds every answer where Sonnet and Opus disagree, plus
-  a few where they agree.
-- On the viewer's Review page, for each answer: grade it yourself first (that grade is then
-  locked), then see what Grader 1 and Grader 2 said (which grader is which is hidden), and decide
-  who was right, with a reason from the rubric.
-- Once your decisions are in, open the Graders page to see how often Sonnet and Opus agreed.
+- Ask Claude to audit the run with Opus at medium effort. Opus grades about 60 answers again,
+  mostly ones that look hard, without seeing Sonnet's grades.
+- Ask Claude to build a review queue: every answer where Sonnet and Opus disagree, plus a few
+  where they agree.
+- On the viewer's Review page, grade each answer yourself first (that grade is then locked), then
+  see what Grader 1 and Grader 2 said, and decide who was right, with a reason from the rubric.
 - You're welcome to write a rubric clarification and have Claude re-grade the reviewed answers
-  with it (see "Fix the scorer" in `evals/shared/README.md`). It's for this exercise only: grades
-  on the three shared families stay on the shared rubric.
-- Hint: the rules both graders follow are in `.claude/agents/eval-grader.md`, the file you found
-  in Part 1 Step 6.
+  with it ("Fix the scorer" in `evals/shared/README.md`). It's for this exercise only: your
+  grades stay on the shared rubric.
+- Hint: both graders follow `.claude/agents/eval-grader.md`, the file you found in Part 1 Step 6.
 - Warning: Sonnet wrote your chosen answers in Step 5, and Sonnet grades your models. Keep that
   in mind when you decide.
 
@@ -342,12 +279,12 @@ judgment.
 Claude doesn't judge warmth or tone. People do, and in this step that's you.
 
 - Open the viewer's Rate page for your run, type your name, choose your succinct and persona
-  models, and press Start. The page gives you a random 20 of the 40 emotional and social items.
+  models, and press Start. You get a random 20 of the 40 emotional and social items, about 15
+  minutes' work.
 - For each item, read both messages (the page doesn't say which model wrote which), mark whether
   each does the task, then press "Send this one" under the one you'd rather send.
-- This takes about 15 minutes.
 - Hint: you'll probably recognize your persona model's answers, so this isn't fully blind.
-  That's fine. Say so in your answer.
+  That's fine; say so in your answer.
 
 > [!IMPORTANT]
 > **Questions:** What share of your picks went to each model, and what share of each model's
@@ -359,9 +296,8 @@ Claude doesn't judge warmth or tone. People do, and in this step that's you.
 - Copy your Step 4 table into the Step 12 part of `WRITEUP.md` and add an "Actual" column. Leave
   Step 4 as you committed it.
 - For each prediction, write "I predicted X, the actual is Y", and which line of your
-  constitutions Y bears on.
-- Back each claim with one quoted answer. Ask Claude to pull up the answers you name. It won't
-  pick them for you.
+  constitutions Y bears on. Back each claim with one quoted answer; Claude will pull up the
+  answers you name.
 - Read **at least five** of the persona model's answers to your own items, and say whether they
   sound like your famous person, quoting one. Nothing else grades that.
 
@@ -393,8 +329,8 @@ When you're done, ask Claude to run the checkpoint. It commits and pushes your w
 
 Your repository, pushed by **8:00am Tuesday, October 27**. At a minimum I am looking for:
 
-- `voice-samples.md` and `constitutions.md` (Steps 1 and 2);
-- `evals/mine/` with your two families and `LOG.md` (Step 3);
+- `voice-samples.md`, `constitutions.md`, and `evals/mine/` with your two families and
+  `LOG.md` (Steps 1 to 3);
 - the `Predictions locked` commit, made before any training (Step 4);
 - `training/pairs-succinct.jsonl` and `training/pairs-persona.jsonl` (Step 5) and
   `training/labels.jsonl` (Step 6);
@@ -404,8 +340,7 @@ Your repository, pushed by **8:00am Tuesday, October 27**. At a minimum I am loo
 - the `Part 2 done` commit.
 
 Submit your repository URL through the
-[assignment submission form](https://forms.gle/mgKcnqzTGxNaGvteA) by **8:00am Tuesday,
-October 27**.
+[assignment submission form](https://forms.gle/mgKcnqzTGxNaGvteA) by the deadline.
 
 After the deadline I'll retrain your two models from the files in your fork and run them on the
 held-back items. So leave `constitutions.md`, `training/` and `evals/mine/` as they were when you

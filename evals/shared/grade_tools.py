@@ -2058,7 +2058,7 @@ def parse_args(argv):
                     "family, a table of 0/1/2 scores, the headline number for each evaluated "
                     "model under each grader (do the conclusions change?), agreement with hand "
                     "grades, and every disagreement written out for a person to read. The "
-                    "viewer's Judges page shows the same for any two judges in a run.")
+                    "viewer's Graders page shows the same for any two judges in a run.")
     p.add_argument("dir_a", metavar="DIR_A", nargs="?", help="first graded folder (after merge)")
     p.add_argument("dir_b", metavar="DIR_B", nargs="?", help="second graded folder (after merge)")
     p.add_argument("--run", metavar="RUNDIR", help="a run folder; use with --graders A B")

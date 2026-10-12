@@ -51,9 +51,6 @@ for.
   ```
   python3 evals/shared/grade_tools.py init-run --root evals/runs --name four-models --title "..." --description "..." --zip ZIPFILE --items evals/shared --items evals/mine
   ```
-  <!-- TODO(check): confirm with the Own-families and Notebook builders that the Part 2 zip
-  is named hw2-four-models.zip, holds base, sft, succinct and persona with stands_for in its
-  models.json, and that --zip and evals/mine work as written here. -->
 
   Afterwards, check each model's `label`, `description` and `charter` in `run.json` and fill
   in any that are blank from what the user tells you.
@@ -137,7 +134,7 @@ python3 evals/shared/grade_tools.py compare --run RUNDIR --graders A B [--hand H
 
 Report, per family, how often the graders agree and Cohen's kappa, whether the order of the
 evaluated models changes between graders, and agreement with hand grades if given. The
-viewer's Judges page shows the same for any two judges.
+viewer's Graders page shows the same for any two judges.
 
 ## 6. Audit and review ("audit run X with Opus at medium effort")
 
@@ -178,7 +175,7 @@ python3 evals/shared/grade_tools.py prepare --run RUNDIR --grader sonnet-low-not
 ```
 
 Then steps 3 and 4 (each prompt includes the `Rubric notes:` line `prepare` printed). The
-viewer's Judges page then shows agreement with the user's review decisions before and after the
+viewer's Graders page then shows agreement with the user's review decisions before and after the
 notes. Rubric notes are for this exercise only. The official grades stay on the shared rubric,
 which doesn't change during Part 2.
 

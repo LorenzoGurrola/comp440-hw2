@@ -18,9 +18,9 @@ DPO trains each model to prefer its chosen answers.
 
 Rules for the whole skill:
 
-- Never write or edit `constitutions.md` or `voice-samples.md`. They are the student's work
-  (Steps 1 and 2). If they want to change one, they do it themselves, then run this skill
-  again.
+- Never write or edit `constitutions.md` or `voice-samples.md` on your own. They are the
+  student's work (Steps 1 and 2). If they want to change one, they edit it or dictate the
+  change for you to type, under the dictation rule in `CLAUDE.md`, then run this skill again.
 - Never say whether the answers are good or follow the constitution. That is the student's
   reading, and Step 6 measures it.
 - Give each writer only the lines `pairs.py` printed: no hints about the person, no examples,
@@ -87,8 +87,8 @@ Show its output word for word and in full, with no summary, comment or descripti
 one question: do these look like what your MODEL constitution asks for?
 
 - On a yes, go on to step 4.
-- On a no, stop. They change `constitutions.md` themselves, as in Step 2, then run
-  `/build-preferences` again; `plan` will notice the change. Don't suggest what to change.
+- On a no, stop. They change `constitutions.md` (or dictate the change), as in Step 2, then
+  run `/build-preferences` again; `plan` will notice the change. Don't suggest what to change.
 - If they want to see more first, run `show` again with `--n 6` or another `--batch`, and
   show it the same way.
 - If `show` says batch 01 has no answers, the writer failed: run step 2 once more.
@@ -129,10 +129,6 @@ After both models:
 ```
 python3 evals/shared/validate.py --train training --extra evals/mine
 ```
-<!-- TODO(check): validate.py's docstring (Own-families builder) documents this exact form
-and says --train FOLDER checks the named training files only. Its folder check was not written
-yet when this was drafted: confirm it never reads training/.batches/ and that it accepts pairs
-files with a few prompts left out (merge --allow-gaps). -->
 
 It checks that no test item, shared or theirs, is a copy or near copy of a training prompt,
 and that the training files have the right fields. Show its summary lines. If it lists one of

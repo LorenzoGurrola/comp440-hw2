@@ -354,7 +354,7 @@ def cmd_merge(args):
     chosen = [p["chosen"].strip() for p in pairs]
     mean = lambda xs: sum(xs) / max(1, len(xs))
     print(f"\nWrote {out_path}: {len(pairs)} pairs"
-          + (f" ({len(missing)} prompts left out)." if missing else "."))
+          + (f" ({len(missing)} of the {len(prompts)} prompts left out)." if missing else "."))
     print(f"Average length: Claude's answers {mean([len(c.split()) for c in chosen]):.0f} "
           f"words, the human answers {mean([len(p['rejected'].split()) for p in pairs]):.0f}. "
           f"{sum(len(c.split()) > LONG_WORDS for c in chosen)} of Claude's answers are over "

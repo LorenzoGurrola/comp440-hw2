@@ -35,6 +35,8 @@ The instructor's runs with held-back items: `python3 evals/app/serve.py --open -
 | **Review** | one answer at a time: grade it yourself first (that grade is then locked), see what Grader 1 and Grader 2 said (which grader is which is hidden), then say who was right and why |
 | **Rate** | two messages side by side with no model names: say whether each does the task, then press "Send this one" under the one you would rather send |
 
+Your own test families from Part 2 show under their own names, next to the three shared ones.
+
 Keyboard shortcuts work on Answers (`←` `→`), Review and Rate; press `?` or the **?** button in
 the header to see them for the current page. Older links (`#/run/NAME/scoreboard`,
 `responses`, `item`, `judges`, `overview`) still work and are redirected.

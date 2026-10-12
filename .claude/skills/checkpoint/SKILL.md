@@ -15,8 +15,6 @@ and the part is not done until it is filled.
      `grades/sonnet-low/`) and the Opus audit (usually `grades/opus-medium-audit/`); their
      review decisions (`review/decisions-<name>.jsonl`); their ratings
      (`ratings/ratings.jsonl`); and `status` in `run.json` at `audited` or later.
-     <!-- TODO(check): if the tools come to set status "reviewed" once the review decisions
-     are in, require "reviewed" here instead of "audited". -->
      Then the other files Part 2 hands in: `constitutions.md`, `voice-samples.md`, at least
      two families in `evals/mine/` and `evals/mine/LOG.md`, `training/pairs-succinct.jsonl`,
      `training/pairs-persona.jsonl` and `training/labels.jsonl`. Run

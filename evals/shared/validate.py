@@ -42,8 +42,9 @@ What it checks:
     5. Training files (--train FOLDER): sft-dolly-600.jsonl (600 lines: id sft-NNN, prompt
        "Question: ...\\nAnswer:", completion starting with a space), prompts-300.jsonl (300 lines:
        id pair-NNN, question, prompt, human), readout-10.jsonl (10 held-out prompts), and when
-       they exist pairs-succinct.jsonl and pairs-persona.jsonl (id from prompts-300, the same
-       prompt, chosen not empty and different from rejected, rejected the human answer) and
+       they exist pairs-succinct.jsonl and pairs-persona.jsonl (id from prompts-300, at most one
+       pair per id, the same prompt, chosen not empty and different from rejected, rejected the
+       human answer; prompts left out are reported, not errors) and
        labels.jsonl (id, model succinct or persona, pick A or B, reason). Ids are unique, and
        the SFT, pair and read-out prompts do not overlap.
 
@@ -317,9 +318,12 @@ def check_training_dir(folder, errors, report):
         if not os.path.isfile(path):
             continue
         rows = read_rows(path, errors)
-        report.append(f"  {name}: {len(rows)} pairs")
-        if len(rows) != PAIRS_PER_MODEL:
-            errors.append(f"{name}: expected {PAIRS_PER_MODEL} pairs, found {len(rows)}")
+        # Fewer than 300 is allowed: the build-preferences skill can leave out a few prompts it
+        # could not get an answer for (merge --allow-gaps).
+        left_out = PAIRS_PER_MODEL - len(rows)
+        report.append(f"  {name}: {len(rows)} pairs"
+                      + (f" ({left_out} of the {PAIRS_PER_MODEL} prompts left out)"
+                         if left_out > 0 else ""))
         seen = set()
         for n, r in enumerate(rows, 1):
             rid = r.get("id")

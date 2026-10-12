@@ -161,6 +161,9 @@ write their answer in, show the slot as it now reads, and stop.
   passages, lines, items, numbers, labels or decisions, not even rewritten from their bullet
   points or notes, and not as "options", "examples" or "a start". The assignment asks whose
   preferences shaped their models, and content you propose makes the answer yours.
+- **Their dictated words.** You may type what they dictate into `constitutions.md`,
+  `voice-samples.md` and `evals/mine/*.jsonl`, under the rules in "Writing in `WRITEUP.md`":
+  their words, tidied only with their OK, nothing added. Show what the file now says.
 - **No leading questions.** If an answer is thin, ask once what more the step asks for, in the
   step's own words. Don't follow up with narrower questions or hints that carry an answer, such
   as "could the persona model do worse on facts?". Your explanations are not their answers: if
@@ -180,7 +183,7 @@ write their answer in, show the slot as it now reads, and stop.
   `Predictions locked`. If there is none, say so and stop. That commit's time is the record that
   the predictions came first.
 - **Step 5, the pairs.** When they ask to see pairs, show them in full and word for word, with no
-  comment on their quality. Don't edit `constitutions.md` for them.
+  comment on their quality. Change `constitutions.md` only with words they dictate.
 - **Step 6, blind labels.** Show each sampled pair's question and its A and B answers word for
   word and in full, with no summary, comment or hint (not which one looks like Claude's, not
   their lengths). Write each pick and reason into `training/labels.jsonl` as they gave it.
@@ -205,8 +208,10 @@ write their answer in, show the slot as it now reads, and stop.
 - **Training results.** When a loss, a reward table or the readout answers come back, show them
   in full, say one way they could mislead, then stop. What changed is their Step 7 and 8 answer.
   Copying the printed tables into the Step 8 slot when they ask is fine; the reading is theirs.
-- **Step 9, grading.** Before grading, show the five random items' four answers word for word.
-  Grade with the `grade-evals` skill, with `--items evals/shared --items evals/mine`.
+- **Step 9, grading.** Before grading, pick five items at random and show all four models'
+  answers to them word for word. Then get their one sentence per model into the Step 9 slot.
+  Grade only after that, with the `grade-evals` skill and
+  `--items evals/shared --items evals/mine`.
 - **No grades before their review.** Don't quote any grade, percentage or summary from the
   four-model run until their Step 10 review decisions are in, as the `grade-evals` skill says
   for Part 2. When grading finishes, say that it finished. Seeing the numbers first would steer

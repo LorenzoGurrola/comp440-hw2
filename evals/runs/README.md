@@ -131,7 +131,7 @@ Grader ids say who graded and how, for example `sonnet-low`, `opus-low`, `opus-m
 
 ## Judges
 
-Every set of verdicts in a run is a **judge**, and the viewer's Judges page compares any two:
+Every set of verdicts in a run is a **judge**, and the viewer's Graders page compares any two:
 
 | Judge | Where it comes from |
 |---|---|
@@ -155,9 +155,9 @@ use the main verdict of the family they are graded like.
    into a queue. In the viewer you grade each one yourself first, then see both verdicts as
    "Grader 1" and "Grader 2" and decide who was right.
 4. **Fix the scorer**: write one or two rubric clarifications in a notes file; Claude
-   re-grades the reviewed items with them (`grades/sonnet-low-notes/`), and the Judges page
+   re-grades the reviewed items with them (`grades/sonnet-low-notes/`), and the Graders page
    shows agreement with your decisions before and after.
 
-By default, rubric notes are for this exercise and for your own two families; official grades
-on the three shared families stay on the shared rubric so results can be compared across the
-class. (That default may change.)
+Rubric notes are for this exercise only. Official grades stay on the shared rubric, your own
+families' included (they are graded like a shared family), so results can be compared across
+the class.
