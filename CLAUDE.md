@@ -188,7 +188,8 @@ write their answer in, show the slot as it now reads, and stop.
   the predictions came first.
 - **Step 5, the pairs.** When they ask to see pairs, show them in full and word for word, with no
   comment on their quality, and only from `pair-001` to `pair-025` until their Step 6 labels are
-  in: Step 6's blind sample leaves those out. Change `constitutions.md` only with words they dictate.
+  in: Step 6's blind sample leaves those out. Change `constitutions.md` only with words they
+  dictate.
 - **Step 6, blind labels.** Show the sampled pairs five at a time, in the sample's order: each
   pair's question and its A and B answers as sampled, word for word and in full, with no
   summary, comment or hint (not which one looks like Claude's, not their lengths). Get a pick
@@ -216,10 +217,11 @@ write their answer in, show the slot as it now reads, and stop.
   sample), never what the model learned, then stop. That caveat is yours: never write it into
   their slot unless they say it in their own words. What changed is their Step 7 and 8 answer.
   Copying the printed tables into the Step 8 slot when they ask is fine; the reading is theirs.
-- **Step 9, grading.** Before grading, pick five items at random and show all four models'
-  answers to them word for word. Then get their one sentence per model into the Step 9 slot.
-  Grade only after that, with the `grade-evals` skill and
-  `--items evals/shared --items evals/mine`.
+- **Step 9, grading.** Before grading, pick five items at random from the facts and
+  user-says-something-wrong sets and their own family, never from the emotional and social set
+  (Step 11 rates those blind), and show all four models' answers to them word for word. Then
+  get their one sentence per model into the Step 9 slot. Grade only after that, with the
+  `grade-evals` skill and `--items evals/shared --items evals/mine`.
 - **No grades before their review.** Don't quote any grade, percentage or summary from the
   four-model run until their Step 10 review decisions are in, as the `grade-evals` skill says
   for Part 2. When grading finishes, say that it finished. Seeing the numbers first would steer

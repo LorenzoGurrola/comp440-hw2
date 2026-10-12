@@ -34,8 +34,9 @@ I recommend four sittings, since some steps need Claude to work for a while and 
 | 3 | 7 to 9 | Colab with a T4, about 20 GPU minutes in one go |
 | 4 | 10 and 11 | Claude Code and the viewer |
 
-I expect Part 2 to take about [TBD] hours in all. Please don't leave sitting 3 for the last
-night: free T4s are sometimes all taken.
+I expect Part 2 to take about 4 to 7 hours in all: four sittings of one to two hours each, with
+the Colab sitting the longest. Please don't leave sitting 3 for the last night: free T4s are
+sometimes all taken.
 
 ## Step 1: Pick your famous person
 
@@ -244,8 +245,9 @@ from the top.
 - The last Step 9 cell downloads `hw2-four-models.zip`. Allow the download if Chrome asks. Once
   it has arrived, choose Runtime > Disconnect and delete runtime in Colab, to give the T4 back.
 - Before anything is graded, ask Claude to show you all four models' answers to five items picked
-  at random. In `WRITEUP.md`, write one sentence about each model: what you noticed. Grading
-  starts only once those four sentences are in.
+  at random (none from the emotional and social set, which you'll rate blind in Step 11). In
+  `WRITEUP.md`, write one sentence about each model: what you noticed. Grading starts only once
+  those four sentences are in.
 - Ask Claude to make a run from the zip and grade it with Sonnet: about 1,000 answers, on your
   plan. Grading needs no GPU, so this can be a new sitting.
 - Write your run folder's name in `WRITEUP.md` (it looks like
