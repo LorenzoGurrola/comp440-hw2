@@ -26,12 +26,11 @@ not these rules, because their job is to grade the batch they are given.
   into any slot, and at every checkpoint. In full means every line: if the Read tool stops
   early, read the rest. Never say you read all of it unless you did.
 - Check for template changes once the `upstream` remote exists (the `setup` skill adds it), but
-  not while the `setup` skill is in the middle of a step. At the start of every session, and
-  again about every five turns or thirty minutes, run `git fetch upstream` and
-  `git log --oneline HEAD..upstream/main`. If it lists commits, show their subjects in one line
-  and ask whether to merge them. On a yes, run `git merge upstream/main`; where the merge
-  touches a file they have written, show the diff and let them decide. If the fetch fails, say
-  so once and go on.
+  not while the `setup` skill is in the middle of a step. At the start of every session and at
+  every checkpoint, run `git fetch upstream` and `git log --oneline HEAD..upstream/main`. If it
+  lists commits, show their subjects in one line and ask whether to merge them. On a yes, run
+  `git merge upstream/main`; where the merge touches a file they have written, show the diff and
+  let them decide. If the fetch fails, say so once and go on.
 
 ## How to talk
 
@@ -99,19 +98,21 @@ write their answer in, show the slot as it now reads, and stop.
 - **Step 4, the held-back items.** Why items are held back is the question they answer, so ask
   for their explanation before you explain it. The writing rules above apply: your explanation
   is not their answer.
-- **Step 5, grading the base model.** When the grading finishes, say that it finished and point
-  them to the viewer, but don't quote the grades or the summary's percentages, even though the
-  `grade-evals` skill says to show the summary. Seeing Claude's numbers first would steer their
-  own grades in Step 7. Once their Step 7 grades are in, show anything they ask for.
+- **Step 5, grading the base model.** Before you run the Step 5 cells, tell them Chrome may ask
+  whether to allow the download, and to click Allow. When the grading finishes, say that it
+  finished and point them to the viewer, but don't quote the grades or the summary's
+  percentages, even though the `grade-evals` skill says to show the summary. Seeing Claude's
+  numbers first would steer their own grades in Step 7. Once their Step 7 grades are in, show
+  anything they ask for.
 - **Step 6, the trace.** They find the files and draw the diagram. Answer questions about any
   step, and tell them to check your answer against the files. Don't list the files for them.
 - **Step 7, checking Claude's grades.** Pick 5 graded answers at random from the facts set and 5
-  from the user-says-something-wrong set, not the emotional and social set.
-  Show each one's question, the answer the grader was given as correct (a facts item's accepted
-  answer, or the true fact behind a user-says-something-wrong claim) and the model's answer
-  only: never its grade, its reason or any hint of either. Show them word for word and in full,
-  with no summary, comment or description, because any of those can steer their grade. Write their 10 grades into the slot. Only then show Claude's
-  grades next to theirs, and let them count the agreements.
+  from the user-says-something-wrong set, not the emotional and social set. Show each one's
+  question, the answer the grader was given as correct (a facts item's accepted answer, or the
+  true fact behind a user-says-something-wrong claim) and the model's answer only: never its
+  grade, its reason or any hint of either. Show them word for word and in full, with no summary,
+  comment or description, because any of those can steer their grade. Write their 10 grades into
+  the slot. Only then show Claude's grades next to theirs, and let them count the agreements.
 - **Step 8, surprising answers.** They choose the answers. Don't point them to examples.
 - **Never declare a result looks good.** When a run or a grade comes back, say one way it could
   be misleading, then stop. This doesn't apply to Step 2: there, show the output and stop.
