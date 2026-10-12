@@ -191,16 +191,19 @@ Submit your repository URL through the
 
 ## Grading rubric
 
-- Trace: [TBD]% - Every file in Step 6 is the right one. Every step in your diagram is placed on
-  your laptop, Google's computer, Anthropic's computers or GitHub, and the steps Claude did are
-  marked.
-- Model and grading: [TBD]% - The facts you found in Step 1 are right, and the grades in Step 3
-  come with reasons.
-- Checking Claude: [TBD]% - Your 10 grades were made before you saw Claude's, and you explain
-  one disagreement (or, if you agreed on all 10, the one you were least sure of).
-- Interpretation: [TBD]% - Your answers to the questions in Steps 2, 4 and 8 are your own reading
-  of what you saw, and the surprising answers come with your own explanation of where they came
-  from.
+Part 1 is 30% of the assignment. Within it:
+
+- Trace: 30% - Your run folder from Step 5 holds the base model's answers and Sonnet's grades.
+  Every file in Step 6 is the right one. Every step in your diagram is placed on your laptop,
+  Google's computer, Anthropic's computers or GitHub, and the steps Claude did are marked.
+- Model and grading: 20% - The facts you found in Step 1 are right, and each of your four grades
+  in Step 3 comes with a reason that names the rubric case it rests on.
+- Checking Claude: 20% - Your 10 grades were made before you saw Claude's, and you explain one
+  disagreement (or, if you agreed on all 10, the one you were least sure of) using the rubric,
+  not just "I think mine is right".
+- Interpretation: 30% - Your answers to the questions in Steps 2, 4 and 8 are your own reading
+  of what you saw: what the probabilities do and don't tell you, why some tests are held back,
+  and where the strange parts of your three surprising answers came from.
 
 ## FAQ
 

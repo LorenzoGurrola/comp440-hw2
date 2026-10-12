@@ -81,3 +81,16 @@ Claude does most of this step. You click a few things in your Chrome browser.
   October 8**.
 
 Then go on to [Part 1](part1.md).
+
+## Grading rubric
+
+Part 0 is 20% of the assignment. Within it:
+
+- Setup done: 40% - Your fork has the `Part 0 done` commit pushed by the deadline, with your
+  name and date filled in, and `TRANSCRIPT.md` shows the setup session that connected Colab.
+- What MCP is: 30% - Your Step B paragraph says in your own words what an MCP server is and why
+  it's useful, with at least one example other than Colab.
+- Why not paste code: 10% - Your answer gives a reason of your own, not just "it's faster".
+- How it connects: 20% - Your Step D answer names the pieces on your laptop and on Google's
+  computer and the path between them. A guess that gets one piece wrong but shows the path
+  earns most of the credit.
