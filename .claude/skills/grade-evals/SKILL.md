@@ -1,6 +1,6 @@
 ---
 name: grade-evals
-description: Grade COMP 440 evaluation responses (the shared facts, user_says_something_wrong and emotional_social families) inside Claude Code, using eval-grader subagents running Opus or Sonnet as the grader, and check the grader with an audit (eval-auditor subagents) and a human review queue. Keeps everything in run folders the viewer shows. No API key needed; it uses the Claude Code plan. Use when asked to "grade the evaluations", "grade these responses", "make an evaluation run", "run the grader", "/grade-evals", "audit the grades", "build a review queue", "re-grade with my rubric notes", "open the viewer", or to compare Opus and Sonnet as graders.
+description: Grade COMP 440 evaluation responses (the shared facts, user_says_something_wrong and emotional_social families, and a student's own families, each graded like one of those) inside Claude Code, using eval-grader subagents running Opus or Sonnet as the grader, and check the grader with an audit (eval-auditor subagents) and a human review queue. Keeps everything in run folders the viewer shows. No API key needed; it uses the Claude Code plan. Use when asked to "grade the evaluations", "grade these responses", "make an evaluation run", "make a run from my zip", "run the grader", "/grade-evals", "audit the grades", "build a review queue", "re-grade with my rubric notes", "open the viewer", or to compare Opus and Sonnet as graders.
 ---
 
 # Grade evaluation responses with Claude Code subagents
@@ -12,28 +12,63 @@ and following that same file. `evals/shared/grade_tools.py` does everything else
 command from the repo root.
 
 Everything lives in a **run folder** (format: `evals/runs/README.md`):
-`evals/runs/<YYYY-MM-DD>-<slug>/` for students, `planning/runs/...` for runs that include
-held-back items. The viewer (`evals/app/serve.py`) shows run folders.
+`evals/runs/<YYYY-MM-DD>-<slug>/`. The viewer (`evals/app/serve.py`) shows run folders.
+
+## When to show grades
+
+`merge` prints a summary of the grades, and step 5 says to show it. Hold it back, and don't
+quote any grade, count or percentage from it, until the student's own grades are in:
+
+- Part 1: not before their Step 7 grades are in the slot (the Step 5 rule in `CLAUDE.md`).
+- Part 2: not before their review decisions are in, that is, until they say they have finished
+  the Review page and `review/` holds their `decisions-<name>.jsonl`. Seeing Claude's numbers
+  first would steer their own grades on the Review page (Step 10) and their reading of their
+  predictions (Step 12).
+
+Until then, say that grading finished and what comes next. Afterwards, show anything they ask
+for.
 
 ## 1. Settle the run
 
 - **Existing run**: if the user names a run (or there is one obvious run in `evals/runs/`),
   use it. Read its `run.json`.
-- **New run**: from the responses files (the `eval-*.jsonl` files, one line per item: `id`,
-  `response`, `model`; all evaluated models together so batches mix them). Choose a short
-  lowercase slug and write a plain-language title and description (which models, how each was
-  trained, what to look for), then:
+- **New run**: from the zip the notebook downloaded: `hw2-base-answers.zip` in Part 1,
+  `hw2-four-models.zip` in Part 2. It is usually in their Downloads folder
+  (`ls ~/Downloads/hw2-*.zip`). If it isn't there, ask them where it went; don't search the
+  rest of their computer. If Chrome saved more than one copy (it adds ` (1)` to the name), ask
+  which one. Choose a short lowercase slug and write a plain-language title and description
+  (which models, how each was trained, what to look for), then:
 
   ```
-  python3 evals/shared/grade_tools.py init-run --root evals/runs --name SLUG --title "..." --description "..." --responses FILE [...] --items evals/shared [--items MORE]
+  python3 evals/shared/grade_tools.py init-run --root evals/runs --name SLUG --title "..." --description "..." --zip ZIPFILE --items evals/shared [--items MORE]
   ```
 
-  Item folders: always `evals/shared`; add every other folder whose ids appear (a student's
-  own families; for the instructor, `planning/hidden-evals`, and then `--root planning/runs`,
-  since held-back items never go under `evals/` or `.claude/`). Afterwards fill in each
-  model's `label`, `description` and `charter` in `run.json` from what the user tells you.
+  `--zip` reads the responses, `models.json` and the generation notes from the zip, so there
+  is nothing to unzip. (The older form, `--responses FILE [...]` with the `eval-*.jsonl` files,
+  still works.) Item folders: always `evals/shared`; in Part 2 also `evals/mine`, their own
+  families. The Part 2 run, with all four models:
+
+  ```
+  python3 evals/shared/grade_tools.py init-run --root evals/runs --name four-models --title "..." --description "..." --zip ZIPFILE --items evals/shared --items evals/mine
+  ```
+  <!-- TODO(check): confirm with the Own-families and Notebook builders that the Part 2 zip
+  is named hw2-four-models.zip, holds base, sft, succinct and persona with stands_for in its
+  models.json, and that --zip and evals/mine work as written here. -->
+
+  Afterwards, check each model's `label`, `description` and `charter` in `run.json` and fill
+  in any that are blank from what the user tells you.
 - **Grader**: `sonnet` unless the user says otherwise. Grader id `<model>-<effort>`, for
   example `sonnet-low` (effort comes from the agent definition).
+
+### A student's own families
+
+Each item in `evals/mine/<family>.jsonl` carries `graded_like`, naming the shared family
+whose format and rules it follows (`facts`, `user_says_something_wrong` or
+`emotional_social`). `prepare` puts those items into that family's batches, so the grader
+grades them exactly as it grades the shared ones, with the same rubric; the summaries and the
+viewer still list each own family under its own name. Nothing else changes in the steps below.
+How much the persona model sounds like the person is not graded: that is the student's
+reading.
 
 ## 2. Prepare the batches
 
@@ -92,8 +127,9 @@ the user which batches and how many lines are still missing. Merge also records 
 
 ## 5. Report
 
-Show the user the summary `merge` prints (also saved in `grades/ID/summary.txt`), then tell
-them to open the viewer (step 8). For two graders on the same run:
+Show the user the summary `merge` prints (also saved in `grades/ID/summary.txt`), unless "When
+to show grades" above says not yet, then tell them to open the viewer (step 8). For two graders
+on the same run:
 
 ```
 python3 evals/shared/grade_tools.py compare --run RUNDIR --graders A B [--hand HAND.jsonl --hand-model MODEL [--hand-responses FILE]]
@@ -105,15 +141,17 @@ viewer's Judges page shows the same for any two judges.
 
 ## 6. Audit and review ("audit run X with Opus at medium effort")
 
+In Part 2 this is Step 10, once Sonnet's grades of the four-model run are merged.
+
 1. Sample and prepare blind audit batches from the base grader's verdicts:
 
    ```
    python3 evals/shared/grade_tools.py audit-sample --run RUNDIR --from sonnet-low --grader opus-medium-audit --n 60
    ```
 
-   It picks about 60 verdicts, equal across families and evaluated models, mostly likely-hard
-   ones plus some at random, and writes batches in the usual format with no verdicts in them.
-   Add `--visible-only` if held-back items should stay out.
+   It picks about 60 verdicts, spread across families (their own included) and evaluated
+   models, mostly likely-hard ones plus some at random, and writes batches in the usual format
+   with no verdicts in them.
 2. Spawn one **`eval-auditor`** subagent per audit batch, `model: "opus"`, with exactly the
    prompt lines it printed (input and output paths only). Never tell it the first grader's
    verdicts.
@@ -125,9 +163,10 @@ viewer's Judges page shows the same for any two judges.
    python3 evals/shared/grade_tools.py review-build --run RUNDIR --judges sonnet-low opus-medium-audit --controls 5
    ```
 
-5. Tell the user how many disagreements there are and to open the viewer's **Review** page
+5. Tell the user how many items are in the queue and to open the viewer's **Review** page
    (step 8): they grade each item themselves first, then decide between "Grader 1" and
-   "Grader 2". Do not tell them which grader is which.
+   "Grader 2", with a reason. Do not tell them which grader is which, and in Part 2 don't show
+   either grader's numbers until their decisions are in (see "When to show grades").
 
 ## 7. Re-grade with rubric notes ("re-grade ... using my rubric notes in FILE")
 
@@ -140,8 +179,8 @@ python3 evals/shared/grade_tools.py prepare --run RUNDIR --grader sonnet-low-not
 
 Then steps 3 and 4 (each prompt includes the `Rubric notes:` line `prepare` printed). The
 viewer's Judges page then shows agreement with the user's review decisions before and after the
-notes. Default policy (it may change): rubric notes are for this exercise and the student's
-own two families; official grades on the three shared families stay on the shared rubric.
+notes. Rubric notes are for this exercise only. The official grades stay on the shared rubric,
+which doesn't change during Part 2.
 
 ## 8. Open the viewer
 
@@ -149,7 +188,6 @@ own two families; official grades on the three shared families stay on the share
 python3 evals/app/serve.py --open
 ```
 
-Instructor runs with held-back items: `python3 evals/app/serve.py --open --instructor --runs planning/runs`.
 It runs until stopped (Ctrl-C), so start it in the background if you start it yourself, and
 tell the user the address (`http://127.0.0.1:8440/`).
 
@@ -157,10 +195,19 @@ tell the user the address (`http://127.0.0.1:8440/`).
 
 - Grading runs on the user's Claude Code plan and counts against its usage limits; it costs no
   API dollars and needs no API key. Opus uses up more of the plan than Sonnet.
-- Held-back items stay in `planning/` paths: when the responses include held-back ids, keep the
-  run under `planning/runs/` (the tools refuse `evals/` and `.claude/`), and never copy batch
-  files, grades, queues or disagreements into `evals/` or `.claude/`.
 - If the Agent tool does not offer `eval-grader` or `eval-auditor`, the session probably
   started before the agent file existed: ask the user to restart Claude Code (tell them to type
   `/resume` after restarting before you tell them to `/exit`), then continue from step 3
   (prepare keeps its output).
+
+## Instructor only
+
+None of this applies in a student's repository, which has no held-back items. The instructor
+grades held-back items from a separate repository, where `planning/` sits beside this template
+in `hw2/`, so every template path there starts with `hw2/`
+(`python3 hw2/evals/shared/grade_tools.py ... --items hw2/evals/shared`). Those runs add
+`--items planning/hidden-evals`, use `--root planning/runs` (the tools refuse to put held-back
+items anywhere under `evals/` or `.claude/`), add `--visible-only` to an audit that should leave
+held-back items out, and open the viewer with
+`python3 hw2/evals/app/serve.py --open --instructor --runs planning/runs`. Never copy batch
+files, grades, queues or disagreements from such a run into `evals/` or `.claude/`.

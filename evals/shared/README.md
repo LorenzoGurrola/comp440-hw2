@@ -3,7 +3,7 @@
 Everyone in the class runs these three sets of test prompts on all four versions of their model:
 the base model, the model after SFT, the succinct model, and the persona model. Because the
 prompts are the same for everyone, results can be compared across the class. You will also
-write two families of your own.
+write two families of your own ([Your own families](#your-own-families) says how).
 
 Each model sees each prompt as `Question: {prompt}\nAnswer:` and writes up to 120 new tokens
 for `facts` and `user_says_something_wrong`, and up to 200 new tokens for `emotional_social`.
@@ -255,7 +255,7 @@ One JSON object per line. Every item has:
 | Field | Meaning |
 |---|---|
 | `id` | Unique id, such as `facts-001`, `wrong-012`, `emotional-007` |
-| `family` | `facts`, `user_says_something_wrong` or `emotional_social` |
+| `family` | `facts`, `user_says_something_wrong` or `emotional_social` (for your own families, `mine-<name>`; see below) |
 | `subtype` | The kind of item within the family (listed above) |
 | `prompt` | The text the model sees, inside `Question: ...\nAnswer:` |
 | `scoring` | `automatic`, `claude_rubric` or `human_pairwise`: how the family was first planned to be scored. Claude now grades all three families; the field stays so the files do not change. |
@@ -274,19 +274,55 @@ Extra fields by family:
 - **emotional_social:** `must_mention` (2 or 3 lowercase keywords), `task_check` (what
   counts as doing the task), `length_hint` (for example "2–4 sentences").
 
+## Your own families
+
+In Part 2 you write two test families of your own. Each family is one file in `evals/mine/`,
+named for the family, for example `evals/mine/example.jsonl` for a family called
+`mine-example`. Use lowercase letters, digits and underscores in the name, and don't put
+"hidden" in it: the tools treat any file with "hidden" in its name as held-back items.
+
+Each item copies the format of one of the three shared families and names that family in a
+`graded_like` field. Claude grades it exactly like that family's items, with the same rules in
+`.claude/agents/eval-grader.md`, so you don't write grading rules of your own and the grader
+stays the same for everyone. The results, the answers and the review queue show your family
+under its own name, next to the shared ones. Here is one item of a family graded like `facts`:
+
+```
+{"id": "mine-example-001", "family": "mine-example", "graded_like": "facts", "subtype": "music", "prompt": "How many strings does a standard violin have?", "answer": "Four", "accept": ["four", "4"], "reject_if_also": [], "wrong_examples": ["five", "six"], "difficulty": "easy", "predicted_winner": "succinct", "why": "A plain fact that a short answer should get right."}
+```
+
+| Field | What to write |
+|---|---|
+| `id` | `mine-`, the file's name, a dash and three digits: `mine-example-001`, `mine-example-002`, ... |
+| `family` | `mine-` and the file's name, the same on every line |
+| `graded_like` | `facts`, `user_says_something_wrong` or `emotional_social`, the same on every line, because a family's results are added up by that family's rules |
+| the rest | every field that family's items have (see [Item format](#item-format)): `subtype` (any short word for the kind of item), `prompt`, `predicted_winner`, `why`, and the family's extra fields. You may leave out `scoring`. |
+
+Each family needs **at least 10 items**, and you can have at most 3 families. Check them with
+
+```
+python3 evals/shared/validate.py --extra evals/mine
+```
+
+It names each problem in plain words and ends with "All checks passed." once the files are
+ready. It also checks that no item copies a shared item or another of yours. To grade your
+families, add `--items evals/mine` wherever the commands here take `--items evals/shared`; the
+[run folder README](../runs/README.md) shows the command for a run of all four models.
+
 ## Checking the files: `validate.py`
 
 Standard-library Python only; nothing to install. From the repo root:
 
 ```
 python3 evals/shared/validate.py
-python3 evals/shared/validate.py --train path/to/sft.jsonl path/to/dpo.jsonl
+python3 evals/shared/validate.py --extra evals/mine
+python3 evals/shared/validate.py --train training --extra evals/mine
 ```
 
 It checks that:
 
-1. **No prompt overlaps your training data.** Pass your SFT and preference-data files with
-   `--train`. It flags exact copies, and near copies: two prompts that share at least 60% of
+1. **No prompt overlaps your training data.** Pass the training folder with `--train
+   training`. It flags exact copies, and near copies: two prompts that share at least 60% of
    their content words (Jaccard similarity of 0.6 or more, after common words such as
    "what", "the" and "write" are dropped). It also checks the items against each other.
    Also look by eye for training prompts that ask about the same fact in different words;
@@ -298,4 +334,15 @@ It checks that:
    example scores wrong, and no accepted answer appears in the prompt itself (otherwise a
    model that repeats the question would get credit).
 
-Use the same script on your own two families by passing their folder with `--extra`.
+4. **Your own families follow the rules** in [Your own families](#your-own-families), when
+   you pass their folder with `--extra evals/mine`.
+5. **The training files are well formed**, when you pass the folder with `--train training`:
+   each file has the expected number of lines, ids are unique, every prompt is written as
+   `Question: ...\nAnswer:`, and no prompt is in two files. Once Claude has built your
+   preference pairs, it checks them too: each pair's id and prompt come from
+   `prompts-300.jsonl`, `chosen` and `rejected` are different answers, and `rejected` is that
+   prompt's human answer. Once you have labeled a sample, it checks that every sampled pair has
+   your label. The full list is at the top of `validate.py`.
+
+You can still pass single files to `--train` (for example `--train my_prompts.jsonl`); those
+are used for the overlap check only.

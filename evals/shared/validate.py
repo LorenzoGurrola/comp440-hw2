@@ -3,14 +3,22 @@
 
 Usage (from the repo root):
     python3 evals/shared/validate.py
+    python3 evals/shared/validate.py --extra evals/mine
+    python3 evals/shared/validate.py --train training
+    python3 evals/shared/validate.py --train training --extra evals/mine
     python3 evals/shared/validate.py --train my_sft.jsonl my_dpo.jsonl
-    python3 evals/shared/validate.py --extra path/to/more/items/
 
-    --train FILE ...  prompts the models were trained on (or earlier test prompts). Accepts
-                      .jsonl files (uses the "prompt", "instruction" or "question" field and
-                      strips a "Question: ...\\nAnswer:" wrapper), .json files (every string in
-                      them), and .txt files (one prompt per line).
-    --extra DIR ...   more item files (*.jsonl in each folder) to check along with these.
+    --extra DIR ...   more item files (*.jsonl in each folder) to check along with these: your
+                      own families (evals/mine/<name>.jsonl), or, for the instructor, files of
+                      held-back items (their names contain "hidden"; they follow the shared
+                      format and rules).
+    --train PATH ...  what the models are trained on. A folder (such as training/) is checked
+                      as the training folder: the files listed under "Training files" below,
+                      their formats and counts, and that no test item is a copy of a training
+                      prompt. A file is used for the overlap check only: .jsonl files (the
+                      "prompt", "instruction" or "question" field, without a
+                      "Question: ...\\nAnswer:" wrapper), .json files (every string in them) and
+                      .txt files (one prompt per line).
 
 What it checks:
     1. Overlap. No item prompt is an exact or near copy of a training prompt, or of another item.
@@ -25,6 +33,19 @@ What it checks:
        correct by score_fact(); every listed wrong example is scored wrong; and no accepted
        answer appears in the prompt itself (otherwise a model that repeats the question would
        get credit).
+    4. Your own families (--extra). Each file evals/mine/<name>.jsonl is one family: at least
+       10 items, at most 3 families. Each item has the id mine-<name>-NNN (three digits), the
+       family "mine-<name>", a graded_like field naming the shared family whose format and
+       grading rules it follows (facts, user_says_something_wrong or emotional_social; the same
+       for every item in the file), and every field that family's items have. File names must
+       not contain "hidden": the tools treat such files as held-back items.
+    5. Training files (--train FOLDER): sft-dolly-600.jsonl (600 lines: id sft-NNN, prompt
+       "Question: ...\\nAnswer:", completion starting with a space), prompts-300.jsonl (300 lines:
+       id pair-NNN, question, prompt, human), readout-10.jsonl (10 held-out prompts), and when
+       they exist pairs-succinct.jsonl and pairs-persona.jsonl (id from prompts-300, the same
+       prompt, chosen not empty and different from rejected, rejected the human answer) and
+       labels.jsonl (id, model succinct or persona, pick A or B, reason). Ids are unique, and
+       the SFT, pair and read-out prompts do not overlap.
 
 The scoring helpers score_fact() and keywords_found() can be imported and reused:
     from validate import score_fact, keywords_found
@@ -62,6 +83,26 @@ SCORING = {"facts": "automatic", "user_says_something_wrong": "claude_rubric",
            "emotional_social": "human_pairwise"}
 WINNERS = {"succinct", "persona", "either"}
 NEAR_DUP = 0.6
+
+# A student's own families: evals/mine/<name>.jsonl, items "mine-<name>-NNN".
+OWN_PREFIX = "mine-"
+OWN_NAME = re.compile(r"^[a-z][a-z0-9_]{0,39}$")
+OWN_FIELDS = ["id", "family", "graded_like", "subtype", "prompt", "predicted_winner", "why"]
+MIN_OWN_ITEMS = 10
+MAX_OWN_FAMILIES = 3
+
+# The training folder (--train FOLDER). Only these named files are read; anything else in the
+# folder (such as the scratch batches in training/.batches/) is ignored.
+SFT_FILE, PROMPTS_FILE, READOUT_FILE = "sft-dolly-600.jsonl", "prompts-300.jsonl", "readout-10.jsonl"
+TRAIN_FILES = {  # file name -> (number of lines, id pattern, example id)
+    SFT_FILE: (600, re.compile(r"^sft-\d{3}$"), "sft-001"),
+    PROMPTS_FILE: (300, re.compile(r"^pair-\d{3}$"), "pair-001"),
+    READOUT_FILE: (10, re.compile(r"^read-\d{2}$"), "read-01"),
+}
+PAIR_FILES = ["pairs-succinct.jsonl", "pairs-persona.jsonl"]
+PAIRS_PER_MODEL = 300
+LABEL_SAMPLE_FILE, LABELS_FILE = "label-sample.jsonl", "labels.jsonl"
+QA_PROMPT = re.compile(r"^Question: (.+)\nAnswer:$", flags=re.S)
 
 # ---------------------------------------------------------------- text normalization
 
@@ -189,6 +230,146 @@ def read_train_prompts(path):
     return out
 
 
+# ---------------------------------------------------------------- the training folder
+
+def one_space(text):
+    """True if text is a string that starts with exactly one space and has words after it."""
+    return isinstance(text, str) and text.startswith(" ") and text[1:2].strip() != "" \
+        and bool(text.strip())
+
+
+def read_rows(path, errors):
+    """The JSON objects in a .jsonl file, with an error for each line that is not one."""
+    rows = []
+    name = os.path.basename(path)
+    with open(path, encoding="utf-8") as f:
+        for n, line in enumerate(f, 1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError as e:
+                errors.append(f"{name} line {n}: not valid JSON ({e})")
+                continue
+            if isinstance(row, dict):
+                rows.append(row)
+            else:
+                errors.append(f"{name} line {n}: not a JSON object")
+    return rows
+
+
+def check_training_dir(folder, errors, report):
+    """Check the training folder; return its training prompts as [(file, question)].
+
+    report gets one plain line per file checked.
+    """
+    data = {}
+    for name, (count, id_re, example) in TRAIN_FILES.items():
+        path = os.path.join(folder, name)
+        if not os.path.isfile(path):
+            errors.append(f"{name}: not found in {folder}")
+            continue
+        rows = read_rows(path, errors)
+        data[name] = rows
+        report.append(f"  {name}: {len(rows)} lines")
+        if len(rows) != count:
+            errors.append(f"{name}: expected {count} lines, found {len(rows)}")
+        seen = set()
+        for n, r in enumerate(rows, 1):
+            rid = r.get("id")
+            where = f"{name} {rid if isinstance(rid, str) else f'line {n}'}"
+            if not isinstance(rid, str) or not id_re.match(rid):
+                errors.append(f"{where}: the id should look like {example}")
+            elif rid in seen:
+                errors.append(f"{where}: the id appears twice")
+            seen.add(rid)
+            prompt = r.get("prompt")
+            if name == SFT_FILE:
+                if not isinstance(prompt, str) or not QA_PROMPT.match(prompt):
+                    errors.append(f"{where}: the prompt should be \"Question: ...\\nAnswer:\"")
+                if not one_space(r.get("completion")):
+                    errors.append(f"{where}: the completion should start with one space, then "
+                                  f"the answer")
+            else:
+                q = r.get("question")
+                if not isinstance(q, str) or not q.strip():
+                    errors.append(f"{where}: no question")
+                elif prompt != f"Question: {q}\nAnswer:":
+                    errors.append(f"{where}: the prompt should be \"Question: \" + question + "
+                                  f"\"\\nAnswer:\"")
+            if name == PROMPTS_FILE and not one_space(r.get("human")):
+                errors.append(f"{where}: the human answer should start with one space, then the "
+                              f"answer")
+    # No prompt may be in more than one of the three files.
+    where_from = {}
+    for name, rows in data.items():
+        for r in rows:
+            if isinstance(r.get("prompt"), str):
+                where_from.setdefault(r["prompt"], set()).add(name)
+    for prompt, names in where_from.items():
+        if len(names) > 1:
+            errors.append(f"the prompt {prompt!r} is in more than one file: "
+                          f"{', '.join(sorted(names))}")
+
+    by_id = {r["id"]: r for r in data.get(PROMPTS_FILE, []) if isinstance(r.get("id"), str)}
+    for name in PAIR_FILES:
+        path = os.path.join(folder, name)
+        if not os.path.isfile(path):
+            continue
+        rows = read_rows(path, errors)
+        report.append(f"  {name}: {len(rows)} pairs")
+        if len(rows) != PAIRS_PER_MODEL:
+            errors.append(f"{name}: expected {PAIRS_PER_MODEL} pairs, found {len(rows)}")
+        seen = set()
+        for n, r in enumerate(rows, 1):
+            rid = r.get("id")
+            where = f"{name} {rid if isinstance(rid, str) else f'line {n}'}"
+            if rid in seen:
+                errors.append(f"{where}: the id appears twice")
+            seen.add(rid)
+            src = by_id.get(rid)
+            if src is None:
+                errors.append(f"{where}: the id is not in {PROMPTS_FILE}")
+            elif r.get("prompt") != src.get("prompt"):
+                errors.append(f"{where}: the prompt differs from that id's prompt in {PROMPTS_FILE}")
+            chosen, rejected = r.get("chosen"), r.get("rejected")
+            for field, text in (("chosen", chosen), ("rejected", rejected)):
+                if not one_space(text):
+                    errors.append(f"{where}: {field} should start with one space, then the answer "
+                                  f"(it is empty or starts differently)")
+            if isinstance(chosen, str) and isinstance(rejected, str) \
+                    and chosen.strip() == rejected.strip():
+                errors.append(f"{where}: chosen and rejected are the same answer")
+            if isinstance(chosen, str) and "\nQuestion:" in chosen:
+                errors.append(f"{where}: chosen contains \"\\nQuestion:\", the start of a new "
+                              f"question; cut it there")
+            if src is not None and rejected != src.get("human"):
+                errors.append(f"{where}: rejected should be that id's human answer in "
+                              f"{PROMPTS_FILE}")
+
+    sample_path, labels_path = (os.path.join(folder, f) for f in (LABEL_SAMPLE_FILE, LABELS_FILE))
+    if os.path.isfile(sample_path) and os.path.isfile(labels_path):
+        sample = read_rows(sample_path, errors)
+        picks = {}
+        for r in read_rows(labels_path, errors):
+            if r.get("pick") not in ("A", "B"):
+                errors.append(f"{LABELS_FILE} {r.get('model')} {r.get('id')}: pick should be A or B")
+            else:
+                picks[(r.get("model"), r.get("id"))] = r["pick"]
+        unlabeled = [f"{r.get('model')} {r.get('id')}" for r in sample
+                     if (r.get("model"), r.get("id")) not in picks]
+        report.append(f"  {LABELS_FILE}: {len(sample) - len(unlabeled)} of the {len(sample)} "
+                      f"sampled pairs labeled")
+        if unlabeled:
+            errors.append(f"{LABELS_FILE}: {len(unlabeled)} sampled pair(s) have no label A or B, "
+                          f"e.g. {', '.join(unlabeled[:3])}")
+
+    # The overlap check compares the test items with what the models are trained on.
+    return [(name, QA_PROMPT.match(r["prompt"]).group(1))
+            for name in (SFT_FILE, PROMPTS_FILE) for r in data.get(name, [])
+            if isinstance(r.get("prompt"), str) and QA_PROMPT.match(r["prompt"])]
+
+
 # ---------------------------------------------------------------- checks
 
 def load_items(path, errors):
@@ -227,22 +408,102 @@ def check_fields(path, items, errors):
         for k in ("prompt", "why"):
             if not str(it[k]).strip():
                 errors.append(f"{where}: empty {k}")
-        if fam == "facts" or (not shared and "accept" in it):
-            if not it["accept"] or any(a != a.lower() or not a.strip() for a in it["accept"]):
-                errors.append(f"{where}: accept must be a non-empty list of lowercase strings")
-            if not isinstance(it.get("reject_if_also", []), list):
-                errors.append(f"{where}: reject_if_also must be a list")
-        elif fam == "user_says_something_wrong":
-            for k in ("false_claim", "correct_fact"):
-                if not str(it[k]).strip():
-                    errors.append(f"{where}: empty {k}")
-        elif fam == "emotional_social":
-            kws = it["must_mention"]
-            if not 2 <= len(kws) <= 3 or any(k != k.lower() for k in kws):
-                errors.append(f"{where}: must_mention needs 2-3 lowercase keywords")
-            _, missing_kw = keywords_found(it, it["prompt"])
-            if missing_kw:
-                errors.append(f"{where}: must_mention {missing_kw} not found in the prompt")
+        check_family_fields(where, fam if shared else ("facts" if "accept" in it else None), it,
+                            errors)
+
+
+def check_family_fields(where, fam, it, errors):
+    """The checks on one family's own fields (fam: the family whose format the item follows)."""
+    if fam == "facts":
+        acc = it["accept"]
+        if not isinstance(acc, list) or not acc or any(
+                not isinstance(a, str) or a != a.lower() or not a.strip() for a in acc):
+            errors.append(f"{where}: accept must be a non-empty list of lowercase strings")
+        if not isinstance(it.get("reject_if_also", []), list):
+            errors.append(f"{where}: reject_if_also must be a list")
+    elif fam == "user_says_something_wrong":
+        for k in ("false_claim", "correct_fact"):
+            if not str(it[k]).strip():
+                errors.append(f"{where}: empty {k}")
+    elif fam == "emotional_social":
+        kws = it["must_mention"]
+        if not isinstance(kws, list) or not 2 <= len(kws) <= 3 or any(
+                not isinstance(k, str) or k != k.lower() for k in kws):
+            errors.append(f"{where}: must_mention needs 2-3 lowercase keywords")
+            return
+        _, missing_kw = keywords_found(it, it["prompt"])
+        if missing_kw:
+            errors.append(f"{where}: must_mention {missing_kw} not found in the prompt")
+
+
+def own_family_name(path):
+    """'mine-<name>' for evals/mine/<name>.jsonl."""
+    return OWN_PREFIX + os.path.basename(path)[:-len(".jsonl")]
+
+
+def check_own_file(path, items, errors):
+    """One of the student's own families: evals/mine/<name>.jsonl. Returns its graded_like."""
+    name = os.path.basename(path)
+    stem = name[:-len(".jsonl")]
+    family = own_family_name(path)
+    if not OWN_NAME.match(stem):
+        errors.append(f"{name}: the file name is your family's name, so use lowercase letters, "
+                      f"digits and underscores, starting with a letter (for example "
+                      f"kind_refusals.jsonl)")
+    if len(items) < MIN_OWN_ITEMS:
+        errors.append(f"{name}: {len(items)} item(s); each of your own families needs at least "
+                      f"{MIN_OWN_ITEMS}")
+    id_ok = re.compile(rf"^{re.escape(family)}-\d{{3}}$")
+    likes = {}
+    for it in items:
+        where = f"{name} {it.get('id', '(no id)')}"
+        if not isinstance(it.get("id"), str) or not id_ok.match(it["id"]):
+            errors.append(f"{where}: the id should be {family}-NNN with three digits, for "
+                          f"example {family}-001 (mine-, the file name, a dash, a number)")
+        if it.get("family") != family:
+            errors.append(f"{where}: family should be {family!r} (mine- and the file name), not "
+                          f"{it.get('family')!r}")
+        like = it.get("graded_like")
+        if like not in FAMILY_FIELDS:
+            errors.append(f"{where}: graded_like should be facts, user_says_something_wrong or "
+                          f"emotional_social: the shared family whose format and grading rules "
+                          f"this item follows (it is {like!r})")
+            continue
+        likes.setdefault(like, it.get("id"))
+        missing = [k for k in OWN_FIELDS + FAMILY_FIELDS[like] if k not in it]
+        if missing:
+            errors.append(f"{where}: missing field(s) {', '.join(missing)}; an item graded like "
+                          f"{like} has every field a {like} item has (evals/shared/README.md, "
+                          f"Item format)")
+            continue
+        if "scoring" in it and it["scoring"] != SCORING[like]:
+            errors.append(f"{where}: scoring should be {SCORING[like]!r} for an item graded like "
+                          f"{like} (or leave the field out)")
+        if it["predicted_winner"] not in WINNERS:
+            errors.append(f"{where}: predicted_winner must be one of {sorted(WINNERS)}")
+        for k in ("subtype", "prompt", "why"):
+            if not isinstance(it[k], str) or not it[k].strip():
+                errors.append(f"{where}: {k} must be a non-empty string")
+        if not isinstance(it["prompt"], str):
+            continue
+        if like == "facts":
+            for k in ("reject_if_also", "wrong_examples"):
+                if not isinstance(it[k], list):
+                    errors.append(f"{where}: {k} must be a list (it may be empty)")
+            if not str(it["answer"]).strip():
+                errors.append(f"{where}: empty answer")
+        check_family_fields(where, like, it, errors)
+    if len(likes) > 1:
+        errors.append(f"{name}: every item in one family must have the same graded_like, so its "
+                      f"results can be added up; this file mixes "
+                      + ", ".join(f"{k} ({v})" for k, v in likes.items())
+                      + ". Put the items graded another way in a family of their own.")
+    return next(iter(likes), None)
+
+
+def is_own_like(it):
+    return isinstance(it, dict) and ("graded_like" in it or str(it.get("family", "")).startswith(
+        OWN_PREFIX) or str(it.get("id", "")).startswith(OWN_PREFIX))
 
 
 def check_facts(items, errors, warnings):
@@ -312,12 +573,13 @@ def check_overlap(items, train, errors, review):
     return stats
 
 
-def subtype_table(files):
+def subtype_table(files, own_kinds=None):
     lines = []
     for path, items in files:
         if not items:
             continue
         fam = items[0].get("family")
+        like = (own_kinds or {}).get(path)
         counts = {}
         for it in items:
             counts[it.get("subtype")] = counts.get(it.get("subtype"), 0) + 1
@@ -329,14 +591,17 @@ def subtype_table(files):
             for it in items:
                 d[it.get("difficulty")] = d.get(it.get("difficulty"), 0) + 1
             extra = "; difficulty " + ", ".join(f"{k} {v}" for k, v in sorted(d.items()))
-        lines.append(f"  {os.path.basename(path)}: {len(items)} items ({cells}{extra})")
+        lines.append(f"  {os.path.basename(path)}: {len(items)} items ({cells}{extra})"
+                     + (f", your own family {fam}, graded like {like}" if like else ""))
     return lines
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--train", nargs="*", default=[], help="training or earlier test prompt files")
-    ap.add_argument("--extra", nargs="*", default=[], help="folders with more item files")
+    ap.add_argument("--train", nargs="*", default=[],
+                    help="the training folder (checked in full), or training/test prompt files")
+    ap.add_argument("--extra", nargs="*", default=[],
+                    help="folders with more item files, such as evals/mine")
     ap.add_argument("--show-review", action="store_true", help="list every 'similar wording' pair")
     args = ap.parse_args()
 
@@ -354,22 +619,57 @@ def main():
         if bad:
             errors.append(f"{name}: items from another family: {bad[:5]}")
         files.append((path, items))
+    shared_files = list(files)
+    own_files = []
     for d in args.extra:
-        for path in sorted(glob.glob(os.path.join(d, "*.jsonl"))):
-            files.append((path, load_items(path, errors)))
+        if not os.path.isdir(d):
+            errors.append(f"--extra {d}: not a folder")
+            continue
+        paths = sorted(glob.glob(os.path.join(d, "*.jsonl")))
+        if not paths:
+            errors.append(f"--extra {d}: no .jsonl item files in it")
+        for path in paths:
+            items = load_items(path, errors)
+            files.append((path, items))
+            if "hidden" not in os.path.basename(path):
+                own_files.append((path, items))
+            elif any(is_own_like(it) for it in items):
+                errors.append(f"{os.path.basename(path)}: the name of your own family's file must "
+                              f"not contain 'hidden'; the tools treat such files as held-back "
+                              f"items. Rename it.")
+            else:
+                shared_files.append((path, items))      # the instructor's held-back items
+        if any("hidden" not in os.path.basename(p) for p in paths) \
+                and not os.path.exists(os.path.join(d, "LOG.md")):
+            warnings.append(f"{d}: no LOG.md, the log of the items Claude drafted and what you "
+                            f"did with each")
+    if len(own_files) > MAX_OWN_FAMILIES:
+        errors.append(f"{len(own_files)} families of your own "
+                      f"({', '.join(os.path.basename(p) for p, _ in own_files)}); the most is "
+                      f"{MAX_OWN_FAMILIES}")
 
     all_items = [it for _, items in files for it in items]
     ids = {}
     for it in all_items:
         if it.get("id") in ids:
-            errors.append(f"duplicate id {it.get('id')}")
+            errors.append(f"duplicate id {it.get('id')}: every id must be unique, across the "
+                          f"shared items and your own")
         ids[it.get("id")] = True
-    for path, items in files:
+    for path, items in shared_files:
         check_fields(path, items, errors)
+    own_kinds = {}
+    for path, items in own_files:
+        own_kinds[path] = check_own_file(path, items, errors)
     check_facts(all_items, errors, warnings)
 
-    train = []
+    train, train_report, n_train_files = [], [], 0
     for path in args.train:
+        if os.path.isdir(path):
+            train_report.append(f"Training folder {path}:")
+            train += check_training_dir(path, errors, train_report)
+            n_train_files += 2
+            continue
+        n_train_files += 1
         try:
             train += [(os.path.basename(path), p) for p in read_train_prompts(path)]
         except (OSError, ValueError) as e:
@@ -378,9 +678,11 @@ def main():
     stats = check_overlap(ok_items, train, errors, review)
 
     print("Files and subtype balance:")
-    print("\n".join(subtype_table(files)))
+    print("\n".join(subtype_table(files, own_kinds)))
+    if train_report:
+        print("\n" + "\n".join(train_report))
     print(f"\nOverlap check: {len(ok_items)} item prompts vs {len(train)} training/test prompts "
-          f"from {len(args.train)} file(s)" + ("" if args.train else " (none given; use --train)"))
+          f"from {n_train_files} file(s)" + ("" if args.train else " (none given; use --train)"))
     print(f"  vs training: exact {stats['exact_train']}, near copies {stats['near_train']}, "
           f"similar wording (for review) {stats['similar_train']}")
     print(f"  among items: exact {stats['exact_items']}, near copies {stats['near_items']}, "

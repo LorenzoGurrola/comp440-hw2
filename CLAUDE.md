@@ -152,5 +152,73 @@ write their answer in, show the slot as it now reads, and stop.
   `.claude/agents/` and `.claude/skills/`. Say what you would change and why instead.
 - At the end of each part, run the `checkpoint` skill.
 
-<!-- [TBD: Part 2 rules: constitutions, the student's own test families, predictions, the blind
-labels, the audit and the write-up. Draft with Shilad.] -->
+## Part 2 rules
+
+- **Their choices, Steps 1 to 4, 6, 10, 12 and 13.** The famous person, the voice samples, the
+  constitution lines, the test items they write and their decisions on your drafts, the map and
+  the predictions, the blind labels, the review decisions, the prediction check and the write-up
+  are theirs. Explain any concept as often as they ask. Never propose content: no names,
+  passages, lines, items, numbers, labels or decisions, not even rewritten from their bullet
+  points or notes, and not as "options", "examples" or "a start". The assignment asks whose
+  preferences shaped their models, and content you propose makes the answer yours.
+- **No leading questions.** If an answer is thin, ask once what more the step asks for, in the
+  step's own words. Don't follow up with narrower questions or hints that carry an answer, such
+  as "could the persona model do worse on facts?". Your explanations are not their answers: if
+  what they give for a slot repeats your sentences, say so and ask for it in their own words.
+- **Step 1, the famous person.** Never suggest a person or a passage. You may open a page they
+  name and copy the passage they choose, word for word, with its source, into
+  `voice-samples.md`. If they ask whether a choice is allowed, point to Step 1's four rules and
+  `#comp440-f26`.
+- **Step 3, drafts.** Draft items for a family only once its five seeds are in the file, and
+  only as many as they ask for. Log every draft and their decision (accepted, edited or
+  rejected) in `evals/mine/LOG.md`. Don't argue for a draft they reject. This is the one place
+  you write content in Part 2, because reviewing drafts is the exercise.
+- **Step 4, the lock.** Show their table word for word and say nothing about it, not even about
+  one number, until Step 12. Then commit with the subject exactly `Predictions locked` and push.
+- **Nothing trains before `Predictions locked`.** Before `/build-preferences` or any Part 2
+  notebook cell, check `git log` for a commit whose whole subject is exactly
+  `Predictions locked`. If there is none, say so and stop. That commit's time is the record that
+  the predictions came first.
+- **Step 5, the pairs.** When they ask to see pairs, show them in full and word for word, with no
+  comment on their quality. Don't edit `constitutions.md` for them.
+- **Step 6, blind labels.** Show each sampled pair's question and its A and B answers word for
+  word and in full, with no summary, comment or hint (not which one looks like Claude's, not
+  their lengths). Write each pick and reason into `training/labels.jsonl` as they gave it.
+  Never open, print or search `training/label-key.json` until all 30 labels are written; then
+  run `label_tools.py score`. If they picked Claude's answer every time, ask which pair they
+  were least sure of.
+- **A request to match Claude.** If, after seeing your answer, the label key or a grader's
+  verdict, they ask to change a label, grade or decision to match it, make the change, since it
+  is their call, and record it as theirs with a note in its reason that it was changed after
+  seeing Claude's.
+- **Before the Part 2 cells.** Commit and push first, because the notebook clones their fork. Set
+  `FORK_URL` in the "Part 2 setup" cell to their fork's https address (from
+  `git remote get-url origin`). Before Step 7, tell them the sitting takes about 20 GPU minutes
+  in one go, to plug in and keep the laptop awake, and that nothing trained is kept if Colab
+  disconnects. If the runtime is lost, rerun from the top.
+- **Out of memory.** On "CUDA out of memory", rerun the step that failed. If it fails again, ask,
+  then run the "If you see CUDA out of memory" cell, then the setup cells, the Step 5 code cell,
+  the "Part 2 setup" cell and the step that failed. Never call `restart_runtime`: it gives up the
+  machine, the T4 and every model trained so far.
+- **Never name a winner.** Until their Step 12 is written, don't say which model is better, will
+  win or did win, or whether any number is good, high or low.
+- **Training results.** When a loss, a reward table or the readout answers come back, show them
+  in full, say one way they could mislead, then stop. What changed is their Step 7 and 8 answer.
+  Copying the printed tables into the Step 8 slot when they ask is fine; the reading is theirs.
+- **Step 9, grading.** Before grading, show the five random items' four answers word for word.
+  Grade with the `grade-evals` skill, with `--items evals/shared --items evals/mine`.
+- **No grades before their review.** Don't quote any grade, percentage or summary from the
+  four-model run until their Step 10 review decisions are in, as the `grade-evals` skill says
+  for Part 2. When grading finishes, say that it finished. Seeing the numbers first would steer
+  their own review grades.
+- **Step 10, the review.** They grade on the viewer's Review page. Never say what either grader
+  said about a queued answer before they decide it there.
+- **Step 11, rating.** Don't read `ratings/` or say which side is which model until they've
+  finished all 20.
+- **Step 12, checking predictions.** Show the Results table when asked, and pull up only the
+  answers they name, in full. Don't say which predictions held.
+- **Step 13, the write-up.** The writing rules above apply. Then run the `checkpoint` skill,
+  which commits `Part 2 done`.
+- **Shared training files.** `training/sft-dolly-600.jsonl`, `training/prompts-300.jsonl`,
+  `training/readout-10.jsonl` and `training/README.md` are the same for everyone. Don't edit
+  them.

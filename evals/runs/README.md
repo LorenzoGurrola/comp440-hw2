@@ -11,6 +11,24 @@ read it.
 - **Runs that include held-back items** (the instructor's) go in `planning/runs/`. The tools
   refuse to put held-back items anywhere under `evals/` or `.claude/`.
 
+## A run from the notebook's zip
+
+The notebook downloads your models' answers as one zip: `hw2-base-answers.zip` in Part 1, and
+`hw2-four-models.zip` in Part 2, with the answers of all four models (`base`, `sft`, `succinct`
+and `persona`) to the shared items and your own. Claude makes the run straight from the zip,
+with PATH the folder Chrome saved it in (usually `~/Downloads`):
+
+```
+python3 evals/shared/grade_tools.py init-run --root evals/runs --name four-models --title "..." --description "..." --zip PATH/hw2-four-models.zip --items evals/shared --items evals/mine
+```
+
+Inside the zip, `responses/<model>.jsonl` holds each model's answers, `models.json` says what
+each model is, and `generation-notes.txt` says how the answers were made. `init-run` copies the
+answers into the run's `responses/` folder and the other two into `run.json`. `--items
+evals/mine` adds your own families; without it, `init-run` stops and says to add it. It also
+prints how many items each model answered in each family, so you can see that nothing is
+missing before you grade.
+
 ## Name
 
 `<YYYY-MM-DD>-<short-slug>`, for example `2026-10-05-four-models-standin`: the date the run was
@@ -62,7 +80,7 @@ Grader ids say who graded and how, for example `sonnet-low`, `opus-low`, `opus-m
 | `batches/` | what each grader subagent reads (no model names, no item ids) |
 | `out/` | what each grader subagent wrote |
 | `redo/` | lines still missing or invalid after a merge |
-| `grades.jsonl` | the merged verdicts: one line per response |
+| `grades.jsonl` | the merged verdicts: one line per response. A line for one of your own items keeps its family's name (`mine-<name>`) and adds `graded_like`, the family it was graded like. |
 | `summary.txt` | the merged summary tables |
 | `rubric-snapshot.md` | the rubric file as it was when the batches were prepared |
 | `rubric-notes.md` | the rubric notes, if the grader was given any |
@@ -85,7 +103,8 @@ Grader ids say who graded and how, for example `sonnet-low`, `opus-low`, `opus-m
 ### `review/`
 
 - `queue-<judgeA>-vs-<judgeB>.jsonl` (built by `grade_tools.py review-build`): one line per
-  item to review, shuffled: `queue_key`, `model`, `id`, `family`, `subtype`, `kind`
+  item to review, shuffled: `queue_key`, `model`, `id`, `family` (and `graded_like` for one of
+  your own items), `subtype`, `kind`
   (`disagreement`, or `control` for an item both judges agreed on), and `grader_1` /
   `grader_2`, the random assignment of which judge is shown as "Grader 1" for that item.
   `queue-....meta.json` holds the queue's neutral label, the two judges and the counts. The
@@ -123,7 +142,8 @@ Every set of verdicts in a run is a **judge**, and the viewer's Judges page comp
 | `rater-<rater>` | a rater's yes/no task checks in `ratings/` (emotional tasks only) |
 
 The verdict compared is each family's main one: `correct` for facts, the 0/1/2 `score` for
-user says something wrong, and `does_task` for emotional and social tasks.
+user says something wrong, and `does_task` for emotional and social tasks. Your own families
+use the main verdict of the family they are graded like.
 
 ## The audit-and-review loop
 

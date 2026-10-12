@@ -32,9 +32,16 @@ responses, every grader's grades, the audit, review decisions and ratings. The v
 The grading rules live in one place: the eval-grader agent's definition. This script only
 checks the shape of each verdict. Standard library only: nothing to install, no API key.
 
+A student's own families (evals/mine/<name>.jsonl, family "mine-<name>") are graded like the
+shared family each item's graded_like names: their responses go into that family's batches, so
+the grader and its rubric are unchanged. Results, summaries and the viewer show each own family
+under its own name.
+
 Typical run, from the repo root (the grade-evals skill does all of this for you):
   python3 evals/shared/grade_tools.py init-run --root evals/runs --name four-models \\
-          --title "..." --description "..." --responses runs/eval-*.jsonl --items evals/shared
+          --title "..." --description "..." --zip hw2-four-models.zip \\
+          --items evals/shared --items evals/mine
+  (or --responses runs/eval-*.jsonl in place of --zip)
   python3 evals/shared/grade_tools.py prepare --run evals/runs/2026-10-05-four-models \\
           --grader sonnet-low --grader-model sonnet
   ... one eval-grader subagent per batch listed ...
@@ -63,6 +70,8 @@ import random
 import re
 import shutil
 import sys
+import tempfile
+import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
@@ -89,6 +98,32 @@ FAMILY_TITLES = {
     "user_says_something_wrong": "User says something wrong",
     "emotional_social": "Emotional and social tasks",
 }
+# A student's own family (evals/mine/<name>.jsonl) has "family": "mine-<name>" and a
+# "graded_like" field naming one of the three FAMILIES. Its items are graded exactly like that
+# family's: same batches, same verdict fields, same rubric section. Everywhere else (results,
+# summaries, the viewer) the family keeps its own name. The "kind" of an item or record is the
+# family whose grading rules apply to it.
+OWN_PREFIX = "mine-"
+
+
+def kind_of(obj):
+    """The grading family (one of FAMILIES) of an item or grades record, or None."""
+    fam = obj.get("family")
+    if fam in FAMILIES:
+        return fam
+    like = obj.get("graded_like")
+    return like if like in FAMILIES else None
+
+
+def family_title(family):
+    """'Short facts' for a shared family; an own family is shown under its own name."""
+    return FAMILY_TITLES.get(family, family)
+
+
+def family_order(families):
+    """The shared families in their usual order, then any others (own families) by name."""
+    present = set(families)
+    return [f for f in FAMILIES if f in present] + sorted(present - set(FAMILIES))
 # The grading rules themselves are written in one place only, the eval-grader agent's
 # definition (.claude/agents/eval-grader.md). Here are just the verdict fields it must write
 # for each family, in order, with their types: bool, str, list (of strings), or a tuple of
@@ -200,8 +235,13 @@ def load_responses(path):
 def check_known_ids(rows, items, path):
     unknown = [r["id"] for r in rows if r["id"] not in items]
     if unknown:
-        hint = (" Some look like held-back items; add the folder that has them with another "
-                "--items." if any("-h" in i for i in unknown) else "")
+        hint = ""
+        if any(str(i).startswith(OWN_PREFIX) for i in unknown):
+            hint = (" Some are your own families' items; add their folder with another --items "
+                    "(for example --items evals/mine).")
+        elif any(re.search(r"-h\d+$", str(i)) for i in unknown):
+            hint = (" Some look like held-back items; add the folder that has them with another "
+                    "--items.")
         die(f"{len(unknown)} response id(s) in {path} are not in any item file given with "
             f"--items: {', '.join(unknown[:10])}{' ...' if len(unknown) > 10 else ''}.{hint}")
 
@@ -226,9 +266,15 @@ def check_verdict(obj, family):
 
 
 def make_record(family, item, row, verdict, grader, graded_at):
-    """One line of grades.jsonl: the verdict plus the string-match cross-checks."""
-    rec = {"id": item["id"], "family": family, "subtype": item.get("subtype"),
-           "model": row["model"], "held_back": item["_held_back"]}
+    """One line of grades.jsonl: the verdict plus the string-match cross-checks.
+
+    family is the grading family the batch used. The record keeps the item's own family name;
+    for a student's own family it also records graded_like (the grading family).
+    """
+    rec = {"id": item["id"], "family": item.get("family", family)}
+    if rec["family"] != family:
+        rec["graded_like"] = family
+    rec.update(subtype=item.get("subtype"), model=row["model"], held_back=item["_held_back"])
     rec.update(verdict)
     if family == "facts":
         rec["string_match_correct"] = score_fact(item, row["response"])
@@ -261,10 +307,18 @@ def row_groups(family, recs):
     return groups
 
 
+def rec_kind(rec):
+    """The grading family of a grades.jsonl record."""
+    return rec.get("graded_like") or rec.get("family")
+
+
 def family_lines(family, recs):
     """The summary table for one family and one evaluated model, by subtype."""
-    lines = [FAMILY_TITLES[family]]
+    kind = rec_kind(recs[0]) if recs else family
+    lines = [family_title(family) + ("" if kind == family
+                                     else f" (your own family, graded like {kind})")]
     rows = []
+    family = kind            # from here on, the grading family decides the columns
     for name, rs in row_groups(family, recs):
         n = len(rs)
         if family == "facts":
@@ -373,13 +427,18 @@ def build_plan(responses, item_paths, out_dir, grader, seed, batch_size, keep=No
             die(f"{len(missing)} of the responses to grade are not in the responses files, "
                 f"e.g. {missing[:3]}")
         rows = [r for r in rows if (r["model"], r["id"]) in keep]
-    for r in rows:
-        if items[r["id"]]["family"] not in FAMILIES:
-            die(f"item {r['id']} is in family {items[r['id']]['family']!r}, which has no "
-                f"grading rules")
+    no_rules = sorted({r["id"] for r in rows if kind_of(items[r["id"]]) is None})
+    if no_rules:
+        it = items[no_rules[0]]
+        die(f"{len(no_rules)} item(s) have no grading rules, e.g. {no_rules[0]} in family "
+            f"{it.get('family')!r}. An item of your own family needs a graded_like field naming "
+            f"one of {', '.join(FAMILIES)}; check the files with "
+            f"python3 evals/shared/validate.py --extra evals/mine")
 
     rng = random.Random(seed)
-    by_family = {f: [r for r in rows if items[r["id"]]["family"] == f] for f in FAMILIES}
+    # Batches are by grading family: a student's own items go into the batches of the family
+    # they are graded like, so the grader sees and grades them exactly like those items.
+    by_family = {f: [r for r in rows if kind_of(items[r["id"]]) == f] for f in FAMILIES}
     keys, batches, used = {}, [], set()
     for family in FAMILIES:
         group = by_family[family]
@@ -423,6 +482,14 @@ def build_plan(responses, item_paths, out_dir, grader, seed, batch_size, keep=No
         "keys": keys,
         "batches": batches,
     }
+    own = {}
+    for r in rows:
+        it = items[r["id"]]
+        if it["family"] not in FAMILIES:
+            o = own.setdefault(it["family"], {"graded_like": kind_of(it), "responses": 0})
+            o["responses"] += 1
+    if own:
+        manifest["own_families"] = {f: own[f] for f in sorted(own)}
     return manifest, held_back
 
 
@@ -650,6 +717,11 @@ def print_prepared(out_dir, manifest, again=False, run_dir=None):
           f"{len(manifest['models'])} model(s) ({', '.join(manifest['models'])}), including "
           f"{manifest['held_back_items']} held-back item(s), in {len(batches)} batches "
           f"({per_family}).")
+    own = manifest.get("own_families") or {}
+    if own:
+        print("Your own families are graded in the batches of the family each is graded like: "
+              + "; ".join(f"{f}, {o['responses']} responses, in the {o['graded_like']} batches"
+                          for f, o in own.items()) + ".")
     print(f"Grader: {g.get('id', g['model'])} ({g.get('agent', 'eval-grader')} subagent, model "
           f"{g['model']}, effort {g['effort']}"
           + (", with rubric notes" if g.get("rubric_notes") else "") + f"). Folder: {out_dir}\n")
@@ -904,12 +976,15 @@ def merge_records(out_dir, manifest, items, results):
 
 
 def headline(records, family, model):
+    """The family's main number for one model: share correct, mean score or share that does
+    the task (by the family's grading kind, for a student's own family)."""
     rs = [r for r in records if r["model"] == model and r["family"] == family]
     if not rs:
         return None
-    if family == "facts":
+    kind = rec_kind(rs[0])
+    if kind == "facts":
         return 100 * sum(r["correct"] for r in rs) / len(rs)
-    if family == "user_says_something_wrong":
+    if kind == "user_says_something_wrong":
         return sum(r["score"] for r in rs) / len(rs)
     return 100 * sum(r["does_task"] for r in rs) / len(rs)
 
@@ -920,7 +995,16 @@ def fmt_headline(family, v):
     return f"{v:.2f}" if family == "user_says_something_wrong" else f"{v:.0f}%"
 
 
+OWN_HEADLINE = {"facts": "correct", "user_says_something_wrong": "mean (0-2)",
+                "emotional_social": "does task"}
+
+
 def headline_lines(records, models):
+    own = {}                  # a student's own families: family -> grading kind
+    for r in records:
+        if r["family"] not in FAMILIES:
+            own.setdefault(r["family"], rec_kind(r))
+    own_names = sorted(own)
     rows = []
     for m in models:
         recs = [r for r in records if r["model"] == m]
@@ -932,16 +1016,21 @@ def headline_lines(records, models):
                     + [f"{sum(r['score_implicit_as_2'] for r in wrong) / len(wrong):.2f}"
                        if wrong else "-"]
                     + [fmt_headline("emotional_social",
-                                    headline(records, "emotional_social", m))])
+                                    headline(records, "emotional_social", m))]
+                    + [fmt_headline(own[f], headline(records, f, m)) for f in own_names])
     lines = ["Headline numbers by evaluated model (all items, visible and held back)"]
     lines += table(["model", "graded", "facts correct", "wrong-claim mean (0-2)",
-                         "mean if implicit = 2", "emotional does task"], rows)
+                         "mean if implicit = 2", "emotional does task"]
+                   + [f"{f} {OWN_HEADLINE[own[f]]}" for f in own_names], rows)
+    if own_names:
+        lines.append("  (" + "; ".join(f"{f} is your own family, graded like {own[f]}"
+                                       for f in own_names) + ")")
     return lines
 
 
 def string_match_lines(recs):
-    facts = [r for r in recs if r["family"] == "facts"]
-    emo = [r for r in recs if r["family"] == "emotional_social"]
+    facts = [r for r in recs if rec_kind(r) == "facts"]
+    emo = [r for r in recs if rec_kind(r) == "emotional_social"]
     parts = []
     if facts:
         agree = sum(r["correct"] == bool(r["string_match_correct"]) for r in facts)
@@ -972,7 +1061,7 @@ def summary_text(out_dir, manifest, records, gaps, hand=None):
     for model in models:
         recs = [r for r in records if r["model"] == model]
         lines += [f"Model: {model}  ({len(recs)} responses graded)", ""]
-        for family in FAMILIES:
+        for family in family_order(r["family"] for r in recs):
             fam = [r for r in recs if r["family"] == family]
             if fam:
                 lines += family_lines(family, fam) + [""]
@@ -1256,17 +1345,21 @@ def cmd_compare(args):
                    f"the two runs and are left out, e.g. {differ[:3]}")
     models = [m for m in man_a["models"] if any(k[0] == m for k in common)]
     disagreements = []
-    for family in FAMILIES:
-        keys = [k for k in common if A[k]["family"] == family]
+    for family in family_order(A[k]["family"] for k in common):
+        keys = [k for k in common if A[k]["family"] == family and B[k]["family"] == family]
         if not keys:
             continue
-        field = LABEL[family]
+        kind = rec_kind(A[keys[0]])
+        own = kind != family
+        field = LABEL[kind]
         pairs = [(A[k][field], B[k][field]) for k in keys]
         agree = sum(a == b for a, b in pairs)
-        out += ["", f"{FAMILY_TITLES[family]}: {len(keys)} responses",
+        out += ["", f"{family_title(family)}"
+                + (f" (your own family, graded like {kind})" if own else "")
+                + f": {len(keys)} responses",
                 f"  {field}: the graders agree on {agree} of {len(keys)} ({pct(agree, len(keys))})"
                 f", Cohen's kappa {fmt_kappa(kappa(pairs))}"]
-        if family == "user_says_something_wrong":
+        if kind == "user_says_something_wrong":
             near = sum(abs(a - b) <= 1 for a, b in pairs)
             p2 = [(A[k]["score_implicit_as_2"], B[k]["score_implicit_as_2"]) for k in keys]
             a2 = sum(a == b for a, b in p2)
@@ -1276,7 +1369,7 @@ def cmd_compare(args):
             grid = [[f"{na} {a}"] + [sum(1 for x, y in pairs if x == a and y == b)
                                      for b in (0, 1, 2)] for a in (0, 1, 2)]
             out += ["  " + x for x in table(["", f"{nb} 0", f"{nb} 1", f"{nb} 2"], grid)]
-        if family == "emotional_social":
+        if kind == "emotional_social":
             for extra in ("all_details", "has_placeholder", "truncated"):
                 ok = sum(A[k][extra] == B[k][extra] for k in keys)
                 out.append(f"  {extra}: agree on {ok} of {len(keys)} ({pct(ok, len(keys))})")
@@ -1288,11 +1381,11 @@ def cmd_compare(args):
             if va[m] is None:
                 continue
             diff = vb[m] - va[m]
-            rows.append([m, len(ka), fmt_headline(family, va[m]), fmt_headline(family, vb[m]),
-                         f"{diff:+.2f}" if family == "user_says_something_wrong"
+            rows.append([m, len(ka), fmt_headline(kind, va[m]), fmt_headline(kind, vb[m]),
+                         f"{diff:+.2f}" if kind == "user_says_something_wrong"
                          else f"{diff:+.0f} points"])
         what = {"facts": "share correct", "user_says_something_wrong": "mean score, 0 to 2",
-                "emotional_social": "share that does the task"}[family]
+                "emotional_social": "share that does the task"}[kind]
         out.append(f"  Headline per evaluated model ({what}):")
         out += ["  " + x for x in table(["model", "n", na, nb, f"{nb} minus {na}"], rows)]
         va = {m: v for m, v in va.items() if v is not None}
@@ -1309,15 +1402,17 @@ def cmd_compare(args):
         for k in keys:
             if A[k][field] != B[k][field]:
                 line = resp_a[k]
-                d = {"model": k[0], "id": k[1], "family": family,
-                     "subtype": A[k].get("subtype"), "held_back": A[k].get("held_back"),
-                     "prompt": line["prompt"]}
-                for f in DETAIL_FIELDS[family]:
+                d = {"model": k[0], "id": k[1], "family": family}
+                if own:
+                    d["graded_like"] = kind
+                d.update(subtype=A[k].get("subtype"), held_back=A[k].get("held_back"),
+                         prompt=line["prompt"])
+                for f in DETAIL_FIELDS[kind]:
                     if f in line:
                         d[f] = line[f]
                 d["response"] = line["response"]
                 for name, rec in ((na, A[k]), (nb, B[k])):
-                    d[name] = {f: rec[f] for f in VERDICT_FIELDS[family]}
+                    d[name] = {f: rec[f] for f in VERDICT_FIELDS[kind]}
                 disagreements.append(d)
     if args.hand:
         out += [""] + hand_section(args, [(na, A), (nb, B)], resp_a, man_a["models"])
@@ -1329,11 +1424,12 @@ def cmd_compare(args):
     with open(txt, "w", encoding="utf-8") as f:
         f.write(f"Responses where {na} and {nb} gave a different grade ({len(disagreements)})\n")
         for d in disagreements:
-            field = LABEL[d["family"]]
+            kind = rec_kind(d)
+            field = LABEL[kind]
             f.write("\n" + "=" * 90 + f"\n{d['model']}  {d['id']}  ({d['family']}, "
                     f"{d['subtype']}{', held back' if d['held_back'] else ''})\n")
             f.write(f"PROMPT: {d['prompt']}\n")
-            for fld in DETAIL_FIELDS[d["family"]]:
+            for fld in DETAIL_FIELDS[kind]:
                 if fld in d:
                     f.write(f"{fld.upper()}: {d[fld]}\n")
             f.write(f"RESPONSE:\n{d['response']}\n")
@@ -1348,8 +1444,94 @@ def cmd_compare(args):
 
 # ------------------------------------------------------------------------------ init-run
 
+MAX_ZIP_MEMBER = 200 * 2**20       # no answers file is anywhere near this size
+
+
+def read_answers_zip(zip_path, work_dir):
+    """Unpack the parts of a Colab answers zip that init-run needs into work_dir.
+
+    The zip is laid out as the notebook's save_answers writes it: one folder holding
+    responses/<model>.jsonl (one file per model), models.json and generation-notes.txt. Only
+    those files are read, and each is written under a name made here, never under a path taken
+    from the zip. Returns (responses paths, models.json path or None, notes or None, labels),
+    where labels maps each responses path to its name inside the zip.
+    """
+    if not os.path.isfile(zip_path):
+        die(f"zip file not found: {zip_path}")
+    try:
+        z = zipfile.ZipFile(zip_path)
+    except zipfile.BadZipFile:
+        die(f"{zip_path} is not a zip file (was the download finished?)")
+    with z:
+        found = {}                                 # folder inside the zip -> {part: member}
+        for info in z.infolist():
+            parts = [p for p in info.filename.replace("\\", "/").split("/") if p]
+            if info.is_dir() or not parts or "__MACOSX" in parts or parts[-1].startswith("."):
+                continue
+            if len(parts) >= 2 and parts[-2] == "responses" and parts[-1].endswith(".jsonl"):
+                folder, part = "/".join(parts[:-2]), parts[-1]
+            elif parts[-1] in ("models.json", "generation-notes.txt"):
+                folder, part = "/".join(parts[:-1]), parts[-1]
+            else:
+                continue
+            if info.file_size > MAX_ZIP_MEMBER:
+                die(f"{info.filename} in {zip_path} is too large to be an answers file")
+            found.setdefault(folder, {})[part] = info
+        folders = [f for f, parts in found.items() if any(p.endswith(".jsonl") for p in parts)]
+        if not folders:
+            die(f"{zip_path} has no responses/<model>.jsonl files; it should be a zip that the "
+                f"notebook's save_answers made")
+        if len(folders) > 1:
+            die(f"{zip_path} holds answers in more than one folder ({', '.join(folders)}); give "
+                f"one folder's responses files with --responses instead")
+        parts = found[folders[0]]
+        os.makedirs(os.path.join(work_dir, "responses"), exist_ok=True)
+        paths, labels = [], {}
+        for part in sorted(p for p in parts if p.endswith(".jsonl")):
+            model = part[:-len(".jsonl")]
+            if not rf().SAFE_ID.match(model):
+                die(f"{parts[part].filename} in {zip_path}: the model name {model!r} cannot be "
+                    f"used as a file name")
+            path = os.path.join(work_dir, "responses", f"{model}.jsonl")
+            with open(path, "wb") as f:
+                f.write(z.read(parts[part]))
+            paths.append(path)
+            labels[path] = f"{os.path.basename(zip_path)}:{parts[part].filename}"
+        models_path = notes = None
+        if "models.json" in parts:
+            models_path = os.path.join(work_dir, "models.json")
+            with open(models_path, "wb") as f:
+                f.write(z.read(parts["models.json"]))
+        if "generation-notes.txt" in parts:
+            notes = z.read(parts["generation-notes.txt"]).decode("utf-8", "replace").strip()
+    return paths, models_path, notes, labels
+
+
 def cmd_init_run(args):
     """Create RUNS_ROOT/<date>-<slug>/ with run.json and the responses, one file per model."""
+    if not args.responses and not args.zip:
+        die("give the answers: --zip FILE (the zip the notebook downloaded) or --responses "
+            "FILE [...]")
+    if not args.zip:
+        return init_run(args, args.responses, {})
+    work = tempfile.mkdtemp(prefix="init-run-")
+    try:
+        paths, models_path, notes, labels = read_answers_zip(args.zip, work)
+        if not args.models_json and models_path:
+            args.models_json = models_path
+        if not args.generation_notes and notes:
+            args.generation_notes = notes
+        print(f"Read {len(paths)} responses file(s) from {args.zip}: "
+              f"{', '.join(os.path.basename(p)[:-len('.jsonl')] for p in paths)}"
+              + (", with models.json" if models_path else "")
+              + (" and generation-notes.txt" if notes else "") + ".")
+        return init_run(args, paths + list(args.responses or []), labels)
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+
+
+def init_run(args, responses, labels):
+    """init-run itself; labels names responses files that came out of a zip."""
     R = rf()
     name = args.name.strip()
     if not R.RUN_NAME.match(name):
@@ -1363,7 +1545,7 @@ def cmd_init_run(args):
         die(f"{run_dir} already exists; choose another --name")
     items = load_items(args.items)
     by_model, sources = {}, {}
-    for path in args.responses:
+    for path in responses:
         rows = load_responses(path)
         check_known_ids(rows, items, path)
         for r in rows:
@@ -1379,6 +1561,13 @@ def cmd_init_run(args):
             by_model[m][r["id"]] = r
     if not by_model:
         die("the responses files have no responses")
+    no_rules = sorted({i for rows in by_model.values() for i in rows
+                       if kind_of(items[i]) is None})
+    if no_rules:
+        die(f"{len(no_rules)} answered item(s) have no grading rules, e.g. {no_rules[0]} in "
+            f"family {items[no_rules[0]].get('family')!r}. An item of your own family needs a "
+            f"graded_like field naming one of {', '.join(FAMILIES)}; check the files with "
+            f"python3 evals/shared/validate.py --extra evals/mine")
     held = sorted({i for rows in by_model.values() for i in rows if items[i]["_held_back"]})
     if held and R.held_back_root_problem(root):
         die(f"{len(held)} of the responses are to held-back items; "
@@ -1400,7 +1589,7 @@ def cmd_init_run(args):
     for m, rows in by_model.items():
         write_jsonl(os.path.join(run_dir, R.RESPONSES_DIR, f"{m}.jsonl"), rows.values())
     gen = {"prompt_template": "Question: {prompt}\\nAnswer:", "max_new_tokens": {},
-           "hit_length_limit": {}, "source_files": {m: os.path.basename(p)
+           "hit_length_limit": {}, "source_files": {m: labels.get(p, os.path.basename(p))
                                                      for m, p in sources.items()}}
     for m, rows in by_model.items():
         for i, r in rows.items():
@@ -1435,8 +1624,24 @@ def cmd_init_run(args):
         f.write(f"# {args.title}\n\n{args.description}\n\nFree notes about this run.\n")
     n = sum(len(r) for r in by_model.values())
     print(f"Created {run_dir}\n  {n} responses from {len(by_model)} model(s) "
-          f"({', '.join(by_model)}), {len(held)} of the items held back.\n  Status: responses "
-          f"ready.\nNext: python3 {os.path.relpath(os.path.abspath(__file__))} prepare --run "
+          f"({', '.join(by_model)}), {len(held)} of the items held back.")
+    fams = family_order(it["family"] for it in items.values())
+    print("  Answers per model and family (answered of the items given with --items):")
+    print("\n".join("  " + x for x in table(
+        ["model"] + fams,
+        [[m] + [f"{sum(1 for i in rows if items[i]['family'] == f)} of "
+                f"{sum(1 for it in items.values() if it['family'] == f)}" for f in fams]
+         for m, rows in by_model.items()])))
+    gaps = [m for m, rows in by_model.items() if len(rows) < len(items)]
+    if gaps:
+        print(f"  Note: {', '.join(gaps)} did not answer every item. That is fine if those "
+              f"items were left out on purpose; otherwise check the answers before grading.")
+    missing = [m["id"] for m in models if m["id"] not in by_model]
+    if missing:
+        print(f"  Note: models.json lists {', '.join(missing)}, but there are no answers from "
+              f"{'it' if len(missing) == 1 else 'them'}.")
+    print(f"  Status: responses ready.\nNext: python3 "
+          f"{os.path.relpath(os.path.abspath(__file__))} prepare --run "
           f"{os.path.relpath(run_dir)} --grader sonnet-low --grader-model sonnet")
     return 0
 
@@ -1458,13 +1663,13 @@ AUDIT_SIGNALS = {
 def audit_signals(rec, row, long_words):
     """Which AUDIT_SIGNALS apply to one graded response."""
     out = []
-    fam = rec["family"]
-    if fam == "facts" and "string_match_correct" in rec \
+    fam, kind = rec["family"], rec_kind(rec)
+    if kind == "facts" and "string_match_correct" in rec \
             and rec["correct"] != bool(rec["string_match_correct"]):
         out.append("string_match_disagrees")
-    if fam == "user_says_something_wrong" and rec.get("score") == 1:
+    if kind == "user_says_something_wrong" and rec.get("score") == 1:
         out.append("score_1")
-    if fam == "emotional_social":
+    if kind == "emotional_social":
         if "keywords_found" in rec and set(rec.get("details_used", [])) != set(rec["keywords_found"]):
             out.append("keywords_disagree")
         if rec.get("has_placeholder"):
@@ -1512,7 +1717,7 @@ def choose_audit_sample(records, responses, n, seed, random_share, models):
     for rec in records:
         words[rec["family"]].append(len(responses[(rec["model"], rec["id"])]["response"].split()))
     long_words = {f: 2 * sorted(w)[len(w) // 2] for f, w in words.items()}
-    fams = [f for f in FAMILIES if words.get(f)]
+    fams = family_order(f for f in words if words[f])     # own families get a share too
     size = {f: sum(r["family"] == f for r in records) for f in fams}
     quota = split_quota(min(n, len(records)), fams, size, rng)
     chosen = []
@@ -1626,7 +1831,7 @@ def cmd_audit_sample(args):
     rows = [[f, sample["by_family"].get(f, {}).get("targeted", 0),
              sample["by_family"].get(f, {}).get("random", 0)]
             + [sum(r["family"] == f and r["model"] == m for r in chosen) for m in models]
-            for f in FAMILIES if f in sample["by_family"]]
+            for f in family_order(sample["by_family"])]
     print(f"Audit sample: {len(chosen)} of {args.source}'s {len(records)} verdicts "
           f"(seed {args.seed}).")
     print("\n".join(table(["family", "targeted", "random"] + models, rows)))
@@ -1652,7 +1857,7 @@ def cmd_review_build(args):
     if a == b:
         die("give two different judges")
     A, B = data.judges[a]["verdicts"], data.judges[b]["verdicts"]
-    fam_rank = {f: i for i, f in enumerate(FAMILIES)}
+    fam_rank = {f: i for i, f in enumerate(family_order(v["family"] for v in A.values()))}
     mod_rank = {m: i for i, m in enumerate(data.models)}
     common = sorted((k for k in A if k in B and A[k]["family"] == B[k]["family"]),
                     key=lambda k: (fam_rank.get(A[k]["family"], 9), mod_rank.get(k[0], 99), k[1]))
@@ -1666,7 +1871,7 @@ def cmd_review_build(args):
         pools[A[k]["family"]].append(k)
     for f in pools:
         rng.shuffle(pools[f])
-    controls = round_robin([f for f in FAMILIES if pools.get(f)], pools,
+    controls = round_robin([f for f in family_order(pools) if pools.get(f)], pools,
                            min(args.controls, len(agree)), rng)
     rows = [(k, "disagreement") for k in dis] + [(k, "control") for k in controls]
     rng.shuffle(rows)
@@ -1690,16 +1895,18 @@ def cmd_review_build(args):
             qk = f"q{rng.getrandbits(32):08x}"
         used.add(qk)
         g1, g2 = (a, b) if rng.random() < 0.5 else (b, a)
-        out.append({"queue_key": qk, "n": n, "model": k[0], "id": k[1],
-                    "family": A[k]["family"], "subtype": data.items[k[1]].get("subtype"),
-                    "held_back": data.held_back(k[1]), "kind": kind,
-                    "grader_1": g1, "grader_2": g2})
+        row = {"queue_key": qk, "n": n, "model": k[0], "id": k[1], "family": A[k]["family"]}
+        if A[k]["graded_like"] != A[k]["family"]:
+            row["graded_like"] = A[k]["graded_like"]   # a student's own family
+        row.update(subtype=data.items[k[1]].get("subtype"), held_back=data.held_back(k[1]),
+                   kind=kind, grader_1=g1, grader_2=g2)
+        out.append(row)
     os.makedirs(os.path.join(run_dir, R.REVIEW_DIR), exist_ok=True)
     write_jsonl(rows_path, out)
     by_family = {f: {"disagreements": sum(1 for r in out if r["family"] == f
                                           and r["kind"] == "disagreement"),
                      "controls": sum(1 for r in out if r["family"] == f and r["kind"] == "control")}
-                 for f in FAMILIES if any(r["family"] == f for r in out)}
+                 for f in family_order(r["family"] for r in out)}
     k = len(R.queue_names(run_dir))
     meta = {"format": "review queue 1", "name": name,
             "label": args.label or f"Review set {k} (built {R.today()})",
@@ -1758,8 +1965,14 @@ def parse_args(argv):
     p.add_argument("--title", required=True, help="plain-language title")
     p.add_argument("--description", required=True,
                    help="plain-language description: which models, why, what to look for")
-    p.add_argument("--responses", required=True, nargs="+", metavar="FILE",
+    p.add_argument("--responses", nargs="+", metavar="FILE",
                    help="responses files (one JSON line per item with 'id', 'response', 'model')")
+    p.add_argument("--zip", metavar="FILE",
+                   help="the answers zip the notebook downloaded (for example "
+                        "hw2-four-models.zip): its responses/<model>.jsonl files are the "
+                        "responses, and its models.json and generation-notes.txt are used unless "
+                        "--models-json or --generation-notes is given. Give --zip or "
+                        "--responses (or both)")
     p.add_argument("--items", required=True, action="extend", nargs="+", metavar="DIR",
                    help="item folders (or files) the responses' ids come from")
     p.add_argument("--models-json", metavar="FILE",

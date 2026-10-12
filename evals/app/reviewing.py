@@ -88,18 +88,22 @@ def clean_reason(value):
 
 # ------------------------------------------------------------------------------ review queue
 
-def item_fields(family, item):
-    """The item fields the grader saw (prompt aside), for the reviewer."""
-    return {f: item.get(f) for f in gt.ITEM_FIELDS[family]
+def item_fields(kind, item):
+    """The item fields the grader saw (prompt aside), for the reviewer.
+
+    kind is the grading family: the item's own family, or its graded_like for a student's own
+    family (whose name, "mine-...", has no fields of its own).
+    """
+    return {f: item.get(f) for f in gt.ITEM_FIELDS[kind]
             if f not in ("prompt", "subtype") and item.get(f) not in (None, "", [])}
 
 
-def blinded_verdict(judge, key, family):
-    """A judge's verdict without anything that says which judge it is."""
+def blinded_verdict(judge, key, kind):
+    """A judge's verdict without anything that says which judge it is (kind: grading family)."""
     v = judge["verdicts"].get(key)
     if not v:
         return None
-    keep = [f for f in gt.VERDICT_FIELDS[family] if f != "reason"]
+    keep = [f for f in gt.VERDICT_FIELDS[kind] if f != "reason"]
     return {"label": v["label"], "fields": {f: v["fields"][f] for f in keep if f in v["fields"]},
             "reason": v["reason"]}
 
@@ -116,6 +120,14 @@ def queue_list(data):
 
 
 QUEUE_ID = re.compile(r"^set-[0-9a-f]{8}$")
+
+
+def row_kind(data, row):
+    """The grading family of a queue row: the item's, else the row's graded_like or family."""
+    kind = data.kind(row["id"]) or row.get("graded_like") or row["family"]
+    if kind not in R.LABEL_FIELD:
+        raise Problem(404, f"no grading rules for the family {row['family']!r}")
+    return kind
 
 
 def get_queue(data, public_id):
@@ -154,27 +166,28 @@ def queue_item(data, public_id, pos, reviewer):
     row = rows[pos]
     key = (row["model"], row["id"])
     item, family = data.items[row["id"]], row["family"]
+    kind = row_kind(data, row)
     resp = data.responses[key]
     s = {}
     if reviewer:
         s = R.review_state(data.dir).get((R.slug(reviewer), name, row["queue_key"]), {})
     out = {"queue": public_id, "label": meta.get("label", "Review set"), "pos": pos, "n": len(rows),
-           "queue_key": row["queue_key"], "family": family,
-           "family_title": R.FAMILY_TITLES[family], "subtype": item.get("subtype"),
+           "queue_key": row["queue_key"], "family": family, "graded_like": kind,
+           "family_title": R.family_title(family), "subtype": item.get("subtype"),
            "item_id": row["id"], "held_back": bool(item.get("_held_back")),
-           "prompt": item.get("prompt", ""), "item": item_fields(family, item),
+           "prompt": item.get("prompt", ""), "item": item_fields(kind, item),
            "response": resp["response"],
            "length": {"new_tokens": resp.get("new_tokens"),
                       "max_new_tokens": resp.get("max_new_tokens"),
                       "hit_limit": resp.get("hit_limit")},
-           "grade_field": R.LABEL_FIELD[family], "rubric": R.rubric_section(family),
+           "grade_field": R.LABEL_FIELD[kind], "rubric": R.rubric_section(kind),
            "rubric_source": R.repo_rel(R.RUBRIC_FILE),
            "blind": None, "revealed": None, "final": None}
     if "blind" in s:
         out["blind"] = s["blind"].get("grade")
         # Only now: both graders' verdicts, as Grader 1 and Grader 2. Never the judge ids.
         out["revealed"] = {g: blinded_verdict(data.judges.get(row[g], {"verdicts": {}}), key,
-                                              family) for g in ("grader_1", "grader_2")}
+                                              kind) for g in ("grader_1", "grader_2")}
     if "final" in s:
         f = s["final"]
         out["final"] = {"final_call": f.get("final_call"), "reason": f.get("reason"),
@@ -192,17 +205,20 @@ def save_review(data, body, roots):
     if row is None:
         raise Problem(404, "that item is not in this queue")
     family = row["family"]
+    kind = row_kind(data, row)
     key = (row["model"], row["id"])
     rec = {"event": body.get("event"), "time": R.now(), "reviewer": reviewer,
            "reviewer_kind": "human", "queue": name, "queue_key": row["queue_key"],
            "model": row["model"], "id": row["id"], "family": family}
+    if kind != family:
+        rec["graded_like"] = kind                      # a student's own family
     with WRITE_LOCK:
         s = R.review_state(data.dir).get((R.slug(reviewer), name, row["queue_key"]), {})
         if body.get("event") == "blind":
             if "blind" in s:
                 raise Problem(409, "your own grade for this item is already saved; it stays "
                                    "fixed once the graders' verdicts have been shown")
-            problem = R.check_grade(family, body.get("grade"))
+            problem = R.check_grade(kind, body.get("grade"))
             if problem:
                 raise Problem(400, problem)
             rec["grade"] = body["grade"]
@@ -216,14 +232,14 @@ def save_review(data, body, roots):
             rec["reason"] = clean_reason(body.get("reason"))
             if call == "both_wrong":
                 corrected = body.get("corrected_grade")
-                problem = R.check_grade(family, corrected)
+                problem = R.check_grade(kind, corrected)
                 if problem:
                     raise Problem(400, "when both graders are wrong, give the right grade: "
                                        + problem)
                 rec["corrected_grade"] = corrected
             rec["blind_grade"] = s["blind"].get("grade")
             for g in ("grader_1", "grader_2"):
-                v = blinded_verdict(data.judges.get(row[g], {"verdicts": {}}), key, family)
+                v = blinded_verdict(data.judges.get(row[g], {"verdicts": {}}), key, kind)
                 rec[g] = {"judge": row[g], "verdict": dict((v or {}).get("fields", {}),
                                                            reason=(v or {}).get("reason"))}
         else:

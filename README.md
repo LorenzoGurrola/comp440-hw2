@@ -26,7 +26,7 @@ Part 1, so keep your repository from one part to the next.
 |---|---|---|---|
 | [Part 0: Set up](instructions/part0.md) | Get the repository, start Claude Code, learn what MCP is, connect Colab and start the evaluation viewer | 8:00am Thursday, October 8 | 20% |
 | [Part 1: The tools and the tests](instructions/part1.md) | Learn how the pieces connect, how the model and the tests are built, and run the tests on the base model | 8:00am Thursday, October 15 | 30% |
-| [Part 2: Train your two models and decide what changed](instructions/part2.md) | Write your two constitutions and two test families, predict the results, train on example answers (SFT) and on preferences (DPO), then grade, audit and write up whose preferences count | 8:00am Tuesday, October 27 | 50% |
+| [Part 2: Train your two models and decide what changed](instructions/part2.md) | Pick a famous person, write two constitutions and two test families, and predict the results; have Claude build preference data and label some of it blind; train on example answers (SFT) and on preferences (DPO); run, grade, audit and rate all four models; check your predictions and write up whose preferences count | 8:00am Tuesday, October 27 | 50% |
 
 ## Working independently
 
@@ -56,7 +56,10 @@ the class's [AI-use norms](https://docs.google.com/document/d/1Eb6qxeS2wy-9TBzL8
   while you train.
 - **A download doesn't arrive.** Chrome asks for permission the first time a notebook downloads
   a file. Look for the prompt near the address bar and allow it.
-- **"CUDA out of memory".** Restart the kernel in the Colab notebook and try again.
+- **"CUDA out of memory".** Ask Claude to run the step that failed again. If it happens twice,
+  ask Claude to run the notebook's "If you see CUDA out of memory" cell, which restarts Python
+  but keeps the models trained so far, and then the setup cells and the step that failed. Don't
+  ask Claude to restart the runtime: that gives up the T4 and everything trained so far.
 
 ## What to submit
 
