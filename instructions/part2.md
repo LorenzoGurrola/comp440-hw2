@@ -5,8 +5,8 @@ Due **8:00am Tuesday, October 27**. The overall instructions are in the [README]
 In this part you'll train your two models and find out what your choices did to them. In
 particular, you will:
 
-- Write the rules for two models (a *constitution* for each) and tests of your own, and predict
-  in numbers how each model will do before you train anything.
+- Write the rules for two models (a *constitution* for each) and a test of your own, and
+  predict in numbers how each model will do before you train anything.
 - Gain hands-on experience with training on example answers (SFT, supervised fine-tuning) and
   on pairs of answers where one is preferred (DPO, direct preference optimization).
 - Check the AI grader against a second AI grader and your own grades, and rate your two models
@@ -25,7 +25,7 @@ down, tidied only with your OK, and adds nothing. Claude also runs the cells and
 explains anything you ask, drafts test items for you to review (Step 3) and writes most of your
 training data (Step 5).
 
-I recommend five sittings, since some steps need Claude to work for a while and one needs a GPU:
+I recommend four sittings, since some steps need Claude to work for a while and one needs a GPU:
 
 | Sitting | Steps | What you need |
 |---|---|---|
@@ -33,7 +33,6 @@ I recommend five sittings, since some steps need Claude to work for a while and 
 | 2 | 5 and 6 | Claude Code, and a good share of your plan |
 | 3 | 7 to 9 | Colab with a T4, about 20 GPU minutes in one go |
 | 4 | 10 and 11 | Claude Code and the viewer |
-| 5 | 12 and 13 | Claude Code and the viewer |
 
 I expect Part 2 to take about [TBD] hours in all. Please don't leave sitting 3 for the last
 night: free T4s are sometimes all taken.
@@ -91,28 +90,30 @@ can be traced to the style.
 > **Questions:** Which line of your persona style do you think will be hardest for a 0.6B model
 > to learn, and why? Where do you expect each style to pull against the core?
 
-## Step 3: Write two test families of your own
+## Step 3: Write a test family of your own
 
-A *family* is a set of test items of one kind, like the three in `evals/shared/`. Your two
-families test what only you know about: your two styles.
+A *family* is a set of test items of one kind, like the three in `evals/shared/`. Yours tests
+something only you know about: a line of your constitutions that the shared families don't
+test. The persona's voice is checked another way: you'll read its answers in Step 11.
 
-- Pick one family you predict the succinct model will win and one the persona model will win. In
-  `WRITEUP.md`, write a short paragraph for each: what it tests, which constitution lines it
-  tests, and which model you think will win.
-- Each family's items copy the format of one shared family (`facts`,
-  `user_says_something_wrong` or `emotional_social`), name it in a `graded_like` field, and are
-  graded by its rules. "Your own families" in `evals/shared/README.md` lists the fields.
-- Write **at least five** items for each family yourself, in `evals/mine/<family>.jsonl`.
-- Then ask Claude to draft more, until each family has **at least ten**. Accept, edit or reject
-  each draft, and edit or reject **at least two** per family. Claude logs each draft and your
-  decision in `evals/mine/LOG.md`.
-- Ask Claude to check the files with `python3 evals/shared/validate.py --extra evals/mine`.
+- Pick what your family tests, and which model you predict will win it. In `WRITEUP.md`, write
+  a short paragraph: what it tests, which constitution lines it tests, and which model you think
+  will win.
+- Your items copy the format of one shared family (`facts`, `user_says_something_wrong` or
+  `emotional_social`), name it in a `graded_like` field, and are graded by its rules. "Your own
+  families" in `evals/shared/README.md` lists the fields.
+- Write **at least five** items yourself, in `evals/mine/<family>.jsonl`. The shared set already
+  holds the classic quiz questions, so take yours from your own interests.
+- Then ask Claude to draft more, until your family has **at least ten**. Accept, edit or reject
+  each draft, and edit or reject **at least two**. Claude logs each draft and your decision in
+  `evals/mine/LOG.md`.
+- Ask Claude to check the file with `python3 evals/shared/validate.py --extra evals/mine`.
 - Warning: nothing grades whether an answer sounds like your famous person; the grader checks
-  only what the shared family's rules check. You'll judge the voice yourself in Step 12.
+  only what the shared family's rules check.
 
 > [!IMPORTANT]
 > **Questions:** For one draft you rejected or edited, what did it get wrong about what you
-> wanted to test? Could a model score well on one of your families for the wrong reason?
+> wanted to test? Could a model score well on your family for the wrong reason?
 
 ## Step 4: Map your constitutions to your tests, and predict
 
@@ -121,13 +122,13 @@ measure, and commit to numbers before any training, so the results can't nudge y
 
 - In `WRITEUP.md`, make one table with a row for every line of `constitutions.md`, core
   included, naming the family that tests it (shared or yours) or "not measured".
-- For each of the five families, predict a number for each of your two models, in that family's
-  measure: the share correct (facts), the mean score from 0 to 2 (user says something wrong), or
-  the share of messages that do the task (emotional and social). Your families use the measure
-  of the family they're graded like. Write numbers, not "succinct wins": only a number tells you
-  how far off you were.
-- Predict one more number: the share of your Step 11 blind comparisons the persona model will
-  win.
+- For each of the four families (the three shared ones and yours), predict a number for each of
+  your two models, in that family's measure: the share correct (facts), the mean score from 0 to
+  2 (user says something wrong), or the share of messages that do the task (emotional and
+  social). Your family uses the measure of the family it's graded like. Write numbers, not
+  "succinct wins": only a number tells you how far off you were.
+- Predict one more number: how many of your five blind comparisons in Step 11 the persona model
+  will win.
 - Ask Claude to commit and push with the subject `Predictions locked`. Nothing is built or
   trained before that commit, and I'll check that it came first.
 - Hint: your Part 1 base-model run is a starting point.
@@ -142,11 +143,11 @@ DPO trains on *pairs*: a prompt, a *chosen* answer and a *rejected* answer. It m
 like the chosen one more likely and answers like the rejected one less likely. Each model needs
 300 pairs.
 
-For each prompt in `training/prompts-300.jsonl`, Claude writes the chosen answer under your
-constitution, and the rejected answer is a person's answer from the Dolly dataset (see
-`training/README.md`). Claude writes them, rather than picking the better of two model answers,
-because a 0.6B model almost never writes in your person's voice on its own. That puts Claude's
-reading of your constitution into your models.
+For each prompt in `training/prompts-300.jsonl`, Claude writes its own answer under your
+constitution as the chosen answer. The rejected answer is a person's answer from the Dolly
+dataset (see `training/README.md`), which Claude never sees. Claude writes the chosen answers,
+rather than picking the better of two model answers, because a 0.6B model almost never writes in
+your person's voice on its own. That puts Claude's reading of your constitution into your models.
 
 - Type `/build-preferences`. Claude starts helpers (Sonnet subagents) that write the answers in
   batches of 25, on your Claude Code plan, with no API key.
@@ -155,13 +156,14 @@ reading of your constitution into your models.
 - At the end, Claude shows how varied and how long the answers are, checks the files, and asks
   before it commits and pushes them as `Preference data built`. The notebook reads them from
   your fork.
-- Read **at least ten** pairs from each of `training/pairs-succinct.jsonl` and
-  `training/pairs-persona.jsonl`.
+- Read **at least ten** of the first 25 pairs (`pair-001` to `pair-025`) in each of
+  `training/pairs-succinct.jsonl` and `training/pairs-persona.jsonl`. Step 6's blind sample
+  leaves those 25 out, so reading them now doesn't spoil it.
 - Hints:
   - This takes Claude about 15 minutes. If you hit your plan's usage limit, type
     `/build-preferences` again after it resets; it carries on where it stopped.
   - If you change your constitutions here, say what you changed in your Step 5 answer. Leave
-    your Step 4 predictions as they are: Step 12 is where you explain a gap.
+    your Step 4 predictions as they are: Step 11 is where you explain a gap.
 
 > [!IMPORTANT]
 > **Questions:** Quote one chosen answer. What does it do that your constitution didn't ask for?
@@ -170,12 +172,13 @@ reading of your constitution into your models.
 ## Step 6: Label a sample yourself, blind
 
 Before you train on Claude's pairs, check whether you agree with them: you'll pick the better
-answer in 15 pairs per model without knowing which one Claude wrote.
+answer in 5 pairs per model without knowing which one Claude wrote.
 
-- Ask Claude to run `python3 evals/shared/label_tools.py sample`. It draws 15 pairs per model,
-  shuffles each pair's answers into A and B in `training/label-sample.jsonl`, and writes which
-  side is Claude's to `training/label-key.json`. Don't open the key until all 30 labels are in:
-  once you've seen it, you can't label blind again.
+- Ask Claude to run `python3 evals/shared/label_tools.py sample`. It draws 5 pairs per model,
+  leaving out the first 25, which Claude may have shown you in Step 5. It shuffles each pair's
+  answers into A and B in `training/label-sample.jsonl`, and writes which side is Claude's to
+  `training/label-key.json`. Don't open the key until all 10 labels are in: once you've seen it,
+  you can't label blind again.
 - Claude shows you the pairs five at a time, each with its question and both answers. For each
   of the five, say which better follows that model's constitution, A or B, with a short reason.
   Claude writes your picks into `training/labels.jsonl`, then shows the next five.
@@ -221,9 +224,10 @@ from the top.
 - Ask Claude to run the Step 8 cells. They train two models with DPO, both starting from your
   SFT model: the succinct model on `training/pairs-succinct.jsonl` and the persona model on
   `training/pairs-persona.jsonl`, about 3 minutes each.
-- Each run is 50 steps of 8 pairs. Every 5 steps it prints the loss, the chosen reward, the
-  rejected reward and the accuracy; [`training.md`](training.md) says what each one means.
-- Each run ends with a small table of steps 5, 25 and 50. Copy both tables into `WRITEUP.md`
+- Each run is 38 steps of 8 pairs, about one pass over your 300 pairs. Every 5 steps it prints
+  the loss, the chosen reward, the rejected reward and the accuracy; [`training.md`](training.md)
+  says what each one means.
+- Each run ends with a small table of steps 5, 25 and 38. Copy both tables into `WRITEUP.md`
   before you close Colab: they aren't saved anywhere else.
 - The last Step 8 cell prints five more readout questions, each with the SFT, succinct and
   persona models' answers. Read them.
@@ -237,7 +241,8 @@ from the top.
 
 - Ask Claude to run the Step 9 cells. They answer the 240 shared items and your own items with
   all four models: base, SFT, succinct and persona. This takes about 7 minutes.
-- The last Step 9 cell downloads `hw2-four-models.zip`. Allow the download if Chrome asks.
+- The last Step 9 cell downloads `hw2-four-models.zip`. Allow the download if Chrome asks. Once
+  it has arrived, choose Runtime > Disconnect and delete runtime in Colab, to give the T4 back.
 - Before anything is graded, ask Claude to show you all four models' answers to five items picked
   at random. In `WRITEUP.md`, write one sentence about each model: what you noticed. Grading
   starts only once those four sentences are in.
@@ -248,9 +253,6 @@ from the top.
 - Please don't open this run's Results or Answers pages until your Step 10 review decisions are
   in. Once you've seen the grader's numbers, it's hard to grade on your own.
 
-> [!IMPORTANT]
-> **Question:** Which model's answers surprised you most, and how?
-
 ## Step 10: Grade and audit
 
 Every grader makes mistakes. Here you'll measure Sonnet's, with a second grader and your own
@@ -260,8 +262,9 @@ judgment.
   mostly ones that look hard, without seeing Sonnet's grades.
 - Ask Claude to build a review queue: every answer where Sonnet and Opus disagree, plus a few
   where they agree.
-- On the viewer's Review page, grade each answer yourself first (that grade is then locked), then
-  see what Grader 1 and Grader 2 said, and decide who was right, with a reason from the rubric.
+- Claude gives you the link to your run's Review page. There, grade each answer yourself first
+  (that grade is then locked), then see what Grader 1 and Grader 2 said, and decide who was
+  right, with a reason from the rubric.
 - You're welcome to write a rubric clarification and have Claude re-grade the reviewed answers
   with it ("Fix the scorer" in `evals/shared/README.md`). It's for this exercise only: your
   grades stay on the shared rubric.
@@ -274,53 +277,23 @@ judgment.
 > your models, and which row of your Step 4 table could they move, in which direction? The audit
 > picked mostly hard answers: does that make Sonnet look better or worse than it is?
 
-## Step 11: Rate your two models blind
+## Step 11: Decide whose preferences count
 
-Claude doesn't judge warmth or tone. People do, and in this step that's you.
+This last step takes about an hour. All three parts go in one slot in `WRITEUP.md`.
 
-- Open the viewer's Rate page for your run, type your name, choose your succinct and persona
-  models, and press Start. You get a random 20 of the 40 emotional and social items, about 15
-  minutes' work.
-- For each item, read both messages (the page doesn't say which model wrote which), mark whether
-  each does the task, then press "Send this one" under the one you'd rather send.
-- Hint: you'll probably recognize your persona model's answers, so this isn't fully blind.
-  That's fine; say so in your answer.
-
-> [!IMPORTANT]
-> **Questions:** What share of your picks went to each model, and what share of each model's
-> messages did the task? Could you tell which model wrote which? How?
-
-## Step 12: Check your predictions
-
-- Open your run's Results page in the viewer.
-- Copy your Step 4 table into the Step 12 part of `WRITEUP.md` and add an "Actual" column. Leave
-  Step 4 as you committed it.
-- For each prediction, write "I predicted X, the actual is Y", and which line of your
-  constitutions Y bears on. Back each claim with one quoted answer; Claude will pull up the
-  answers you name.
-- Read **at least five** of the persona model's answers to your own items, and say whether they
-  sound like your famous person, quoting one. Nothing else grades that.
-
-> [!IMPORTANT]
-> **Questions:** Which prediction was furthest off, and what didn't you know when you made it?
-> Did the core hold: are your two models about the same on the two core families? If not, which
-> style line do you think crowded it out?
-
-## Step 13: Write up whose preferences count
-
-Write **500 to 800 words** in `WRITEUP.md`, in your own words. At a minimum I am looking for:
-
-- every place a preference entered your two models, and whose it was: yours, Claude's, the Dolly
-  writers', the test writers' (mine and yours), the grader's, and Qwen's makers';
-- one training pair and one persona answer, quoted, and what the model copied that your
-  constitution didn't ask for;
-- one claim your persona model made as "I" that it invented, and a sentence saying that its
-  answers are an imitation of the person, not the person;
-- where you disagreed with Claude (in your labels, grades or review decisions) and what changed
-  because of it;
-- one thing about your models you couldn't measure;
-- how you used Claude in this part, following the class's
-  [AI-use norms](https://docs.google.com/document/d/1Eb6qxeS2wy-9TBzL8eGk9j75iYu_yEV4VoLQaywRz8E/edit).
+1. **Rate five pairs blind.** Open the viewer's Rate page for your run, type your name, choose
+   your succinct and persona models, and press Start. For each of the five emotional and social
+   items, read both messages (the page doesn't say which model wrote which), mark whether each
+   does the task, then press "Send this one" under the one you'd rather send. Then write which
+   side you think was the persona each time, and how you could tell.
+2. **Check your predictions.** Ask Claude to copy your Step 4 table into the slot and fill in an
+   "Actual" column from your run's Results page. Leave Step 4 as you committed it. Write one
+   sentence on each of the two rows that surprised you most, and quote one answer that shows
+   what happened. Claude will pull up the answers you name.
+3. **Whose preferences count.** In about 300 words, in your own words: quote one training pair
+   and one persona answer; say where your choices, Claude's and the Dolly writers' entered your
+   models; and name one thing your tests couldn't measure. Say too that the persona's answers
+   are an imitation of the person, not the person.
 
 When you're done, ask Claude to run the checkpoint. It commits and pushes your work as
 `Part 2 done`.
@@ -329,14 +302,14 @@ When you're done, ask Claude to run the checkpoint. It commits and pushes your w
 
 Your repository, pushed by **8:00am Tuesday, October 27**. At a minimum I am looking for:
 
-- `voice-samples.md`, `constitutions.md`, and `evals/mine/` with your two families and
-  `LOG.md` (Steps 1 to 3);
+- `voice-samples.md`, `constitutions.md`, and `evals/mine/` with your family and `LOG.md`
+  (Steps 1 to 3);
 - the `Predictions locked` commit, made before any training (Step 4);
 - `training/pairs-succinct.jsonl` and `training/pairs-persona.jsonl` (Step 5) and
   `training/labels.jsonl` (Step 6);
 - your run folder, with all four models' answers, Sonnet's grades, the Opus audit, your review
-  decisions and your ratings (Steps 9 to 11);
-- `WRITEUP.md` with Steps 1 to 13 filled in, and `TRANSCRIPT.md`;
+  decisions and your five ratings (Steps 9 to 11);
+- `WRITEUP.md` with Steps 1 to 11 filled in, and `TRANSCRIPT.md`;
 - the `Part 2 done` commit.
 
 Submit your repository URL through the
@@ -351,7 +324,7 @@ trained.
 Part 2 is 50% of the assignment. Within it:
 
 - Constitutions and tests: 15% - Your two constitutions share one core and differ only in style,
-  with a conflict rule; each family has at least five items you wrote and two logged edits or
+  with a conflict rule; your family has at least five items you wrote and two logged edits or
   rejections; every constitution line is mapped to a family or listed as not measured.
 - Predictions and labels: 20% - Your predictions are numbers and were committed before any
   training; your blind labels were written before you saw which answer Claude wrote; you explain
@@ -359,13 +332,15 @@ Part 2 is 50% of the assignment. Within it:
   answer every time, the pair you were least sure of and why.
 - Reading the models: 10% - Your Step 7, 8 and 9 answers each name one concrete change, seen in
   a quoted answer or a reward number, not a restatement of `training.md`.
-- The run: 10% - Your run folder holds all four models' answers on the shared and your own
-  items, Sonnet's grades, the Opus audit, your review decisions and your ratings.
+- The run: 10% - Your run folder holds all four models' answers on the shared items and yours,
+  Sonnet's grades, the Opus audit, your review decisions and your five blind ratings, and you
+  say which side you think was the persona and how you could tell.
 - Checking the grader: 15% - Each review decision gives a reason from the rubric, and you say
   which model the grader's mistakes favored and whether they could change one row of your table.
-- Whose preferences count: 30% - Each prediction is checked against a number and a quoted
-  answer; you quote one training pair and one persona answer and name what the model copied that
-  your constitution didn't ask for; you say whose choices shaped each result, in your own words.
+- Whose preferences count: 30% - Your Step 4 table has its actual numbers, with a sentence on
+  each of the two most surprising rows and a quoted answer; you quote one training pair and one
+  persona answer, say where your choices, Claude's and the Dolly writers' entered your models,
+  and name one thing your tests couldn't measure, in your own words.
 
 ## FAQ
 

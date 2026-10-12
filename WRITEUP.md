@@ -61,9 +61,9 @@ XXXX (your passages go in `voice-samples.md`)
 
 XXXX (your lines go in `constitutions.md`; answer the Step 2 questions here)
 
-### Step 3: Your two test families
+### Step 3: Your test family
 
-XXXX (a paragraph for each family, and the Step 3 questions; your items go in `evals/mine/`)
+XXXX (a paragraph on your family, and the Step 3 questions; your items go in `evals/mine/`)
 
 ### Step 4: Your map and predictions
 
@@ -93,14 +93,8 @@ XXXX
 
 XXXX
 
-### Step 11: Your blind ratings
+### Step 11: Whose preferences count
 
-XXXX
-
-### Step 12: Your predictions checked
-
-XXXX (copy your Step 4 table here and add an "Actual" column)
-
-### Step 13: Whose preferences count
-
-XXXX
+XXXX (three parts: your five blind ratings and which side you think was the persona; your
+Step 4 table with an "Actual" column and two surprising rows; about 300 words on whose
+preferences count)

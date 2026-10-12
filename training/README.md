@@ -16,8 +16,8 @@ classmate's come from your constitutions, not from the data. The notebook and th
 | `prompts-300.jsonl` | 300 | Questions, each with a human-written answer, that Claude answers under your constitutions | Step 5 |
 | `readout-10.jsonl` | 10 | Questions with short answers, kept out of training, for reading the models' answers side by side | Steps 7 and 8 |
 | `pairs-succinct.jsonl`, `pairs-persona.jsonl` | 300 each | Your preference pairs: Claude's answer under each constitution (*chosen*) and the human answer (*rejected*) | Steps 5, 6 and 8 |
-| `label-sample.jsonl`, `label-key.json` | 30 | The pairs you label blind (15 per model), and the key saying which side is Claude's answer | Step 6 |
-| `labels.jsonl` | 30 | Your labels, one per pair in the sample | Step 6 |
+| `label-sample.jsonl`, `label-key.json` | 10 | The pairs you label blind (5 per model), and the key saying which side is Claude's answer | Step 6 |
+| `labels.jsonl` | 10 | Your labels, one per pair in the sample | Step 6 |
 
 The files in the last three rows don't come with the template. Claude's `build-preferences`
 skill writes the pairs files, `evals/shared/label_tools.py sample` writes the sample and the key,

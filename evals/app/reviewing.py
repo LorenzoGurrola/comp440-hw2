@@ -21,7 +21,7 @@ if SHARED not in sys.path:
 import grade_tools as gt  # noqa: E402
 import runfolder as R  # noqa: E402
 
-RATE_ITEMS = 20                     # items per rater, as in evals/shared/README.md
+RATE_ITEMS = 5                      # items per rater, as in evals/shared/README.md (Part 2 Step 11)
 MAX_REASON = 300
 WRITE_LOCK = threading.Lock()       # one writer at a time (checks + append are one step)
 FILE_NAME = re.compile(r"^(decisions-[a-z0-9-]{1,40}|assignments|ratings)\.jsonl$")
@@ -271,7 +271,7 @@ def rater_assignments(data, rater):
 
 
 def create_assignment(data, body, roots):
-    """POST /ratings/assign: {rater, models: [a, b]} -> a random 20 emotional items."""
+    """POST /ratings/assign: {rater, models: [a, b]} -> a random RATE_ITEMS emotional items."""
     if not isinstance(body, dict):
         raise Problem(400, "expected a JSON object")
     rater = clean_name(body.get("rater"), "rater")

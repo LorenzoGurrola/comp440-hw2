@@ -23,7 +23,7 @@ quote any grade, count or percentage from it, until the student's own grades are
 - Part 2: not before their review decisions are in, that is, until they say they have finished
   the Review page and `review/` holds their `decisions-<name>.jsonl`. Seeing Claude's numbers
   first would steer their own grades on the Review page (Step 10) and their reading of their
-  predictions (Step 12).
+  predictions (Step 11).
 
 Until then, say that grading finished and what comes next. Afterwards, show anything they ask
 for.
@@ -107,7 +107,8 @@ verdicts.
 Launch at most 8 graders in one message; agents in one message run in parallel. Wait for all
 of them to finish (their results, or their completion notifications if they run in the
 background) before launching the next group. Do not poll with sleep or status loops. A grader
-that fails or writes bad lines needs no immediate retry: step 4 catches it.
+that fails or writes bad lines needs no immediate retry: step 4 catches it. Don't report
+progress after each batch: say once, when all the batches are in, that grading has finished.
 
 ## 4. Merge, then redo the gaps (at most twice)
 
@@ -160,8 +161,9 @@ In Part 2 this is Step 10, once Sonnet's grades of the four-model run are merged
    python3 evals/shared/grade_tools.py review-build --run RUNDIR --judges sonnet-low opus-medium-audit --controls 5
    ```
 
-5. Tell the user how many items are in the queue and to open the viewer's **Review** page
-   (step 8): they grade each item themselves first, then decide between "Grader 1" and
+5. Tell the user how many items are in the queue and give them the direct link to the run's
+   **Review** page, `http://127.0.0.1:8440/#/run/<run folder name>/review` (start the viewer
+   first if it isn't running, step 8): they grade each item themselves first, then decide between "Grader 1" and
    "Grader 2", with a reason. Do not tell them which grader is which, and in Part 2 don't show
    either grader's numbers until their decisions are in (see "When to show grades").
 

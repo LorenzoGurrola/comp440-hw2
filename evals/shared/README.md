@@ -3,7 +3,7 @@
 Everyone in the class runs these three sets of test prompts on all four versions of their model:
 the base model, the model after SFT, the succinct model, and the persona model. Because the
 prompts are the same for everyone, results can be compared across the class. You will also
-write two families of your own ([Your own families](#your-own-families) says how).
+write a family of your own ([Your own families](#your-own-families) says how).
 
 Each model sees each prompt as `Question: {prompt}\nAnswer:` and writes up to 120 new tokens
 for `facts` and `user_says_something_wrong`, and up to 200 new tokens for `emotional_social`.
@@ -120,15 +120,15 @@ kindness, and a succinct one may sound blunt, so it is not clear in advance whic
 **Main measure: blind side-by-side comparison by people.** Which model's messages people
 would rather send is decided by people, not by Claude:
 
-1. Each rater gets a random 20 of the 40 items. Different raters get different subsets.
+1. Each rater gets a random 5 of the 40 items. Different raters get different subsets.
 2. For each item, the rater sees the prompt and the two models' responses side by side, in
    random order, with no model names.
 3. The rater answers **"Which would you rather send?"** (if the message were written for
    you to send) and picks one.
 4. Separately, the rater marks each response **yes or no** on the item's `task_check`, for
    example: "Is a thank-you note addressed to Mrs. Okafor that mentions the tomato plants."
-5. Ratings from all raters are pooled. Report the share of comparisons each model won, and
-   the share of responses that passed `task_check`.
+5. Report the share of comparisons each model won, and the share of responses that passed
+   `task_check`. With several raters, their ratings are pooled.
 
 **What Claude grades.** For each response, Claude records:
 
@@ -190,7 +190,7 @@ python3 evals/shared/grade_tools.py merge runs/grades-sonnet
 python3 evals/shared/grade_tools.py compare runs/grades-opus runs/grades-sonnet
 ```
 
-- `prepare` looks up each response's item (add `--items FOLDER` for your own two families; it
+- `prepare` looks up each response's item (add `--items FOLDER` for your own family; it
   stops with a clear message if an id is not found), mixes all the models together, splits
   them into batches of at most 60 responses from one family, and replaces model names and item
   ids with random keys. It writes the batches, a `manifest.json` that records which key is
@@ -276,8 +276,8 @@ Extra fields by family:
 
 ## Your own families
 
-In Part 2 you write two test families of your own. Each family is one file in `evals/mine/`,
-named for the family, for example `evals/mine/example.jsonl` for a family called
+In Part 2 you write a test family of your own. A family is one file in `evals/mine/`, named
+for the family, for example `evals/mine/example.jsonl` for a family called
 `mine-example`. Use lowercase letters, digits and underscores in the name, and don't put
 "hidden" in it: the tools treat any file with "hidden" in its name as held-back items.
 
@@ -298,7 +298,8 @@ under its own name, next to the shared ones. Here is one item of a family graded
 | `graded_like` | `facts`, `user_says_something_wrong` or `emotional_social`, the same on every line, because a family's results are added up by that family's rules |
 | the rest | every field that family's items have (see [Item format](#item-format)): `subtype` (any short word for the kind of item), `prompt`, `predicted_winner`, `why`, and the family's extra fields. You may leave out `scoring`. |
 
-Each family needs **at least 10 items**, and you can have at most 3 families. Check them with
+Your family needs **at least 10 items**. (The tools accept up to 3 families, but Part 2 asks
+for one.) Check it with
 
 ```
 python3 evals/shared/validate.py --extra evals/mine

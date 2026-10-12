@@ -12,8 +12,8 @@ into batches, keeps track of finished batches, checks the answers and writes the
 Run every command from the repository's folder.
 
 Each pair has a prompt from `training/prompts-300.jsonl`, a *chosen* answer (Claude's, written
-under one constitution) and a *rejected* answer (the human answer from the Dolly dataset). One
-file per model: `training/pairs-succinct.jsonl` and `training/pairs-persona.jsonl`. In Step 8,
+under one constitution) and a *rejected* answer (the human answer from the Dolly dataset, which
+the writers never see). One file per model: `training/pairs-succinct.jsonl` and `training/pairs-persona.jsonl`. In Step 8,
 DPO trains each model to prefer its chosen answers.
 
 Rules for the whole skill:
@@ -80,7 +80,7 @@ Call the Agent tool once, for batch 01 only, with:
 ## 3. Pause: three answers, word for word
 
 ```
-python3 .claude/skills/build-preferences/pairs.py show --model MODEL --batch 1 --n 3
+python3 .claude/skills/build-preferences/pairs.py show --model MODEL --n 3
 ```
 
 Show its output word for word and in full, with no summary, comment or description. Then ask
@@ -89,8 +89,9 @@ one question: do these look like what your MODEL constitution asks for?
 - On a yes, go on to step 4.
 - On a no, stop. They change `constitutions.md` (or dictate the change), as in Step 2, then
   run `/build-preferences` again; `plan` will notice the change. Don't suggest what to change.
-- If they want to see more first, run `show` again with `--n 6` or another `--batch`, and
-  show it the same way.
+- If they want to see more first, run `show` again with `--n 6`, and show it the same way.
+  `show` draws only from batch 01 (pair-001 to pair-025), because Step 6's blind sample leaves
+  those pairs out. Never show answers from other batches before their labels are in.
 - If `show` says batch 01 has no answers, the writer failed: run step 2 once more.
 
 ## 4. Write the rest

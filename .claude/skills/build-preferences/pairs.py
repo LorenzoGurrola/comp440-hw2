@@ -9,11 +9,13 @@ Run it from the repository's folder. Standard library only: nothing to install.
           training/prompts-300.jsonl into batches, and prints the lines to give each
           answer-writer. Run it again to carry on: finished batches are kept.
   status  shows which batches have answers, and the lines for the ones that still need a writer.
-  show    prints a few answers from one batch, word for word, with their questions.
+  show    prints a few answers from the first batch (pair-001 to pair-025), word for word, with
+          their questions. Only the first batch, because label_tools.py sample leaves those
+          pairs out of Step 6's blind sample.
   merge   checks the answers (every prompt answered once, none empty, none copied from the
-          human answer), writes redo batches for any gaps, and when nothing is missing writes
-          training/pairs-<model>.jsonl. It also prints a variety check: openings, endings and
-          phrases that many answers share.
+          human answer, which the writers never see), writes redo batches for any gaps, and
+          when nothing is missing writes training/pairs-<model>.jsonl. It also prints a variety
+          check: openings, endings and phrases that many answers share.
 
 Example:
   python3 .claude/skills/build-preferences/pairs.py plan --model succinct
@@ -184,8 +186,7 @@ def cmd_plan(args):
     for n, start in enumerate(range(0, len(prompts), args.size), 1):
         chunk = prompts[start:start + args.size]
         inp, out = os.path.join(d, f"in-{n:02d}.jsonl"), os.path.join(d, f"out-{n:02d}.jsonl")
-        write_jsonl(inp, [{"id": r["id"], "question": r["question"], "human": r["human"]}
-                          for r in chunk])
+        write_jsonl(inp, [{"id": r["id"], "question": r["question"]} for r in chunk])
         batches.append({"n": n, "input": inp, "output": out, "ids": [r["id"] for r in chunk]})
     plan = dict(key, model=args.model, prompts=len(prompts), batches=batches, redo_round=0)
     with open(plan_path, "w", encoding="utf-8") as f:
@@ -266,10 +267,11 @@ def cmd_status(args):
 
 
 def cmd_show(args):
+    """Answers from the first batch only: Step 6's blind sample leaves those pairs out."""
     plan = load_plan(args.model)
-    b = next((b for b in plan["batches"] if b["n"] == args.batch), None)
-    if b is None or not os.path.isfile(b["output"]):
-        die(f"batch {args.batch} of {args.model} has no answers yet.")
+    b = plan["batches"][0]
+    if not os.path.isfile(b["output"]):
+        die(f"batch 01 of {args.model} has no answers yet.")
     prompts = {r["id"]: r for r in load_prompts()}
     rows, _ = read_jsonl(b["output"])
     good = [r for r in rows if isinstance(r, dict) and r.get("id") in b["ids"]
@@ -336,8 +338,7 @@ def cmd_merge(args):
             chunk = missing[start:start + size]
             inp = os.path.join(d, f"redo-{rnd}-{k:02d}-in.jsonl")
             out = os.path.join(d, f"redo-{rnd}-{k:02d}-out.jsonl")
-            write_jsonl(inp, [{"id": r["id"], "question": r["question"], "human": r["human"]}
-                              for r in chunk])
+            write_jsonl(inp, [{"id": r["id"], "question": r["question"]} for r in chunk])
             print(f"\n[redo {k:02d}, {len(chunk)} prompts]\n{writer_lines(d, inp, out)}")
         with open(os.path.join(d, "plan.json"), "w", encoding="utf-8") as f:
             json.dump(plan, f, indent=1)
@@ -375,8 +376,8 @@ def main():
             p.add_argument("--restart", action="store_true",
                            help="delete this model's batches and start over")
         if name == "show":
-            p.add_argument("--batch", type=int, default=1)
-            p.add_argument("--n", type=int, default=3)
+            p.add_argument("--n", type=int, default=3,
+                           help="how many answers, all from the first batch (default 3)")
             p.add_argument("--seed", type=int, default=440)
         if name == "merge":
             p.add_argument("--allow-gaps", action="store_true",

@@ -148,8 +148,8 @@ changing the model.
 
 It's the same idea as in SFT: one step looks at 8 pairs and moves the weights a little, with a
 smaller learning rate (5e-6). The GPU can only hold 2 pairs at a time, so the notebook adds up the
-changes from 4 groups of 2 before it moves the weights. Each of your DPO runs is 50 steps of 8
-pairs, 400 pairs in all, so it sees your 300 pairs about 1.3 times.
+changes from 4 groups of 2 before it moves the weights. Each of your DPO runs is 38 steps of 8
+pairs, 304 pairs in all, so it sees each of your 300 pairs about once.
 
 ## Why GPU memory is tight
 

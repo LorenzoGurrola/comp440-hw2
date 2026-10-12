@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Label a blind sample of your preference pairs, then compare your labels with Claude's (Step 6).
 
-  sample  draws --n pairs (15 by default) from each of training/pairs-succinct.jsonl and
-          training/pairs-persona.jsonl, puts Claude's chosen answer on side A or side B at
-          random, and writes training/label-sample.jsonl, one pair per line: "id", "model",
+  sample  draws --n pairs (5 by default) from each of training/pairs-succinct.jsonl and
+          training/pairs-persona.jsonl, leaving out pair-001 to pair-025 (the first batch,
+          which is where the build-preferences skill's examples in Step 5 come from, so you
+          may have seen them), puts Claude's chosen answer on side A or side B at random, and writes training/label-sample.jsonl, one pair per line: "id", "model",
           "prompt", "A", "B". Which side holds Claude's chosen answer (the key) goes to
           training/label-key.json, with the seed that drew the sample, so running sample again
           with that --seed draws the same sample. It will not replace an earlier sample, key or
@@ -36,6 +37,9 @@ REPO = os.path.dirname(os.path.dirname(HERE))
 TRAINING = os.path.join(REPO, "training")
 MODELS = ("succinct", "persona")
 KEY_FORMAT = "label_tools key 1"
+# The pairs the build-preferences skill may show in Step 5 (pairs.py show draws only from the
+# first batch). The blind sample leaves them out, since the student may remember them.
+SHOWN_IN_STEP5 = {f"pair-{i:03d}" for i in range(1, 26)}
 PREVIEW = 200
 
 
@@ -94,7 +98,7 @@ def load_pairs(path):
 
 def cmd_sample(args):
     p = paths(args.dir)
-    pairs = {m: load_pairs(p[m]) for m in MODELS}
+    pairs = {m: [r for r in load_pairs(p[m]) if r["id"] not in SHOWN_IN_STEP5] for m in MODELS}
     old = [p[k] for k in ("sample", "key", "labels") if os.path.exists(p[k])]
     if old and not args.force:
         die(f"{', '.join(show(x) for x in old)} already exist. A new sample would not match "
@@ -102,7 +106,8 @@ def cmd_sample(args):
             f"files are moved to {show(args.dir)}/replaced-<date-time>/, not deleted.")
     for m in MODELS:
         if len(pairs[m]) < args.n:
-            die(f"{show(p[m])} has {len(pairs[m])} pairs, fewer than --n {args.n}.")
+            die(f"{show(p[m])} has {len(pairs[m])} pairs after pair-001 to pair-025, fewer "
+                f"than --n {args.n}.")
     if old:
         keep = os.path.join(args.dir, "replaced-" + dt.datetime.now().strftime("%Y%m%d-%H%M%S"))
         os.makedirs(keep)
@@ -227,7 +232,8 @@ def build_parser():
                        help="the training folder (default: training/ in the repo root)")
         p.set_defaults(func=func)
         if name == "sample":
-            p.add_argument("--n", type=int, default=15, help="pairs per model (default 15)")
+            p.add_argument("--n", type=int, default=5,
+                           help="pairs per model (default 5), never from pair-001 to pair-025")
             p.add_argument("--seed", type=int,
                            help="seed for the draw (default: a new random one, saved in the "
                                 "key, so the same seed redraws the same sample)")

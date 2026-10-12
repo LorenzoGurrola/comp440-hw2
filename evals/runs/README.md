@@ -124,7 +124,7 @@ Grader ids say who graded and how, for example `sonnet-low`, `opus-low`, `opus-m
 
 ### `ratings/`
 
-- `assignments.jsonl`: one line per rater and pair of models: the 20 random emotional items
+- `assignments.jsonl`: one line per rater and pair of models: the 5 random emotional items
   given to that rater, and for each item which model's message is shown on the left.
 - `ratings.jsonl`: one line per rating: which side the rater would rather send (and so which
   model), and the rater's yes/no task check for each message. The latest one per item counts.

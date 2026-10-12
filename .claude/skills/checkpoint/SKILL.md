@@ -13,11 +13,11 @@ and the part is not done until it is filled.
    - Part 2: the four-model folder under `evals/runs/`, with response files for `base`, `sft`,
      `succinct` and `persona` in `responses/`; a Sonnet grades folder (usually
      `grades/sonnet-low/`) and the Opus audit (usually `grades/opus-medium-audit/`); their
-     review decisions (`review/decisions-<name>.jsonl`); their ratings
+     review decisions (`review/decisions-<name>.jsonl`); their five ratings
      (`ratings/ratings.jsonl`); and `status` in `run.json` at `audited` or later.
-     Then the other files Part 2 hands in: `constitutions.md`, `voice-samples.md`, at least
-     two families in `evals/mine/` and `evals/mine/LOG.md`, `training/pairs-succinct.jsonl`,
-     `training/pairs-persona.jsonl` and `training/labels.jsonl`. Run
+     Then the other files Part 2 hands in: `constitutions.md`, `voice-samples.md`, their family
+     in `evals/mine/` and `evals/mine/LOG.md`, `training/pairs-succinct.jsonl`,
+     `training/pairs-persona.jsonl` and `training/labels.jsonl` (10 labels). Run
      `python3 evals/shared/validate.py --train training --extra evals/mine` and paste its last
      line.
    - Part 2, the order of the commits. Predictions made after training aren't predictions, so

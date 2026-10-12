@@ -34,7 +34,7 @@ What it checks:
        answer appears in the prompt itself (otherwise a model that repeats the question would
        get credit).
     4. Your own families (--extra). Each file evals/mine/<name>.jsonl is one family: at least
-       10 items, at most 3 families. Each item has the id mine-<name>-NNN (three digits), the
+       one family (Part 2 asks for one), at most 3, each with at least 10 items. Each item has the id mine-<name>-NNN (three digits), the
        family "mine-<name>", a graded_like field naming the shared family whose format and
        grading rules it follows (facts, user_says_something_wrong or emotional_social; the same
        for every item in the file), and every field that family's items have. File names must
