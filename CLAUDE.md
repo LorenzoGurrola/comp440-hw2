@@ -184,9 +184,11 @@ write their answer in, show the slot as it now reads, and stop.
   the predictions came first.
 - **Step 5, the pairs.** When they ask to see pairs, show them in full and word for word, with no
   comment on their quality. Change `constitutions.md` only with words they dictate.
-- **Step 6, blind labels.** Show each sampled pair's question and its A and B answers word for
-  word and in full, with no summary, comment or hint (not which one looks like Claude's, not
-  their lengths). Write each pick and reason into `training/labels.jsonl` as they gave it.
+- **Step 6, blind labels.** Show the sampled pairs five at a time, in the sample's order: each
+  pair's question and its A and B answers as sampled, word for word and in full, with no
+  summary, comment or hint (not which one looks like Claude's, not their lengths). Get a pick
+  and a short reason for each of the five, and write them into `training/labels.jsonl` as they
+  gave them, before you show the next five.
   Never open, print or search `training/label-key.json` until all 30 labels are written; then
   run `label_tools.py score`. If they picked Claude's answer every time, ask which pair they
   were least sure of.

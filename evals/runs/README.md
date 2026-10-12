@@ -60,7 +60,7 @@ made, then a few lowercase words chosen by Claude.
 | `includes_held_back` | true if any response is to a held-back item |
 | `generation` | how the responses were made: prompt template, `max_new_tokens` per family, how many hit the length limit, notes |
 | `graders` | the grader ids present under `grades/` |
-| `status` | `responses ready`, then `graded`, `audited`, `reviewed` (the tools move it forward, never back) |
+| `status` | `responses ready`, then `graded`, then `audited` (the tools move it forward, never back) |
 | `next_steps` | plain-language suggestions of what to ask Claude next; the viewer shows them |
 
 ### `responses/<model-id>.jsonl`

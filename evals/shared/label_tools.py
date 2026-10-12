@@ -137,8 +137,10 @@ def cmd_sample(args):
           f"{show(p['sample'])}.")
     print(f"The key is in {show(p['key'])}. Don't open it until {show(p['labels'])} has a label "
           f"for every pair.")
-    print('Show each pair word for word, record each pick in labels.jsonl as {"id", "model", '
-          '"pick": "A" or "B", "reason"}, then run: python3 evals/shared/label_tools.py score')
+    print("Show the pairs five at a time, word for word, with sides A and B as sampled. Record a "
+          'pick and reason for each of the five in labels.jsonl as {"id", "model", "pick": "A" or '
+          '"B", "reason"} before showing the next five. Then run: '
+          "python3 evals/shared/label_tools.py score")
 
 
 def preview(text):

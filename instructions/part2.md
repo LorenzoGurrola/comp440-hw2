@@ -158,7 +158,7 @@ reading of your constitution into your models.
 - Read **at least ten** pairs from each of `training/pairs-succinct.jsonl` and
   `training/pairs-persona.jsonl`.
 - Hints:
-  - This takes Claude about [TBD] minutes. If you hit your plan's usage limit, type
+  - This takes Claude about 15 minutes. If you hit your plan's usage limit, type
     `/build-preferences` again after it resets; it carries on where it stopped.
   - If you change your constitutions here, say what you changed in your Step 5 answer. Leave
     your Step 4 predictions as they are: Step 12 is where you explain a gap.
@@ -176,9 +176,9 @@ answer in 15 pairs per model without knowing which one Claude wrote.
   shuffles each pair's answers into A and B in `training/label-sample.jsonl`, and writes which
   side is Claude's to `training/label-key.json`. Don't open the key until all 30 labels are in:
   once you've seen it, you can't label blind again.
-- For each pair, Claude shows you the question and both answers. Say which better follows that
-  model's constitution, A or B, with a short reason. Claude writes your picks into
-  `training/labels.jsonl`.
+- Claude shows you the pairs five at a time, each with its question and both answers. For each
+  of the five, say which better follows that model's constitution, A or B, with a short reason.
+  Claude writes your picks into `training/labels.jsonl`, then shows the next five.
 - Then ask Claude to run `python3 evals/shared/label_tools.py score`. It prints how often you
   picked Claude's answer for each model, and lists the pairs where you didn't.
 - Hint: you'll often be able to tell which answer is Claude's. Label by the constitution anyway,
