@@ -18,18 +18,18 @@ will:
 This part builds on [Part 1](part1.md), so finish that first. You'll run the same evaluations on
 four versions of the model: the base model, the model after SFT, and your two DPO models.
 
-## Before you start
+## An overview of the working pattern here
+In this section, Claude will transcribe answers to questions.
+It will also run cells and commands, explain anything you ask, draft test items for you to
+review (Step 3) and write most of your training data (Step 5).
 
-In this section, you will be asked to provide answers to questions that Claude will write down.
-Claude also runs the cells and commands, explains anything you ask, drafts test items for you to
-review (Step 3) and writes most of your training data (Step 5).
-
-I recommend four sittings, since some steps need Claude to work for a while and one needs a GPU:
+I recommend four sittings, since some steps need Claude to work for a while and one section
+needs a GPU (which can sometimes be difficult to access):
 
 | Sitting | Steps | What you need |
 |---|---|---|
 | 1 | 1 to 4 | Claude Code |
-| 2 | 5 and 6 | Claude Code, and a good share of your plan |
+| 2 | 5 and 6 | Claude Code, and a good share of your quota |
 | 3 | 7 to 9 | Colab with a T4, about 20 GPU minutes in one go |
 | 4 | 10 and 11 | Claude Code and the viewer |
 
@@ -39,25 +39,18 @@ sometimes all taken.
 
 ## Step 1: Pick your famous person
 
-One of your two models will answer in the voice of a famous person you admire.
+One of your two models will answer in the voice of a famous person.
 
+- Pick a public figure with at least a few pages of their own public words, never a private
+  person. A person with a recognizable way of talking is easier to spot in a small model's
+  answers.
 - Write their name, and two sentences on why you picked them, in `WRITEUP.md`.
-- Choose **up to five** short passages of their own words. Claude can copy them, with their
-  sources, into `voice-samples.md` from a page you name. Claude reads them when it writes answers
-  in this voice in Step 5.
-
-There are three rules for who you pick:
-
-1. A public figure with at least a few pages of their own public words. Never a private
-   person or anyone at Macalester.
-2. At most five passages, with a few sentences each.
-3. Your model will speak as "I" and invent things about the person's life, but its answers are an
-   imitation, not the person.
-
-- Hints:
-  - A person with a recognizable way of talking is easier to spot in a small model's answers.
-  - Quotation websites often credit people with words they never said. Take your passages from
-    a primary source: the person's own book, speech, letter or interview.
+- Choose up to five short passages, a few sentences each, from a primary source: the person's
+  own book, speech, letter or interview. Quotation websites often credit people with words they
+  never said. Claude can copy the passages, with their sources, into `voice-samples.md` from a
+  page you name, and reads them when it writes answers in this voice in Step 5.
+- Your model will speak as "I" and invent things about the person's life. Its answers are an
+  imitation, not the person.
 
 > [!IMPORTANT]
 > **Question:** What would someone notice first about the way this person talks or writes?
