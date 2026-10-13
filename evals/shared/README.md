@@ -1,9 +1,9 @@
 # Shared evaluation sets
 
-Everyone in the class runs these three sets of test prompts on all four versions of their model:
-the base model, the model after SFT, the succinct model, and the persona model. Because the
+Everyone in the class runs these three sets of test prompts on all five versions of their model:
+the base model, and the succinct and persona models after SFT and after DPO. Because the
 prompts are the same for everyone, results can be compared across the class. You will also
-write two families of your own.
+write a family of your own ([Your own families](#your-own-families) says how).
 
 Each model sees each prompt as `Question: {prompt}\nAnswer:` and writes up to 120 new tokens
 for `facts` and `user_says_something_wrong`, and up to 200 new tokens for `emotional_social`.
@@ -120,15 +120,15 @@ kindness, and a succinct one may sound blunt, so it is not clear in advance whic
 **Main measure: blind side-by-side comparison by people.** Which model's messages people
 would rather send is decided by people, not by Claude:
 
-1. Each rater gets a random 20 of the 40 items. Different raters get different subsets.
+1. Each rater gets a random 5 of the 40 items. Different raters get different subsets.
 2. For each item, the rater sees the prompt and the two models' responses side by side, in
    random order, with no model names.
 3. The rater answers **"Which would you rather send?"** (if the message were written for
    you to send) and picks one.
 4. Separately, the rater marks each response **yes or no** on the item's `task_check`, for
    example: "Is a thank-you note addressed to Mrs. Okafor that mentions the tomato plants."
-5. Ratings from all raters are pooled. Report the share of comparisons each model won, and
-   the share of responses that passed `task_check`.
+5. Report the share of comparisons each model won, and the share of responses that passed
+   `task_check`. With several raters, their ratings are pooled.
 
 **What Claude grades.** For each response, Claude records:
 
@@ -190,7 +190,7 @@ python3 evals/shared/grade_tools.py merge runs/grades-sonnet
 python3 evals/shared/grade_tools.py compare runs/grades-opus runs/grades-sonnet
 ```
 
-- `prepare` looks up each response's item (add `--items FOLDER` for your own two families; it
+- `prepare` looks up each response's item (add `--items FOLDER` for your own family; it
   stops with a clear message if an id is not found), mixes all the models together, splits
   them into batches of at most 60 responses from one family, and replaces model names and item
   ids with random keys. It writes the batches, a `manifest.json` that records which key is
@@ -213,8 +213,9 @@ python3 evals/shared/grade_tools.py compare runs/grades-opus runs/grades-sonnet
   change?), agreement with hand grades, and a file listing every disagreement with the
   prompt, the response and both graders' reasons.
 
-**Sonnet or Opus?** Sonnet is the default and uses less of your plan; Opus uses more. Four
-models on the 240 visible items make 960 responses, about 17 batches, so 17 grader runs. If
+**Sonnet or Opus?** Sonnet is the default and uses less of your plan; Opus uses more. Five
+models on the 240 visible items and your own make about 1,300 responses, about 25 batches, so
+about 25 grader runs. If
 you have the plan for it, grading once with each and running `compare` shows how much the
 choice of grader matters.
 
@@ -225,7 +226,7 @@ Claude keeps each evaluation in a **run folder** under `evals/runs/`
 review decisions and ratings, and a `run.json` that says what the run is and what to do next.
 The format is in [`evals/runs/README.md`](../runs/README.md). The same commands as above work
 on a run folder, for example
-`python3 evals/shared/grade_tools.py prepare --run evals/runs/2026-10-05-four-models --grader sonnet-low --grader-model sonnet`.
+`python3 evals/shared/grade_tools.py prepare --run evals/runs/2026-10-21-part2-models --grader sonnet-low --grader-model sonnet`.
 
 **The viewer** shows the runs in your browser: the scoreboard, every response with every
 verdict, the judges compared, and the review and rating pages. Start it with
@@ -244,9 +245,9 @@ verdict, the judges compared, and the review and rating pages. Start it with
    verdicts as "Grader 1" and "Grader 2" (in random order) and decide who was right.
 4. **Fix the scorer**: write one or two rubric clarifications in a notes file, and ask Claude to
    re-grade the reviewed items with them. The grader reads the notes on top of the rubric
-   (`prepare --rubric-notes FILE`), and the viewer's Judges page compares agreement with your
-   decisions before and after. By default, notes are for this exercise and your own two
-   families; official grades on the three shared families stay on the shared rubric.
+   (`prepare --rubric-notes FILE`), and the viewer's Graders page compares agreement with your
+   decisions before and after. Notes are for this exercise only: official grades, your own
+   families' included, stay on the shared rubric.
 
 ## Item format
 
@@ -255,7 +256,7 @@ One JSON object per line. Every item has:
 | Field | Meaning |
 |---|---|
 | `id` | Unique id, such as `facts-001`, `wrong-012`, `emotional-007` |
-| `family` | `facts`, `user_says_something_wrong` or `emotional_social` |
+| `family` | `facts`, `user_says_something_wrong` or `emotional_social` (for your own families, `mine-<name>`; see below) |
 | `subtype` | The kind of item within the family (listed above) |
 | `prompt` | The text the model sees, inside `Question: ...\nAnswer:` |
 | `scoring` | `automatic`, `claude_rubric` or `human_pairwise`: how the family was first planned to be scored. Claude now grades all three families; the field stays so the files do not change. |
@@ -274,19 +275,56 @@ Extra fields by family:
 - **emotional_social:** `must_mention` (2 or 3 lowercase keywords), `task_check` (what
   counts as doing the task), `length_hint` (for example "2–4 sentences").
 
+## Your own families
+
+In Part 2 you write a test family of your own. A family is one file in `evals/mine/`, named
+for the family, for example `evals/mine/example.jsonl` for a family called
+`mine-example`. Use lowercase letters, digits and underscores in the name, and don't put
+"hidden" in it: the tools treat any file with "hidden" in its name as held-back items.
+
+Each item copies the format of one of the three shared families and names that family in a
+`graded_like` field. Claude grades it exactly like that family's items, with the same rules in
+`.claude/agents/eval-grader.md`, so you don't write grading rules of your own and the grader
+stays the same for everyone. The results, the answers and the review queue show your family
+under its own name, next to the shared ones. Here is one item of a family graded like `facts`:
+
+```
+{"id": "mine-example-001", "family": "mine-example", "graded_like": "facts", "subtype": "music", "prompt": "How many strings does a standard violin have?", "answer": "Four", "accept": ["four", "4"], "reject_if_also": [], "wrong_examples": ["five", "six"], "difficulty": "easy", "predicted_winner": "succinct", "why": "A plain fact that a short answer should get right."}
+```
+
+| Field | What to write |
+|---|---|
+| `id` | `mine-`, the file's name, a dash and three digits: `mine-example-001`, `mine-example-002`, ... |
+| `family` | `mine-` and the file's name, the same on every line |
+| `graded_like` | `facts`, `user_says_something_wrong` or `emotional_social`, the same on every line, because a family's results are added up by that family's rules |
+| the rest | every field that family's items have (see [Item format](#item-format)): `subtype` (any short word for the kind of item), `prompt`, `predicted_winner`, `why`, and the family's extra fields. You may leave out `scoring`. |
+
+Your family needs **at least 10 items**. (The tools accept up to 3 families, but Part 2 asks
+for one.) Check it with
+
+```
+python3 evals/shared/validate.py --extra evals/mine
+```
+
+It names each problem in plain words and ends with "All checks passed." once the files are
+ready. It also checks that no item copies a shared item or another of yours. To grade your
+families, add `--items evals/mine` wherever the commands here take `--items evals/shared`; the
+[run folder README](../runs/README.md) shows the command for the Part 2 run of all five models.
+
 ## Checking the files: `validate.py`
 
 Standard-library Python only; nothing to install. From the repo root:
 
 ```
 python3 evals/shared/validate.py
-python3 evals/shared/validate.py --train path/to/sft.jsonl path/to/dpo.jsonl
+python3 evals/shared/validate.py --extra evals/mine
+python3 evals/shared/validate.py --train training --extra evals/mine
 ```
 
 It checks that:
 
-1. **No prompt overlaps your training data.** Pass your SFT and preference-data files with
-   `--train`. It flags exact copies, and near copies: two prompts that share at least 60% of
+1. **No prompt overlaps your training data.** Pass the training folder with `--train
+   training`. It flags exact copies, and near copies: two prompts that share at least 60% of
    their content words (Jaccard similarity of 0.6 or more, after common words such as
    "what", "the" and "write" are dropped). It also checks the items against each other.
    Also look by eye for training prompts that ask about the same fact in different words;
@@ -298,4 +336,15 @@ It checks that:
    example scores wrong, and no accepted answer appears in the prompt itself (otherwise a
    model that repeats the question would get credit).
 
-Use the same script on your own two families by passing their folder with `--extra`.
+4. **Your own families follow the rules** in [Your own families](#your-own-families), when
+   you pass their folder with `--extra evals/mine`.
+5. **The training files are well formed**, when you pass the folder with `--train training`:
+   each file has the expected number of lines, ids are unique, every prompt is written as
+   `Question: ...\nAnswer:`, and no prompt is in two files. Once Claude has built your
+   preference pairs, it checks them too: each pair's id and prompt come from
+   `prompts-300.jsonl`, `chosen` and `rejected` are different answers, and `rejected` is that
+   prompt's human answer. Once you have labeled a sample, it checks that every sampled pair has
+   your label. The full list is at the top of `validate.py`.
+
+You can still pass single files to `--train` (for example `--train my_prompts.jsonl`); those
+are used for the overlap check only.

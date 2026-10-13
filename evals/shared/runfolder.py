@@ -50,6 +50,10 @@ RESERVED_JUDGE_PREFIXES = ("review-", "rater-", "string-match")
 
 FAMILIES = gt.FAMILIES
 FAMILY_TITLES = gt.FAMILY_TITLES
+# A student's own family keeps its name ("mine-<name>"); its "graded_like" (one of FAMILIES)
+# says which family's verdict fields, labels and rubric apply. The dicts below are keyed by
+# that grading family.
+kind_of, family_title, family_order = gt.kind_of, gt.family_title, gt.family_order
 LABEL_FIELD = {"facts": "correct", "user_says_something_wrong": "score",
                "emotional_social": "does_task"}
 LABEL_VALUES = {"facts": [True, False], "user_says_something_wrong": [0, 1, 2],
@@ -358,24 +362,33 @@ def grader_description(info, n):
 
 # ------------------------------------------------------------------------------ verdicts
 
-def verdict_from_record(rec):
-    """A grades.jsonl record -> the judge-neutral verdict used everywhere in the viewer."""
+def verdict_from_record(rec, graded_like=None):
+    """A grades.jsonl record -> the judge-neutral verdict used everywhere in the viewer.
+
+    The verdict's "family" is the item's family (a student's own family keeps its name) and
+    "graded_like" is the family whose rules graded it: the record's own graded_like, else the
+    one given (the item's), else the family itself.
+    """
     family = rec.get("family")
-    if family not in LABEL_FIELD or LABEL_FIELD[family] not in rec:
+    kind = rec.get("graded_like") or (family if family in LABEL_FIELD else graded_like)
+    if kind not in LABEL_FIELD or LABEL_FIELD[kind] not in rec:
         return None
-    label = rec[LABEL_FIELD[family]]
-    fields = {k: rec[k] for k in gt.VERDICT_FIELDS[family] if k in rec and k != "reason"}
+    label = rec[LABEL_FIELD[kind]]
+    fields = {k: rec[k] for k in gt.VERDICT_FIELDS[kind] if k in rec and k != "reason"}
     for extra in ("all_details", "string_match_correct", "keywords_found", "keywords_missing"):
         if extra in rec:
             fields[extra] = rec[extra]
-    return {"family": family, "label": label,
-            "label2": rec.get("score_implicit_as_2", label) if family == "user_says_something_wrong"
+    return {"family": family, "graded_like": kind, "label": label,
+            "label2": rec.get("score_implicit_as_2", label) if kind == "user_says_something_wrong"
             else label,
             "fields": fields, "reason": str(rec.get("reason") or "")}
 
 
 def grade_to_label(family, grade):
-    """A reviewer's grade ({"correct": true} / {"score": 1} / {"does_task": false})."""
+    """A reviewer's grade ({"correct": true} / {"score": 1} / {"does_task": false}).
+
+    family here (and in check_grade and reviewer_final_label) is the grading family.
+    """
     if not isinstance(grade, dict):
         return None
     v = grade.get(LABEL_FIELD.get(family, ""))
@@ -408,8 +421,8 @@ def string_match_verdict(item, response):
         reason = f"contains the accepted answer {accepts[0]!r} somewhere in the response"
     else:
         reason = "no accepted answer appears in the response"
-    return {"family": "facts", "label": ok, "label2": ok, "fields": {"correct": ok},
-            "reason": f"String match: {reason}."}
+    return {"family": item.get("family", "facts"), "graded_like": "facts", "label": ok,
+            "label2": ok, "fields": {"correct": ok}, "reason": f"String match: {reason}."}
 
 
 # ------------------------------------------------------------------------------ review queues
@@ -549,6 +562,18 @@ class RunData:
     def family(self, item_id):
         return self.items.get(item_id, {}).get("family")
 
+    def kind(self, item_id):
+        """The grading family of an item (its graded_like, for a student's own family)."""
+        return kind_of(self.items.get(item_id, {}))
+
+    def families(self):
+        """[{family, graded_like, title, own}] for every family with items, shared ones first."""
+        kinds = {}
+        for it in self.items.values():
+            kinds.setdefault(it.get("family"), kind_of(it))
+        return [{"family": f, "graded_like": kinds[f], "title": family_title(f),
+                 "own": f not in FAMILIES} for f in family_order(kinds) if kinds[f]]
+
     def model_label(self, model):
         return self.model_info.get(model, {}).get("label") or model
 
@@ -566,7 +591,7 @@ class RunData:
             verdicts = {}
             for rec in load_grade_records(self.dir, gid):
                 key = (rec.get("model"), rec.get("id"))
-                v = verdict_from_record(rec)
+                v = verdict_from_record(rec, self.kind(key[1]))
                 if v and self.keep(key):
                     verdicts[key] = v
             self._add(gid, info.get("kind", "claude-subagent"), gid,
@@ -576,13 +601,14 @@ class RunData:
         verdicts = {}
         for key, row in self.responses.items():
             item = self.items[key[1]]
-            if item.get("family") == "facts" and item.get("accept"):
+            if kind_of(item) == "facts" and item.get("accept"):
                 verdicts[key] = string_match_verdict(item, row["response"])
         if verdicts:
             self._add("string-match", "automatic", "string-match",
                       "The automatic string-match check for facts (score_fact in validate.py): "
                       "correct if an accepted answer appears anywhere in the response. Facts "
-                      f"only; {count(len(verdicts), 'verdict')}.",
+                      "(and your own families graded like facts) only; "
+                      f"{count(len(verdicts), 'verdict')}.",
                       {"kind": "automatic", "families": ["facts"]}, verdicts)
 
     def _load_reviewers(self):
@@ -591,7 +617,8 @@ class RunData:
             ev = s.get("final") or s.get("blind")
             key = (ev.get("model"), ev.get("id"))
             family = ev.get("family") or self.family(key[1])
-            if not self.keep(key) or family not in LABEL_FIELD:
+            kind = self.kind(key[1]) or ev.get("graded_like") or family
+            if not self.keep(key) or kind not in LABEL_FIELD:
                 continue
             r = by_reviewer.setdefault(rslug, {"name": ev.get("reviewer"), "kind":
                                                ev.get("reviewer_kind", "human"),
@@ -599,20 +626,20 @@ class RunData:
             blind, final = s.get("blind"), s.get("final")
             t = (final or blind).get("time", "")
             if blind:
-                lab = grade_to_label(family, blind.get("grade"))
+                lab = grade_to_label(kind, blind.get("grade"))
                 if lab is not None:
-                    r["blind"][key] = {"family": family, "label": lab, "label2": lab,
-                                       "fields": {LABEL_FIELD[family]: lab},
+                    r["blind"][key] = {"family": family, "graded_like": kind, "label": lab,
+                                       "label2": lab, "fields": {LABEL_FIELD[kind]: lab},
                                        "reason": "Own grade, given before seeing the graders."}
             if final and t >= r["times"].get(key, ""):
-                lab = reviewer_final_label(family, final, blind)
+                lab = reviewer_final_label(kind, final, blind)
                 if lab is not None:
                     r["times"][key] = t
-                    fields = {LABEL_FIELD[family]: lab, "final_call": final.get("final_call")}
+                    fields = {LABEL_FIELD[kind]: lab, "final_call": final.get("final_call")}
                     if final.get("confidence"):
                         fields["confidence"] = final["confidence"]
-                    r["final"][key] = {"family": family, "label": lab, "label2": lab,
-                                       "fields": fields,
+                    r["final"][key] = {"family": family, "graded_like": kind, "label": lab,
+                                       "label2": lab, "fields": fields,
                                        "reason": final.get("reason") or "(no reason recorded)"}
         for rslug, r in sorted(by_reviewer.items()):
             kind = "claude-session" if r["kind"] == "claude-session" else "human"
@@ -640,8 +667,9 @@ class RunData:
             for model, ok in (ev.get("task_check") or {}).items():
                 key = (model, item_id)
                 if isinstance(ok, bool) and self.keep(key):
-                    r["verdicts"][key] = {"family": "emotional_social", "label": ok, "label2": ok,
-                                          "fields": {"does_task": ok},
+                    r["verdicts"][key] = {"family": self.family(item_id) or "emotional_social",
+                                          "graded_like": "emotional_social", "label": ok,
+                                          "label2": ok, "fields": {"does_task": ok},
                                           "reason": "Rater's task check in a blind side-by-side "
                                                     "comparison."}
         for rslug, r in sorted(by_rater.items()):

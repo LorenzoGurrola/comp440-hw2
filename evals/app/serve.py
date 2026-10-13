@@ -157,6 +157,7 @@ def run_summary(name, run_dir, root):
         "description": run.get("description", ""), "status": run.get("status"),
         "next_steps": run.get("next_steps", []), "root": R.repo_rel(root),
         "models": A.models_meta(data),
+        "families": A.family_list(data),
         "item_sets": [{"path": s.get("path"), "items": s.get("items"),
                        "held_back": s.get("held_back", False)} for s in sets],
         "held_back_hidden": 0 if Settings.instructor else hidden,
@@ -226,7 +227,8 @@ def api_items(q, body, run):
                        model, judge, q.get("verdict"), q.get("q"), offset, limit)
     out["judge"] = judge
     out["judges"] = [A.judge_meta(j) for j in data.judges.values()]
-    out["subtypes"] = {f: A.subtypes_of(data, f) for f in R.FAMILIES}
+    out["subtypes"] = {f["family"]: A.subtypes_of(data, f["family"])
+                       for f in A.family_list(data)}
     return out
 
 

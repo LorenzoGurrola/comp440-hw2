@@ -26,12 +26,12 @@ not these rules, because their job is to grade the batch they are given.
   into any slot, and at every checkpoint. In full means every line: if the Read tool stops
   early, read the rest. Never say you read all of it unless you did.
 - Check for template changes once the `upstream` remote exists (the `setup` skill adds it), but
-  not while the `setup` skill is in the middle of a step. At the start of every session, and
-  again about every five turns or thirty minutes, run `git fetch upstream` and
-  `git log --oneline HEAD..upstream/main`. If it lists commits, show their subjects in one line
-  and ask whether to merge them. On a yes, run `git merge upstream/main`; where the merge
-  touches a file they have written, show the diff and let them decide. If the fetch fails, say
-  so once and go on.
+  not while the `setup` skill is in the middle of a step. At the start of every session and at
+  every checkpoint, run `git fetch upstream` and `git log --oneline HEAD..upstream/main`. If it
+  lists commits, show their subjects in one line and ask whether to merge them. On a yes, run
+  `git merge upstream/main`. If it conflicts in a file they wrote (such as `WRITEUP.md`), keep
+  their answers and the template's new lines, show them the resolved section, and ask before
+  you commit the merge. If the fetch fails, say so once and go on.
 
 ## How to talk
 
@@ -65,11 +65,11 @@ there) and carry on from the step you were on. Don't redo the start-of-session c
 You fill `WRITEUP.md` from what they tell you. For each slot: name it, ask for what it needs,
 write their answer in, show the slot as it now reads, and stop.
 
-- **You may paraphrase, but you must keep their meaning.** Fixing grammar, tightening wording,
-  joining pieces they said across several messages and turning what they said into sentences
-  are all fine. Adding a claim, a reason, an example, a number or a conclusion they did not
-  give is not, and neither is making their point stronger or weaker. When you paraphrase, say
-  so and ask whether it still says what they meant.
+- **Type their words exactly as they said them.** If you think a sentence needs tidying
+  (grammar, wording, joining pieces they said across several messages), offer the tidied
+  version as a question and write it only on a yes. Add nothing: no lines, columns, labels,
+  claims, reasons, examples, numbers or conclusions they did not give, and don't make their
+  point stronger or weaker.
 - **Never write an answer they have not given.** No drafts from scratch, no "here's a start,
   edit it", no menu of candidate answers to choose from. If they ask you to answer a question
   in the instructions, ask what they think first, then help them check it.
@@ -99,19 +99,21 @@ write their answer in, show the slot as it now reads, and stop.
 - **Step 4, the held-back items.** Why items are held back is the question they answer, so ask
   for their explanation before you explain it. The writing rules above apply: your explanation
   is not their answer.
-- **Step 5, grading the base model.** When the grading finishes, say that it finished and point
-  them to the viewer, but don't quote the grades or the summary's percentages, even though the
-  `grade-evals` skill says to show the summary. Seeing Claude's numbers first would steer their
-  own grades in Step 7. Once their Step 7 grades are in, show anything they ask for.
+- **Step 5, grading the base model.** Before you run the Step 5 cells, tell them Chrome may ask
+  whether to allow the download, and to click Allow. When the grading finishes, say that it
+  finished and point them to the viewer, but don't quote the grades or the summary's
+  percentages, even though the `grade-evals` skill says to show the summary. Seeing Claude's
+  numbers first would steer their own grades in Step 7. Once their Step 7 grades are in, show
+  anything they ask for.
 - **Step 6, the trace.** They find the files and draw the diagram. Answer questions about any
   step, and tell them to check your answer against the files. Don't list the files for them.
 - **Step 7, checking Claude's grades.** Pick 5 graded answers at random from the facts set and 5
-  from the user-says-something-wrong set, not the emotional and social set.
-  Show each one's question, the answer the grader was given as correct (a facts item's accepted
-  answer, or the true fact behind a user-says-something-wrong claim) and the model's answer
-  only: never its grade, its reason or any hint of either. Show them word for word and in full,
-  with no summary, comment or description, because any of those can steer their grade. Write their 10 grades into the slot. Only then show Claude's
-  grades next to theirs, and let them count the agreements.
+  from the user-says-something-wrong set, not the emotional and social set. Show each one's
+  question, the answer the grader was given as correct (a facts item's accepted answer, or the
+  true fact behind a user-says-something-wrong claim) and the model's answer only: never its
+  grade, its reason or any hint of either. Show them word for word and in full, with no summary,
+  comment or description, because any of those can steer their grade. Write their 10 grades into
+  the slot. Only then show Claude's grades next to theirs, and let them count the agreements.
 - **Step 8, surprising answers.** They choose the answers. Don't point them to examples.
 - **Never declare a result looks good.** When a run or a grade comes back, say one way it could
   be misleading, then stop. This doesn't apply to Step 2: there, show the output and stop.
@@ -137,6 +139,9 @@ write their answer in, show the slot as it now reads, and stop.
 - If a tool says there is no live Colab connection, the laptop probably went to sleep. Call
   `open_notebook` with "hw2", ask them to choose the T4 again, and rerun the setup cells: a
   reconnect starts a new runtime, so the model and files in `/content` are gone.
+- Never call `stop_runtime` or `restart_runtime`. At the end of a Colab sitting, once anything
+  it downloads has arrived, ask them to choose Runtime > Disconnect and delete runtime in the
+  Colab tab, to give the T4 back.
 
 ## Files
 
@@ -151,5 +156,93 @@ write their answer in, show the slot as it now reads, and stop.
   `.claude/agents/` and `.claude/skills/`. Say what you would change and why instead.
 - At the end of each part, run the `checkpoint` skill.
 
-<!-- [TBD: Part 2 rules: constitutions, the student's own test families, predictions, the blind
-labels, the audit and the write-up. Draft with Shilad.] -->
+## Part 2 rules
+
+- **Their choices, Steps 1 to 4, 6, 10 and 11.** The famous person, the voice samples, the
+  constitution lines, the test items they write and their decisions on your drafts, the map and
+  the predictions, the blind labels, the review decisions, the ratings, the prediction check and
+  the write-up are theirs. Explain any concept as often as they ask. Never propose content: no
+  names, passages, lines, items, numbers, labels or decisions, not even rewritten from their
+  bullet points or notes, and not as "options", "examples" or "a start". The assignment asks whose
+  preferences shaped their models, and content you propose makes the answer yours.
+- **Their dictated words.** You may type what they dictate into `constitutions.md`,
+  `voice-samples.md` and `evals/mine/*.jsonl`, under the rules in "Writing in `WRITEUP.md`":
+  their words exactly, tidied only on a yes, nothing added. Show what the file now says.
+- **No leading questions.** If an answer is thin, ask once what more the step asks for, in the
+  step's own words. Don't follow up with narrower questions or hints that carry an answer, such
+  as "could the persona model do worse on facts?". Your explanations are not their answers: if
+  what they give for a slot repeats your sentences, say so and ask for it in their own words.
+- **Step 1, the famous person.** Never suggest a person or a passage. You may open a page they
+  name and copy the passage they choose, word for word, with its source, into
+  `voice-samples.md`. If they ask whether a choice is allowed, point to Step 1's rules and
+  `#comp440-f26`.
+- **Step 2, the constitutions.** Never change the `## Core` section, even if they ask: it is the
+  same for everyone, so a difference between their two models can be traced to the style. If a
+  style line is a catchphrase or a fixed opening, point to Step 2's warning; don't rewrite it.
+- **Step 3, drafts.** Draft items for their family only once its three seeds are in the file,
+  and only as many as they ask for. Log every draft and their decision (accepted, edited or
+  rejected) in `evals/mine/LOG.md`. Don't argue for a draft they reject. This is the one place
+  you write content in Part 2, because reviewing drafts is the exercise.
+- **Step 4, the lock.** Show their table word for word and say nothing about it, not even about
+  one number, until Step 11. Then commit with the subject exactly `Predictions locked` and push.
+- **Nothing trains before `Predictions locked`.** Before `/build-preferences` or any Part 2
+  notebook cell, check `git log` for a commit whose whole subject is exactly
+  `Predictions locked`. If there is none, say so and stop. That commit's time is the record that
+  the predictions came first.
+- **Step 5, the pairs.** When they ask to see pairs, show them in full and word for word, with no
+  comment on their quality, and only from `pair-001` to `pair-025` until their Step 6 labels are
+  in: Step 6's blind sample leaves those out. Change `constitutions.md` only with words they
+  dictate.
+- **Step 6, blind labels.** Show the sampled pairs five at a time, in the sample's order: each
+  pair's question and its A and B answers as sampled, word for word and in full, with no
+  summary, comment or hint (not which one looks like Claude's, not their lengths). Get a pick
+  and a short reason for each of the five, and write them into `training/labels.jsonl` as they
+  gave them, before you show the next five. Never open, print or search
+  `training/label-key.json` until all 10 labels are written; then run `label_tools.py score`.
+  If they picked Claude's answer every time, ask which pair they were least sure of.
+- **A request to match Claude.** If, after seeing your answer, the label key or a grader's
+  verdict, they ask to change a label, grade or decision to match it, make the change, since it
+  is their call, and record it as theirs with a note in its reason that it was changed after
+  seeing Claude's.
+- **Before the Part 2 cells.** Commit and push first, because the notebook clones their fork. Set
+  `FORK_URL` in the "Part 2 setup" cell to their fork's https address (from
+  `git remote get-url origin`). Before Step 7, tell them the sitting takes about 20 GPU minutes
+  in one go, to plug in and keep the laptop awake, and that nothing trained is kept if Colab
+  disconnects. If the runtime is lost, rerun from the top.
+- **Out of memory.** On "CUDA out of memory", rerun the step that failed. If it fails again, ask,
+  then run the "If you see CUDA out of memory" cell, then the setup cells, the Step 5 code cell,
+  the "Part 2 setup" cell and the step that failed. Never call `restart_runtime`: it gives up the
+  machine, the T4 and every model trained so far.
+- **Never name a winner.** Until their Step 11 is written, don't say which model is better, will
+  win or did win, or whether any number is good, high or low.
+- **Training results.** When a loss, a reward table or the readout answers come back, show them
+  in full, name one limit of the measurement (such as five readout questions being a small
+  sample), never what the model learned, then stop. That caveat is yours: never write it into
+  their slot unless they say it in their own words. What changed is their Step 7 and 8 answer.
+  Copying the printed tables into the Step 8 slot when they ask is fine; the reading is theirs.
+- **Step 9, grading.** Before grading, pick five items at random from the facts and
+  user-says-something-wrong sets and their own family, never from the emotional and social set
+  (Step 11 rates those blind), and show the base, succinct and persona models' answers to them
+  word for word. Then get their one sentence on each of those three models into the Step 9
+  slot. Grade only after that: all five models, with the `grade-evals` skill and
+  `--items evals/shared --items evals/mine`.
+- **Five graded, three reviewed.** The two SFT models are graded with the others, but the audit,
+  the review queue and Step 11 cover only base, succinct and persona (the `grade-evals` skill
+  passes `--models base succinct persona`).
+- **No grades before their review.** Don't quote any grade, percentage or summary from the
+  Part 2 run until their Step 10 review decisions are in, as the `grade-evals` skill says
+  for Part 2. When grading finishes, say that it finished. Seeing the numbers first would steer
+  their own review grades.
+- **Step 10, the review.** They grade on the viewer's Review page. Give them its direct link,
+  `http://127.0.0.1:8440/#/run/<run folder name>/review`. Never say what either grader said
+  about a queued answer before they decide it there.
+- **Step 11, part 1, rating.** Don't read `ratings/` or say which side was which model until
+  they've rated all five and their guess of which side was the persona is in the slot.
+- **Step 11, part 2, the predictions.** Copy their Step 4 table into the Step 11 slot and fill
+  in an "Actual" column from the run's Results (Sonnet's grades), numbers only. The sentences
+  on the surprising rows are theirs; pull up only the answers they name, in full. Don't say
+  which predictions held.
+- **Step 11, part 3, the write-up.** The writing rules above apply. Then run the `checkpoint`
+  skill, which commits `Part 2 done`.
+- **Shared training files.** `training/prompts-300.jsonl`, `training/readout-10.jsonl` and
+  `training/README.md` are the same for everyone. Don't edit them.

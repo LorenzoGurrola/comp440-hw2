@@ -116,6 +116,8 @@ on everyone's models at the end of the assignment.
   for permission the first time; allow it.
 - Ask Claude Code to make a run from the zip file and grade it with Sonnet.
 - Open the run in the viewer.
+- In `WRITEUP.md`, write your run folder's name under Step 5 (it looks like
+  `evals/runs/2026-10-08-base`). That's all you write for this step.
 - Hint: if your laptop slept and Colab disconnected, ask Claude to reopen the notebook and choose
   the T4 again. A reconnect starts fresh, so the setup cells need to run again.
 
@@ -133,8 +135,8 @@ so you know where each piece lives and who did what.
   - the same question in the viewer.
 - Draw a diagram of the path the question took: from the item file, to Colab, to the model's
   answer, to the zip file you downloaded, to the run folder, to Claude's grade, to the viewer.
-- Label each box with where it ran: your laptop, Google's computer or Anthropic's computers.
-  Mark each step that Claude Code did for you.
+- Label each box with where it ran or was stored: your laptop, Google's computer, Anthropic's
+  computers or GitHub. Mark each step that Claude Code did for you.
 - Hints:
   - Hand-drawn and photographed is fine. So is a diagram typed into `WRITEUP.md`.
   - `evals/runs/README.md` describes the run folder. The grading rules are in `.claude/agents/`.
@@ -189,15 +191,19 @@ Submit your repository URL through the
 
 ## Grading rubric
 
-- Trace: [TBD]% - Every file in Step 6 is the right one. Every step in your diagram is placed on
-  your laptop, Google's computer or Anthropic's computers, and the steps Claude did are marked.
-- Model and grading: [TBD]% - The facts you found in Step 1 are right, and the grades in Step 3
-  come with reasons.
-- Checking Claude: [TBD]% - Your 10 grades were made before you saw Claude's, and you explain
-  one disagreement (or, if you agreed on all 10, the one you were least sure of).
-- Interpretation: [TBD]% - Your answers to the questions in Steps 2, 4 and 8 are your own reading
-  of what you saw, and the surprising answers come with your own explanation of where they came
-  from.
+Part 1 is 30% of the assignment. Within it:
+
+- Trace: 30% - Your run folder from Step 5 holds the base model's answers and Sonnet's grades.
+  Every file in Step 6 is the right one. Every step in your diagram is placed on your laptop,
+  Google's computer, Anthropic's computers or GitHub, and the steps Claude did are marked.
+- Model and grading: 20% - The facts you found in Step 1 are right, and each of your four grades
+  in Step 3 comes with a reason that names the rubric case it rests on.
+- Checking Claude: 20% - Your 10 grades were made before you saw Claude's, and you explain one
+  disagreement (or, if you agreed on all 10, the one you were least sure of) using the rubric,
+  not just "I think mine is right".
+- Interpretation: 30% - Your answers to the questions in Steps 2, 4 and 8 are your own reading
+  of what you saw: what the probabilities do and don't tell you, why some tests are held back,
+  and where the strange parts of your three surprising answers came from.
 
 ## FAQ
 

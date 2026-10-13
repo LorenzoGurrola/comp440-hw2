@@ -16,6 +16,10 @@
      #/run/NAME/review?queue=&pos=
      #/run/NAME/rate?assignment=&pos=
    Older links (overview, scoreboard, responses, item, judges) are redirected.
+
+   Task types: the three shared families, then any of the student's own ("mine-..."), shown
+   under their own names. An own family is graded like one of the three (its graded_like), so
+   its grades, badges and measures are that family's: kindOf() looks it up.
 */
 "use strict";
 
@@ -27,7 +31,6 @@
   const helpBtn = document.getElementById("help");
   const helpBox = document.getElementById("helpbox");
 
-  const FAMILIES = ["facts", "user_says_something_wrong", "emotional_social"];
   const TASK = { facts: "Facts", user_says_something_wrong: "Corrects the user", emotional_social: "Emotional tasks" };
   const MEASURE = { facts: "% right", user_says_something_wrong: "average, 0–2", emotional_social: "% done" };
   const LABEL_FIELD = { facts: "correct", user_says_something_wrong: "score", emotional_social: "does_task" };
@@ -44,13 +47,18 @@
     answer: "Right answer", accept: "Also accepted", reject_if_also: "Wrong if it also says",
     wrong_examples: "Common wrong answers", scoring_note: "Note", false_claim: "False claim",
     correct_fact: "The truth", source_note: "Source", task_check: "Counts if", must_mention: "Details to use",
-    length_hint: "Length", why: "What it tests",
+    length_hint: "Length", why: "What it tests", graded_like: "Graded like",
   };
   const PAGES = [["results", "Results"], ["answers", "Answers"], ["graders", "Graders"], ["review", "Review"], ["rate", "Rate"]];
   const OLD_PAGES = { overview: "results", scoreboard: "results", responses: "answers", item: "answers", judges: "graders" };
   const OLD_PARAMS = { judge: "grader", verdict: "grade" };
 
-  const S = { config: null, token: 0, keys: null, help: [], lastList: null, open: new Set(), lastHash: "", backTo: null };
+  const S = { config: null, token: 0, keys: null, help: [], lastList: null, open: new Set(), lastHash: "", backTo: null, kinds: {} };
+
+  /** The family whose grades apply: itself for the shared three, graded_like for an own family. */
+  function kindOf(fam) { return S.kinds[fam] || fam; }
+  /** A task type's name: the shared three have short names; an own family keeps its own. */
+  function taskName(fam) { return TASK[fam] || fam; }
 
   // ------------------------------------------------------------------ DOM helpers
 
@@ -186,15 +194,15 @@
     return out;
   }
 
-  function grade(family, v) { return (GRADES[family] || []).find((g) => g.v === v); }
+  function grade(family, v) { return (GRADES[kindOf(family)] || []).find((g) => g.v === v); }
   function tone(family, v) {
-    if (family === "user_says_something_wrong") return v === 2 ? "good" : v === 1 ? "mid" : "bad";
+    if (kindOf(family) === "user_says_something_wrong") return v === 2 ? "good" : v === 1 ? "mid" : "bad";
     return v ? "good" : "bad";
   }
   function gradeWord(family, v) {
     const g = grade(family, v);
     if (!g) return String(v);
-    return family === "user_says_something_wrong" ? `${g.sym} (${g.word})` : g.word;
+    return kindOf(family) === "user_says_something_wrong" ? `${g.sym} (${g.word})` : g.word;
   }
   function badge(family, v) {
     const g = grade(family, v);
@@ -204,14 +212,14 @@
   /** The one line that says what a right answer looks like. */
   function keyLine(family, item) {
     const pairs = { facts: "answer", user_says_something_wrong: "correct_fact", emotional_social: "task_check" };
-    const f = pairs[family];
+    const f = pairs[kindOf(family)];
     if (!item || !item[f]) return null;
     return h("p", { class: "key" }, h("span", { class: "muted" }, FIELD_NAMES[f] + ": "), String(item[f]));
   }
   function itemDetails(family, item, skip) {
     const dl = h("dl", { class: "fields" });
     const order = ["answer", "accept", "reject_if_also", "wrong_examples", "scoring_note", "false_claim", "correct_fact",
-      "source_note", "task_check", "must_mention", "length_hint", "why"];
+      "source_note", "task_check", "must_mention", "length_hint", "why", "graded_like"];
     for (const f of order) {
       if ((skip || []).includes(f)) continue;
       const v = item[f];
@@ -320,6 +328,8 @@
     const r = await api("runs/" + enc(run));
     const models = {};
     for (const m of r.models) models[m.id] = shortModel(m);
+    S.kinds = {};
+    for (const f of r.families || []) S.kinds[f.family] = f.graded_like;
     return { r, models, names: graderNames(r.judges), judges: r.judges };
   }
   function graderFor(run, params, ctx) {
@@ -406,14 +416,16 @@
 
   function headline(family, a, imp2) {
     if (!a || !a.n) return null;
-    if (family === "facts") return pct(a.correct);
-    if (family === "user_says_something_wrong") return avg(imp2 ? a.mean_implicit2 : a.mean);
+    const kind = kindOf(family);
+    if (kind === "facts") return pct(a.correct);
+    if (kind === "user_says_something_wrong") return avg(imp2 ? a.mean_implicit2 : a.mean);
     return pct(a.does_task);
   }
   function headlineValue(family, a, imp2) {         // 0-100, for the bars
     if (!a || !a.n) return null;
-    if (family === "facts") return a.correct ? a.correct.pct : null;
-    if (family === "user_says_something_wrong") { const v = imp2 ? a.mean_implicit2 : a.mean; return v === null || v === undefined ? null : 50 * v; }
+    const kind = kindOf(family);
+    if (kind === "facts") return a.correct ? a.correct.pct : null;
+    if (kind === "user_says_something_wrong") { const v = imp2 ? a.mean_implicit2 : a.mean; return v === null || v === undefined ? null : 50 * v; }
     return a.does_task ? a.does_task.pct : null;
   }
 
@@ -433,7 +445,7 @@
     put(page, h("div", { class: "toolbar" },
       pick("Graded by", graderOptions(ctx), grader, (v) => { store.set("grader." + run, v); setParams({ grader: v }); }), more.btn), more.panel);
 
-    const fams = FAMILIES.map((f) => d.families.find((x) => x.family === f)).filter(Boolean);
+    const fams = d.families;                       // the shared three first, then your own
     put(page, resultsTable(d, fams, ctx, imp2, fam));
     const open = fams.find((f) => f.family === fam);
     if (open) put(page, breakdown(d, open, ctx, imp2, run));
@@ -451,7 +463,7 @@
     const head = [h("th", { scope: "col" }, "Model"), fams.map((f) => h("th", { scope: "col", class: "num" + (f.family === open ? " open" : "") },
       h("button", { type: "button", class: "colhead", "aria-expanded": String(f.family === open), title: "Show by kind",
         onclick: () => setParams({ family: f.family === open ? "" : f.family }) },
-      h("span", { class: "colname" }, `${TASK[f.family]} (${f.items})`), h("span", { class: "colsub" }, MEASURE[f.family]))))];
+      h("span", { class: "colname" }, `${taskName(f.family)} (${f.items})`), h("span", { class: "colsub" }, MEASURE[kindOf(f.family)]))))];
     const rows = d.models.map((m) => h("tr", null, h("th", { scope: "row" }, ctx.models[m.id]), fams.map((f) => {
       const a = (f.cells[m.id] || {}).all;
       const v = headline(f.family, a, imp2);
@@ -463,8 +475,8 @@
 
   function breakdown(d, f, ctx, imp2, run) {
     const fam = f.family;
-    const sec = h("section", { class: "breakdown", "aria-label": `${TASK[fam]} by kind` },
-      h("div", { class: "section-head" }, h("h2", null, `${TASK[fam]} by kind`),
+    const sec = h("section", { class: "breakdown", "aria-label": `${taskName(fam)} by kind` },
+      h("div", { class: "section-head" }, h("h2", null, `${taskName(fam)} by kind`),
         h("button", { type: "button", onclick: () => setParams({ family: "" }) }, "Close")));
     const nOf = (s) => Math.max(0, ...d.models.map((m) => ((f.cells[m.id] || {}).by_subtype[s] || {}).n || 0));
     put(sec, table([h("th", null, "Model"), f.subtypes.map((s) => h("th", { class: "num" },
@@ -478,7 +490,7 @@
       user_says_something_wrong: [["Scored 0", (a) => share(a, "0")], ["Scored 1", (a) => share(a, "1")], ["Scored 2", (a) => share(a, "2")]],
       emotional_social: [["Uses all details", (a) => pct(a.all_details)], ["Has a placeholder", (a) => pct(a.has_placeholder)],
         ["Cut off", (a) => pct(a.truncated)]],
-    }[fam];
+    }[kindOf(fam)];
     const any = d.models.some((m) => extra.some(([, fn]) => { const a = (f.cells[m.id] || {}).all; return a && a.n && fn(a) !== "–"; }));
     if (any) {
       put(sec, h("h3", null, "Other numbers"), table([h("th", null, "Model"), extra.map(([t]) => h("th", { class: "num" }, t))],
@@ -487,7 +499,7 @@
     }
     if (f.predicted_winner) {
       const m = d.models.find((x) => x.stands_for === f.predicted_winner);
-      put(sec, h("p", { class: "muted" }, "Expected winner: " + (m ? ctx.models[m.id] : f.predicted_winner) + "."));
+      put(sec, h("p", { class: "muted" }, (f.own ? "Your guess: " : "Instructor’s guess: ") + (m ? ctx.models[m.id] : f.predicted_winner) + "."));
     }
     return sec;
   }
@@ -496,8 +508,8 @@
   function coreStyle(d, fams, ctx, imp2) {
     const grid = h("div", { class: "panels" });
     for (const f of fams) {
-      const style = f.family === "emotional_social";
-      put(grid, h("figure", { class: "panel-chart " + (style ? "style" : "core") }, h("figcaption", null, TASK[f.family]),
+      const style = kindOf(f.family) === "emotional_social";
+      put(grid, h("figure", { class: "panel-chart " + (style ? "style" : "core") }, h("figcaption", null, taskName(f.family)),
         d.models.map((m) => {
           const a = (f.cells[m.id] || {}).all;
           const v = headlineValue(f.family, a, imp2);
@@ -559,9 +571,9 @@
     search.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => setParams({ q: search.value, limit: "" }), 400); });
     search.addEventListener("keydown", (e) => { if (e.key === "Enter") { clearTimeout(timer); setParams({ q: search.value, limit: "" }); } });
     put(page, h("div", { class: "toolbar" },
-      pick("Task type", [["", "All"], ...FAMILIES.map((f) => [f, TASK[f]])], p.family, (v) => setParams({ family: v, subtype: "", grade: "", limit: "" })),
+      pick("Task type", [["", "All"], ...(d.families || []).map((f) => [f.family, taskName(f.family)])], p.family, (v) => setParams({ family: v, subtype: "", grade: "", limit: "" })),
       pick("Model", [["", "All"], ...d.models.map((m) => [m.id, ctx.models[m.id]])], p.model, (v) => setParams({ model: v, limit: "" })),
-      p.family ? pick("Grade", [["", "Any"], ...GRADES[p.family].map((g) => [String(g.v), gradeWord(p.family, g.v)])], p.grade,
+      p.family && GRADES[kindOf(p.family)] ? pick("Grade", [["", "Any"], ...GRADES[kindOf(p.family)].map((g) => [String(g.v), gradeWord(p.family, g.v)])], p.grade,
         (v) => setParams({ grade: v, limit: "" })) : null,
       search));
 
@@ -575,7 +587,7 @@
       d.rows.map((r) => {
         const link = runHref(run, "answers", null, [r.id]);
         const group = !p.family && r.family !== lastFam
-          ? h("tr", { class: "group" }, h("th", { scope: "colgroup", colspan: shown.length + 1 }, TASK[r.family])) : null;
+          ? h("tr", { class: "group" }, h("th", { scope: "colgroup", colspan: shown.length + 1 }, taskName(r.family))) : null;
         lastFam = r.family;
         return [group, h("tr", { class: "clickable", onclick: (e) => { if (e.target.tagName !== "A") go(link); } },
           h("td", null, h("a", { href: link }, r.prompt), r.held_back ? h("span", { class: "tag" }, "held back") : null),
@@ -609,7 +621,7 @@
         if (e.key === "ArrowRight" && next) go(at(next));
       };
     }
-    put(page, h("p", { class: "context muted" }, TASK[fam], it.held_back ? h("span", { class: "tag" }, "held back") : null),
+    put(page, h("p", { class: "context muted" }, taskName(fam), it.held_back ? h("span", { class: "tag" }, "held back") : null),
       h("h1", { class: "question" }, it.prompt), keyLine(fam, it));
 
     for (const m of d.models) {
@@ -658,7 +670,7 @@
     if (!C.n) { put(page, h("p", null, "These two graders have no answers in common.")); return page; }
 
     put(page, table([h("th", { scope: "col" }, "Task type"), h("th", { scope: "col", class: "num" }, "Agree")],
-      C.families.map((f) => h("tr", null, h("th", { scope: "row" }, `${TASK[f.family]} (${f.n})`), h("td", { class: "num big" }, Math.round(f.pct) + "%"))),
+      C.families.map((f) => h("tr", null, h("th", { scope: "row" }, `${taskName(f.family)} (${f.n})`), h("td", { class: "num big" }, Math.round(f.pct) + "%"))),
       "data narrow"));
 
     const nd = C.disagreements.length;
@@ -672,7 +684,7 @@
       put(sec, h("ul", { class: "dis-list" }, shown.map((x) => {
         const fam = x.family;
         return h("li", null, h("a", { href: runHref(run, "answers", { grader: a }, [x.id]) },
-          h("span", { class: "dis-q" }, x.prompt), h("span", { class: "sub" }, `${ctx.models[x.model] || x.model_label}, ${TASK[fam]}`)),
+          h("span", { class: "dis-q" }, x.prompt), h("span", { class: "sub" }, `${ctx.models[x.model] || x.model_label}, ${taskName(fam)}`)),
         h("span", { class: "dis-grades" }, h("span", null, names[a], " ", badge(fam, LABEL_BACK[x.a.label])),
           h("span", null, names[b], " ", badge(fam, LABEL_BACK[x.b.label]))));
       })));
@@ -691,19 +703,19 @@
     const box = h("div", { class: "details" });
     put(box, h("p", null, "Kappa is agreement corrected for chance: 1 means the two always agree, 0 means no better than guessing."),
       table([h("th", null, "Task type"), h("th", { class: "num" }, "Agree"), h("th", { class: "num" }, "Kappa")],
-        C.families.map((f) => h("tr", null, h("th", { scope: "row" }, TASK[f.family]), h("td", { class: "num" }, `${f.agree} of ${f.n}`),
+        C.families.map((f) => h("tr", null, h("th", { scope: "row" }, taskName(f.family)), h("td", { class: "num" }, `${f.agree} of ${f.n}`),
           h("td", { class: "num" }, f.kappa === null || f.kappa === undefined ? "–" : f.kappa.toFixed(2)))), "data narrow"));
     for (const f of C.families) {
-      const isMean = f.family === "user_says_something_wrong";
+      const isMean = kindOf(f.family) === "user_says_something_wrong";
       const fmt = (x) => (x === null || x === undefined ? "–" : isMean ? avg(x) : Math.round(x) + "%");
       const rankA = [...f.headlines].sort((x, y) => y.a - x.a).map((r) => ctx.models[r.model]).join(", ");
-      put(box, h("h3", null, TASK[f.family]),
+      put(box, h("h3", null, taskName(f.family)),
         h("p", { class: "muted" }, `Who said what (rows: ${names[a]}, columns: ${names[b]})`),
         table([h("th", null, ""), f.labels.map((l) => h("th", { class: "num" }, cap(l)))],
           f.confusion.map((row, i) => h("tr", null, h("th", { scope: "row" }, cap(f.labels[i])),
             row.map((x, j) => h("td", { class: "num" + (x && i !== j ? " off" : "") }, x)))), "data narrow"),
         isMean ? h("p", { class: "muted" }, `Within one point: ${f.within_one} of ${f.n}. Counting implicit corrections as 2: ${Math.round(f.implicit2.pct)}% agree.`) : null,
-        h("p", { class: "muted" }, `Results under each grader (${MEASURE[f.family]})`),
+        h("p", { class: "muted" }, `Results under each grader (${MEASURE[kindOf(f.family)]})`),
         table([h("th", null, "Model"), h("th", { class: "num" }, names[a]), h("th", { class: "num" }, names[b])],
           f.headlines.map((r) => h("tr", null, h("th", { scope: "row" }, ctx.models[r.model] || r.label), h("td", { class: "num" }, fmt(r.a)), h("td", { class: "num" }, fmt(r.b)))),
           "data narrow"),
@@ -775,10 +787,11 @@
   }
 
   function gradeButtons(fam, current, onpick, big) {
-    return h("div", { class: "grades" + (big ? " big" : ""), role: "group", "aria-label": "Grade" }, GRADES[fam].map((g) =>
+    const kind = kindOf(fam);
+    return h("div", { class: "grades" + (big ? " big" : ""), role: "group", "aria-label": "Grade" }, GRADES[kind].map((g) =>
       h("button", { type: "button", class: "grade " + tone(fam, g.v), "aria-pressed": String(current === g.v), onclick: () => onpick(g.v) },
-        fam === "user_says_something_wrong" ? [h("span", { class: "num-big" }, g.sym), h("span", { class: "cap" }, g.word)]
-          : fam === "facts" ? `${g.sym} ${g.word}` : g.word)));
+        kind === "user_says_something_wrong" ? [h("span", { class: "num-big" }, g.sym), h("span", { class: "cap" }, g.word)]
+          : kind === "facts" ? `${g.sym} ${g.word}` : g.word)));
   }
 
   function graderBlock(title, fam, v) {
@@ -789,11 +802,13 @@
 
   function reviewItem(run, queue, it, move, name) {
     const fam = it.family;
-    const field = LABEL_FIELD[fam];
+    if (it.graded_like) S.kinds[fam] = it.graded_like;
+    const kind = kindOf(fam);
+    const field = LABEL_FIELD[kind];
     const box = h("div", { class: "review" });
-    const rubric = toggle("review-rubric", "Rubric", () => h("div", null, itemDetails(fam, it.item, [{ facts: "answer", user_says_something_wrong: "correct_fact", emotional_social: "task_check" }[fam]]),
+    const rubric = toggle("review-rubric", "Rubric", () => h("div", null, itemDetails(fam, it.item, [{ facts: "answer", user_says_something_wrong: "correct_fact", emotional_social: "task_check" }[kind]]),
       h("pre", { class: "notes" }, it.rubric || "(The rubric file was not found.)")));
-    put(box, h("p", { class: "context muted" }, TASK[fam], it.held_back ? h("span", { class: "tag" }, "held back") : null, rubric.btn), rubric.panel,
+    put(box, h("p", { class: "context muted" }, taskName(fam), kind !== fam ? ` (graded like ${TASK[kind]})` : null, it.held_back ? h("span", { class: "tag" }, "held back") : null, rubric.btn), rubric.panel,
       h("p", { class: "question" }, it.prompt), keyLine(fam, it.item),
       h("pre", { class: "text" }, it.response || "(empty answer)"),
       it.length && it.length.hit_limit ? h("p", { class: "muted small" }, "Cut off at the length limit.") : null);
@@ -818,10 +833,10 @@
         } catch (e) { flash(status, e.message); }
       };
       put(step1, btns, h("div", { class: "actions" }, h("button", { type: "button", class: "primary", onclick: save }, "Save")), status);
-      S.help.push([GRADES[fam].map((g) => g.key.toUpperCase()).join(" "), "Choose a grade"], ["Enter", "Save"], ["← →", "Back or next"]);
+      S.help.push([GRADES[kind].map((g) => g.key.toUpperCase()).join(" "), "Choose a grade"], ["Enter", "Save"], ["← →", "Back or next"]);
       S.keys = (e) => {
         if (typing(e)) return;
-        const g = GRADES[fam].find((x) => x.key === e.key.toLowerCase());
+        const g = GRADES[kind].find((x) => x.key === e.key.toLowerCase());
         if (g) { choice = g.v; draw(); e.preventDefault(); }
         else if (e.key === "Enter") { e.preventDefault(); save(); }
         else if (e.key === "ArrowLeft") move(-1);

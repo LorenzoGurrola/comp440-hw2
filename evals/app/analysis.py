@@ -3,6 +3,10 @@
 Everything here only reads. Every function takes a `scope`: "all" items, "visible" items only,
 or "held_back" items only. (Without --instructor the server loads runs with held-back items
 already dropped, so "all" then means the visible items.)
+
+Families: the three shared families, then any of the student's own ("mine-..."), each shown
+under its own name. An own family's numbers are those of the family it is graded like (its
+"graded_like"), so functions that compute numbers take that grading family as `kind`.
 """
 from __future__ import annotations
 
@@ -52,17 +56,19 @@ def judge_meta(judge, data=None):
                      "audit_of", "covers", "status", "created", "reviewer", "rater", "source")}
     return {"id": judge["id"], "kind": judge["kind"], "label": judge["label"],
             "description": judge["description"], "info": info, "n": len(judge["verdicts"]),
-            "families": {f: fams[f] for f in R.FAMILIES if fams[f]}}
+            "families": {f: fams[f] for f in R.family_order(fams) if fams[f]}}
 
 
-def label_name(family, label):
-    return LABEL_NAMES.get(family, {}).get(label, str(label))
+def label_name(kind, label):
+    """The word for a verdict, by grading family ("correct", "1: partial", ...)."""
+    return LABEL_NAMES.get(kind, {}).get(label, str(label))
 
 
 # ------------------------------------------------------------------------------ scoreboard
 
-def family_stats(family, verdicts):
-    """Summary numbers for one family over a list of verdicts."""
+def family_stats(kind, verdicts):
+    """Summary numbers for one family over a list of verdicts (kind: its grading family)."""
+    family = kind
     n = len(verdicts)
     out = {"n": n}
     if not n:
@@ -88,10 +94,10 @@ def family_stats(family, verdicts):
     return out
 
 
-def headline(family, verdicts, implicit2=False):
+def headline(kind, verdicts, implicit2=False):
     if not verdicts:
         return None
-    if family == "user_says_something_wrong":
+    if kind == "user_says_something_wrong":
         field = "label2" if implicit2 else "label"
         return sum(v[field] for v in verdicts) / len(verdicts)
     return 100.0 * sum(v["label"] is True for v in verdicts) / len(verdicts)
@@ -109,6 +115,11 @@ def subtypes_of(data, family):
     return [s for s in order if s in present] + sorted(present - set(order))
 
 
+def family_list(data):
+    """[{family, graded_like, title, own}] for the families in the run, shared ones first."""
+    return data.families()
+
+
 def models_meta(data):
     return [{"id": m, "label": data.model_label(m),
              "stands_for": data.model_info.get(m, {}).get("stands_for"),
@@ -120,7 +131,8 @@ def scoreboard(data, judge_id, scope):
     judge = data.judges[judge_id]
     verdicts = scoped(judge["verdicts"], data, scope)
     fams = []
-    for family in R.FAMILIES:
+    for fam in family_list(data):
+        family, kind = fam["family"], fam["graded_like"]
         fam_items = [it for it in data.items.values() if it["family"] == family]
         if not fam_items:
             continue
@@ -128,13 +140,14 @@ def scoreboard(data, judge_id, scope):
         cells = {}
         for m in data.models:
             vs = [(k, v) for k, v in verdicts.items() if k[0] == m and v["family"] == family]
-            cells[m] = {"all": family_stats(family, [v for _, v in vs]),
-                        "by_subtype": {s: family_stats(family, [
+            cells[m] = {"all": family_stats(kind, [v for _, v in vs]),
+                        "by_subtype": {s: family_stats(kind, [
                             v for k, v in vs if str(data.items[k[1]].get("subtype")) == s])
                             for s in subs}}
         sub_pred = {s: predicted_winner([it for it in fam_items if str(it.get("subtype")) == s])
                     for s in subs}
-        fams.append({"family": family, "title": R.FAMILY_TITLES[family],
+        fams.append({"family": family, "graded_like": kind, "own": fam["own"],
+                     "title": fam["title"],
                      "predicted_winner": predicted_winner(fam_items),
                      "subtype_predicted_winner": sub_pred, "subtypes": subs, "cells": cells,
                      "items": sum(1 for it in fam_items if scope == "all"
@@ -155,25 +168,27 @@ def agreement(data, a_id, b_id, scope):
     qpos = {}
     if queue:
         qpos = {(r["model"], r["id"]): i for i, r in enumerate(queue[2])}
-    for family in R.FAMILIES:
+    for family in R.family_order(A[k]["family"] for k in common):
         keys = [k for k in common if A[k]["family"] == family]
         if not keys:
             continue
+        kind = A[keys[0]].get("graded_like", family)
         pairs = [(A[k]["label"], B[k]["label"]) for k in keys]
         agree = sum(x == y for x, y in pairs)
-        labels = R.LABEL_VALUES[family]
-        fam = {"family": family, "title": R.FAMILY_TITLES[family], "n": len(keys),
-               "agree": agree, "pct": 100.0 * agree / len(keys), "kappa": gt.kappa(pairs),
-               "labels": [label_name(family, x) for x in labels],
+        labels = R.LABEL_VALUES[kind]
+        fam = {"family": family, "graded_like": kind, "title": R.family_title(family),
+               "n": len(keys), "agree": agree, "pct": 100.0 * agree / len(keys),
+               "kappa": gt.kappa(pairs),
+               "labels": [label_name(kind, x) for x in labels],
                "confusion": [[sum(1 for x, y in pairs if x == la and y == lb) for lb in labels]
                              for la in labels],
-               "what": HEADLINE_WHAT[family]}
-        if family == "user_says_something_wrong":
+               "what": HEADLINE_WHAT[kind]}
+        if kind == "user_says_something_wrong":
             fam["within_one"] = sum(abs(x - y) <= 1 for x, y in pairs)
             p2 = [(A[k]["label2"], B[k]["label2"]) for k in keys]
             a2 = sum(x == y for x, y in p2)
             fam["implicit2"] = {"agree": a2, "pct": 100.0 * a2 / len(keys), "kappa": gt.kappa(p2)}
-        if family == "emotional_social":
+        if kind == "emotional_social":
             extras = {}
             for f in ("all_details", "has_placeholder", "truncated"):
                 both = [k for k in keys if isinstance(A[k]["fields"].get(f), bool)
@@ -188,11 +203,11 @@ def agreement(data, a_id, b_id, scope):
             kb = [B[k] for k in keys if k[0] == m]
             if not ka:
                 continue
-            va[m], vb[m] = headline(family, ka), headline(family, kb)
+            va[m], vb[m] = headline(kind, ka), headline(kind, kb)
             row = {"model": m, "label": data.model_label(m), "n": len(ka), "a": va[m],
                    "b": vb[m], "diff": vb[m] - va[m]}
-            if family == "user_says_something_wrong":
-                row["a2"], row["b2"] = headline(family, ka, True), headline(family, kb, True)
+            if kind == "user_says_something_wrong":
+                row["a2"], row["b2"] = headline(kind, ka, True), headline(kind, kb, True)
             rows.append(row)
         fam["headlines"] = rows
         fam["order_a"], fam["order_b"] = order(va, data), order(vb, data)
@@ -204,11 +219,11 @@ def agreement(data, a_id, b_id, scope):
             if A[k]["label"] != B[k]["label"]:
                 it = data.items[k[1]]
                 d = {"model": k[0], "model_label": data.model_label(k[0]), "id": k[1],
-                     "family": family, "subtype": it.get("subtype"),
+                     "family": family, "graded_like": kind, "subtype": it.get("subtype"),
                      "held_back": bool(it.get("_held_back")),
                      "prompt": short(it.get("prompt", ""), 160),
-                     "a": {"label": label_name(family, A[k]["label"]), "reason": A[k]["reason"]},
-                     "b": {"label": label_name(family, B[k]["label"]), "reason": B[k]["reason"]}}
+                     "a": {"label": label_name(kind, A[k]["label"]), "reason": A[k]["reason"]},
+                     "b": {"label": label_name(kind, B[k]["label"]), "reason": B[k]["reason"]}}
                 if k in qpos:
                     d["queue_pos"] = qpos[k]
                 disagreements.append(d)
@@ -346,7 +361,7 @@ def list_items(data, scope, family=None, subtype=None, model=None, judge=None, v
     """Items matching the filters, each with the chosen judge's verdict per model."""
     J = data.judges.get(judge) if judge else None
     q = (q or "").strip().lower()
-    fam_rank = {f: i for i, f in enumerate(R.FAMILIES)}
+    fam_rank = {f["family"]: i for i, f in enumerate(family_list(data))}
     models = [model] if model else data.models
     rows = []
     for item_id, it in sorted(data.items.items(), key=lambda kv: (fam_rank.get(
@@ -371,18 +386,20 @@ def list_items(data, scope, family=None, subtype=None, model=None, judge=None, v
                     if (m, item_id) in data.responses]
             if not any(q in str(h).lower() for h in hay):
                 continue
-        row = {"id": item_id, "family": it["family"], "subtype": it.get("subtype"),
-               "held_back": bool(it.get("_held_back")), "prompt": short(it.get("prompt", ""), 180)}
+        row = {"id": item_id, "family": it["family"], "graded_like": data.kind(item_id),
+               "subtype": it.get("subtype"), "held_back": bool(it.get("_held_back")),
+               "prompt": short(it.get("prompt", ""), 180)}
         if J:
             row["verdicts"] = {m: J["verdicts"][(m, item_id)]["label"] for m in data.models
                                if (m, item_id) in J["verdicts"]}
         rows.append(row)
     return {"total": len(rows), "offset": offset, "rows": rows[offset: offset + limit],
-            "models": models_meta(data)}
+            "models": models_meta(data), "families": family_list(data)}
 
 
 def item_detail(data, item_id):
     it = data.items[item_id]
+    kind = data.kind(item_id)
     responses, verdicts = {}, {}
     for m in data.models:
         r = data.responses.get((m, item_id))
@@ -396,7 +413,7 @@ def item_detail(data, item_id):
             if v:
                 verdicts[m].append({"judge": j["id"], "judge_label": j["label"], "kind": j["kind"],
                                     "label": v["label"],
-                                    "label_name": label_name(it["family"], v["label"]),
+                                    "label_name": label_name(kind, v["label"]),
                                     "fields": v["fields"], "reason": v["reason"]})
     queues = []
     for name, meta, rows in data.queues():
@@ -404,5 +421,5 @@ def item_detail(data, item_id):
             if r["id"] == item_id:
                 queues.append({"id": R.queue_public_id(name), "label": meta.get("label"),
                                "pos": i, "model": r["model"]})
-    return {"item": public_item(it), "models": models_meta(data), "responses": responses,
-            "verdicts": verdicts, "queues": queues}
+    return {"item": public_item(it), "graded_like": kind, "models": models_meta(data),
+            "responses": responses, "verdicts": verdicts, "queues": queues}

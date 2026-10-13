@@ -125,6 +125,50 @@ What the base model gets right and wrong: It sometimes says the right answer, bu
 
 Where the strange parts came from: Maybe it was trained on a lot of quiz material online, so it is predicting multiple-choice options.
 
-## Part 2
+## Part 2: Train your two models and decide what changed
 
-[TBD]
+### Step 1: Your famous person, and why
+
+XXXX (your passages go in `voice-samples.md`)
+
+### Step 2: Your constitutions
+
+XXXX (your lines go in `constitutions.md`; answer the Step 2 questions here)
+
+### Step 3: Your test family
+
+XXXX (a paragraph on your family, and the Step 3 questions; your items go in `evals/mine/`)
+
+### Step 4: Your map and predictions
+
+XXXX (one table: each line of `constitutions.md`, its family or "not measured", your predictions)
+
+### Step 5: What Claude's answers do
+
+XXXX
+
+### Step 6: Your blind labels
+
+XXXX
+
+### Step 7: What SFT changed
+
+XXXX
+
+### Step 8: Your two reward logs
+
+XXXX
+
+### Step 9: Three models before grading, and your run folder
+
+XXXX
+
+### Step 10: Your review and the audit
+
+XXXX
+
+### Step 11: Whose preferences count
+
+XXXX (three parts: your five blind ratings and which side you think was the persona; your
+Step 4 table with an "Actual" column and two surprising rows; about 300 words on whose
+preferences count)
