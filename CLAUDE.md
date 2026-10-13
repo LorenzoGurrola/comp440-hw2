@@ -176,7 +176,7 @@ write their answer in, show the slot as it now reads, and stop.
   name and copy the passage they choose, word for word, with its source, into
   `voice-samples.md`. If they ask whether a choice is allowed, point to Step 1's rules and
   `#comp440-f26`.
-- **Step 3, drafts.** Draft items for their family only once its five seeds are in the file,
+- **Step 3, drafts.** Draft items for their family only once its three seeds are in the file,
   and only as many as they ask for. Log every draft and their decision (accepted, edited or
   rejected) in `evals/mine/LOG.md`. Don't argue for a draft they reject. This is the one place
   you write content in Part 2, because reviewing drafts is the exercise.

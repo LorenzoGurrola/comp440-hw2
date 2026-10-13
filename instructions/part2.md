@@ -93,7 +93,7 @@ test. The persona's voice is checked another way: you'll read its answers in Ste
 - Your items copy the format of one shared family (`facts`, `user_says_something_wrong` or
   `emotional_social`), name it in a `graded_like` field, and are graded by its rules. "Your own
   families" in `evals/shared/README.md` lists the fields.
-- Write **at least five** items yourself, in `evals/mine/<family>.jsonl`. The shared set already
+- Write **at least three** items yourself, in `evals/mine/<family>.jsonl`. The shared set already
   holds the classic quiz questions, so take yours from your own interests.
 - Then ask Claude to draft more, until your family has **at least ten**. Accept, edit or reject
   each draft, and edit or reject **at least two**. Claude logs each draft and your decision in
@@ -324,7 +324,7 @@ trained.
 Part 2 is 50% of the assignment. Within it:
 
 - Constitutions and tests: 15% - Your two constitutions share one core and differ only in style,
-  with a conflict rule; your family has at least five items you wrote and two logged edits or
+  with a conflict rule; your family has at least three items you wrote and two logged edits or
   rejections; every constitution line is mapped to a family or listed as not measured.
 - Predictions and labels: 20% - Your predictions are numbers and were committed before any
   training; your blind labels were written before you saw which answer Claude wrote; you explain
