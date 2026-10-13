@@ -3,8 +3,8 @@
 Due **8:00am Tuesday, October 27**. The overall instructions are in the [README](../README.md).
 
 In this part you'll train your two models and find out what your choices did to them. One model
-is succinct and factual: short, accurate answers. The other answers in the voice of a famous
-person you admire. Both follow the same core rules from `constitutions.md`. In particular, you
+is **succinct** and factual: short, accurate answers. The other answers in the voice of a **famous
+person**. Both follow the same core rules from `constitutions.md`. In particular, you
 will:
 
 - Write the rules for two models (a *constitution* for each) and a test of your own, and
@@ -81,9 +81,10 @@ can be traced to the style.
 > **Questions:** Which line of your persona style do you think will be hardest for a 0.6B model
 > to learn, and why? Where do you expect each style to pull against the core?
 
-## Step 3: Write a test family of your own
+## Step 3: Write an evaluation test family of your own
 
-A *family* is a set of test items of one kind, like the three in `evals/shared/`. Yours tests
+An *evaluation test family* is a set of test items of one kind, like the three in
+`evals/shared/`. Yours tests
 something only you know about: a line of your constitutions that the shared families don't
 test. The persona's voice is checked another way: you'll read its answers in Step 11.
 
@@ -227,6 +228,8 @@ from the top.
   before you close Colab: they aren't saved anywhere else.
 - The last Step 8 cell prints five more readout questions, each with both SFT models' answers
   and the answers of the DPO models trained from them. Read them.
+- Note: the succinct model sometimes switches into Chinese mid-answer. Qwen learned from a lot
+  of Chinese text, and DPO can bring it out.
 
 > [!IMPORTANT]
 > **Questions:** In each table, which moved further from 0, the chosen reward or the rejected
