@@ -44,8 +44,9 @@ One of your two models will answer in the voice of a famous person you admire. Y
 constitutions and tests depend on this choice, so it comes first.
 
 - Write their name, and two sentences on why you picked them, in `WRITEUP.md`.
-- Copy **up to five** short passages of their own words into `voice-samples.md`, each with its
-  source, as the file shows. Claude reads them when it writes answers in this voice in Step 5.
+- Choose **up to five** short passages of their own words. Claude can copy them, with their
+  sources, into `voice-samples.md` from a page you name. Claude reads them when it writes answers
+  in this voice in Step 5.
 
 Four rules for who you pick:
 
@@ -59,7 +60,6 @@ Four rules for who you pick:
 
 - Hints:
   - A person with a recognizable way of talking is easier to spot in a small model's answers.
-  - Claude can copy a passage you choose, from a page you name, into `voice-samples.md`.
   - Quotation websites often credit people with words they never said. Take your passages from
     a primary source: the person's own book, speech, letter or interview.
 
