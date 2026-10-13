@@ -2,11 +2,13 @@
 
 Due **8:00am Tuesday, October 27**. The overall instructions are in the [README](../README.md).
 
-In this part you'll train your two models and find out what your choices did to them. In
-particular, you will:
+In this part you'll train your two models and find out what your choices did to them. One model
+is succinct and factual: short, accurate answers. The other answers in the voice of a famous
+person you admire. Both follow the same core rules from `constitutions.md`. In particular, you
+will:
 
 - Write the rules for two models (a *constitution* for each) and a test of your own, and
-  predict in numbers how each model will do before you train anything.
+  predict how each model will do before you train anything.
 - Gain hands-on experience with training on example answers (SFT, supervised fine-tuning) and
   on pairs of answers where one is preferred (DPO, direct preference optimization).
 - Check the AI grader against a second AI grader and your own grades, and rate your two models
@@ -18,12 +20,9 @@ four versions of the model: the base model, the model after SFT, and your two DP
 
 ## Before you start
 
-The choices and the writing in this part are yours, and Claude won't suggest them: this
-assignment asks whose preferences shaped your models, and if Claude wrote those parts, the answer
-would be Claude's. You can type your words yourself or dictate them to Claude, which writes them
-down, tidied only with your OK, and adds nothing. Claude also runs the cells and commands,
-explains anything you ask, drafts test items for you to review (Step 3) and writes most of your
-training data (Step 5).
+In this section, you will be asked to provide answers to questions that Claude will write down.
+Claude also runs the cells and commands, explains anything you ask, drafts test items for you to
+review (Step 3) and writes most of your training data (Step 5).
 
 I recommend four sittings, since some steps need Claude to work for a while and one needs a GPU:
 
@@ -34,29 +33,26 @@ I recommend four sittings, since some steps need Claude to work for a while and 
 | 3 | 7 to 9 | Colab with a T4, about 20 GPU minutes in one go |
 | 4 | 10 and 11 | Claude Code and the viewer |
 
-I expect Part 2 to take about 4 to 7 hours in all: four sittings of one to two hours each, with
-the Colab sitting the longest. Please don't leave sitting 3 for the last night: free T4s are
+I expect Part 2 to take about 4 to 6 hours in all: four sittings of one to two hours each, with
+the Colab sitting the longest. Please don't leave sitting 3 for the last night: free GPUs are
 sometimes all taken.
 
 ## Step 1: Pick your famous person
 
-One of your two models will answer in the voice of a famous person you admire. Your
-constitutions and tests depend on this choice, so it comes first.
+One of your two models will answer in the voice of a famous person you admire.
 
 - Write their name, and two sentences on why you picked them, in `WRITEUP.md`.
 - Choose **up to five** short passages of their own words. Claude can copy them, with their
   sources, into `voice-samples.md` from a page you name. Claude reads them when it writes answers
   in this voice in Step 5.
 
-Four rules for who you pick:
+There are three rules for who you pick:
 
 1. A public figure with at least a few pages of their own public words. Never a private
-   person, anyone at Macalester, or a classmate.
-2. At most five passages, a few sentences each. Your fork is public, so I don't want whole
-   speeches or chapters in it.
-3. Your model will speak as "I" and invent things about the person's life. Its answers are an
-   imitation, not the person, and your write-up must say so.
-4. If you're not sure a choice is fair, ask on `#comp440-f26` before Step 2.
+   person or anyone at Macalester.
+2. At most five passages, with a few sentences each.
+3. Your model will speak as "I" and invent things about the person's life, but its answers are an
+   imitation, not the person.
 
 - Hints:
   - A person with a recognizable way of talking is easier to spot in a small model's answers.
