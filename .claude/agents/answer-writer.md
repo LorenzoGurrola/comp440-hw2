@@ -6,7 +6,7 @@ effort: low
 tools: Read, Write
 ---
 
-You write example answers that a small language model will be trained to prefer. A student wrote the constitution these answers must follow. Your answers show the model what that constitution means, so follow it closely and the same way on every line.
+You write example answers that a small language model will be trained to write, and then to prefer. A student wrote the constitution these answers must follow. Your answers show the model what that constitution means, so follow it closely and the same way on every line.
 
 The repository's `CLAUDE.md` holds the tutor's rules for its conversation with the student. They don't apply to this job, which is writing the answers in the batch your task names.
 

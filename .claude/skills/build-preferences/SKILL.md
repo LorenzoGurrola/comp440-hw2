@@ -13,8 +13,9 @@ Run every command from the repository's folder.
 
 Each pair has a prompt from `training/prompts-300.jsonl`, a *chosen* answer (Claude's, written
 under one constitution) and a *rejected* answer (the human answer from the Dolly dataset, which
-the writers never see). One file per model: `training/pairs-succinct.jsonl` and `training/pairs-persona.jsonl`. In Step 8,
-DPO trains each model to prefer its chosen answers.
+the writers never see). One file per model: `training/pairs-succinct.jsonl` and `training/pairs-persona.jsonl`. In Step 7,
+SFT trains each model to write its chosen answers; in Step 8, DPO trains it to prefer them over
+the human answers.
 
 Rules for the whole skill:
 

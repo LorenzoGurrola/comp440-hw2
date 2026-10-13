@@ -1,7 +1,7 @@
 # Shared evaluation sets
 
-Everyone in the class runs these three sets of test prompts on all four versions of their model:
-the base model, the model after SFT, the succinct model, and the persona model. Because the
+Everyone in the class runs these three sets of test prompts on all five versions of their model:
+the base model, and the succinct and persona models after SFT and after DPO. Because the
 prompts are the same for everyone, results can be compared across the class. You will also
 write a family of your own ([Your own families](#your-own-families) says how).
 
@@ -213,8 +213,9 @@ python3 evals/shared/grade_tools.py compare runs/grades-opus runs/grades-sonnet
   change?), agreement with hand grades, and a file listing every disagreement with the
   prompt, the response and both graders' reasons.
 
-**Sonnet or Opus?** Sonnet is the default and uses less of your plan; Opus uses more. Four
-models on the 240 visible items make 960 responses, about 17 batches, so 17 grader runs. If
+**Sonnet or Opus?** Sonnet is the default and uses less of your plan; Opus uses more. Five
+models on the 240 visible items and your own make about 1,300 responses, about 25 batches, so
+about 25 grader runs. If
 you have the plan for it, grading once with each and running `compare` shows how much the
 choice of grader matters.
 
@@ -225,7 +226,7 @@ Claude keeps each evaluation in a **run folder** under `evals/runs/`
 review decisions and ratings, and a `run.json` that says what the run is and what to do next.
 The format is in [`evals/runs/README.md`](../runs/README.md). The same commands as above work
 on a run folder, for example
-`python3 evals/shared/grade_tools.py prepare --run evals/runs/2026-10-05-four-models --grader sonnet-low --grader-model sonnet`.
+`python3 evals/shared/grade_tools.py prepare --run evals/runs/2026-10-21-part2-models --grader sonnet-low --grader-model sonnet`.
 
 **The viewer** shows the runs in your browser: the scoreboard, every response with every
 verdict, the judges compared, and the review and rating pages. Start it with
@@ -308,7 +309,7 @@ python3 evals/shared/validate.py --extra evals/mine
 It names each problem in plain words and ends with "All checks passed." once the files are
 ready. It also checks that no item copies a shared item or another of yours. To grade your
 families, add `--items evals/mine` wherever the commands here take `--items evals/shared`; the
-[run folder README](../runs/README.md) shows the command for a run of all four models.
+[run folder README](../runs/README.md) shows the command for the Part 2 run of all five models.
 
 ## Checking the files: `validate.py`
 

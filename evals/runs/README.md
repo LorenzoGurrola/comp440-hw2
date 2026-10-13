@@ -14,30 +14,30 @@ read it.
 ## A run from the notebook's zip
 
 The notebook downloads your models' answers as one zip: `hw2-base-answers.zip` in Part 1, and
-`hw2-four-models.zip` in Part 2, with the answers of all four models (`base`, `sft`, `succinct`
-and `persona`) to the shared items and your own. Claude makes the run straight from the zip,
+`hw2-part2-models.zip` in Part 2, with the answers of all five models (`base`, `sft-succinct`,
+`sft-persona`, `succinct` and `persona`) to the shared items and your own. Claude makes the run straight from the zip,
 with PATH the folder Chrome saved it in (usually `~/Downloads`):
 
 ```
-python3 evals/shared/grade_tools.py init-run --root evals/runs --name four-models --title "..." --description "..." --zip PATH/hw2-four-models.zip --items evals/shared --items evals/mine
+python3 evals/shared/grade_tools.py init-run --root evals/runs --name part2-models --title "..." --description "..." --zip PATH/hw2-part2-models.zip --items evals/shared --items evals/mine
 ```
 
 Inside the zip, `responses/<model>.jsonl` holds each model's answers, `models.json` says what
 each model is, and `generation-notes.txt` says how the answers were made. `init-run` copies the
 answers into the run's `responses/` folder and the other two into `run.json`. `--items
-evals/mine` adds your own families; without it, `init-run` stops and says to add it. It also
+evals/mine` adds your own family; without it, `init-run` stops and says to add it. It also
 prints how many items each model answered in each family, so you can see that nothing is
 missing before you grade.
 
 ## Name
 
-`<YYYY-MM-DD>-<short-slug>`, for example `2026-10-05-four-models-standin`: the date the run was
+`<YYYY-MM-DD>-<short-slug>`, for example `2026-10-21-part2-models`: the date the run was
 made, then a few lowercase words chosen by Claude.
 
 ## Contents
 
 ```
-2026-10-05-four-models/
+2026-10-21-part2-models/
   run.json                 what the run is: models, items, settings, status, next steps
   notes.md                 free notes
   responses/<model-id>.jsonl

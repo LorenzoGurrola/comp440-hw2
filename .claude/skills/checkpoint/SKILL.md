@@ -10,10 +10,11 @@ and the part is not done until it is filled.
    what you found in one line each. Do not say whether the numbers look right.
    - Part 1: a folder under `evals/runs/` with a response file for the base model and a Sonnet
      grades folder, and `status` in its `run.json` at `graded` or later.
-   - Part 2: the four-model folder under `evals/runs/`, with response files for `base`, `sft`,
-     `succinct` and `persona` in `responses/`; a Sonnet grades folder (usually
-     `grades/sonnet-low/`) and the Opus audit (usually `grades/opus-medium-audit/`); their
-     review decisions (`review/decisions-<name>.jsonl`); their five ratings
+   - Part 2: the Part 2 run folder under `evals/runs/`, with response files for all five
+     models (`base`, `sft-succinct`, `sft-persona`, `succinct` and `persona`) in `responses/`; a
+     Sonnet grades folder (usually `grades/sonnet-low/`) that grades all five; the Opus audit
+     (usually `grades/opus-medium-audit/`) over base, succinct and persona; their review
+     decisions (`review/decisions-<name>.jsonl`); their five ratings
      (`ratings/ratings.jsonl`); and `status` in `run.json` at `audited` or later.
      Then the other files Part 2 hands in: `constitutions.md`, `voice-samples.md`, their family
      in `evals/mine/` and `evals/mine/LOG.md`, `training/pairs-succinct.jsonl`,

@@ -33,7 +33,7 @@ for.
 - **Existing run**: if the user names a run (or there is one obvious run in `evals/runs/`),
   use it. Read its `run.json`.
 - **New run**: from the zip the notebook downloaded: `hw2-base-answers.zip` in Part 1,
-  `hw2-four-models.zip` in Part 2. It is usually in their Downloads folder
+  `hw2-part2-models.zip` in Part 2. It is usually in their Downloads folder
   (`ls ~/Downloads/hw2-*.zip`). If it isn't there, ask them where it went; don't search the
   rest of their computer. If Chrome saved more than one copy (it adds ` (1)` to the name), ask
   which one. Choose a short lowercase slug and write a plain-language title and description
@@ -46,10 +46,11 @@ for.
   `--zip` reads the responses, `models.json` and the generation notes from the zip, so there
   is nothing to unzip. (The older form, `--responses FILE [...]` with the `eval-*.jsonl` files,
   still works.) Item folders: always `evals/shared`; in Part 2 also `evals/mine`, their own
-  families. The Part 2 run, with all four models:
+  family. The Part 2 run holds five models (`base`, `sft-succinct`, `sft-persona`, `succinct`,
+  `persona`), and Sonnet grades all five:
 
   ```
-  python3 evals/shared/grade_tools.py init-run --root evals/runs --name four-models --title "..." --description "..." --zip ZIPFILE --items evals/shared --items evals/mine
+  python3 evals/shared/grade_tools.py init-run --root evals/runs --name part2-models --title "..." --description "..." --zip ZIPFILE --items evals/shared --items evals/mine
   ```
 
   Afterwards, check each model's `label`, `description` and `charter` in `run.json` and fill
@@ -139,12 +140,14 @@ viewer's Graders page shows the same for any two judges.
 
 ## 6. Audit and review ("audit run X with Opus at medium effort")
 
-In Part 2 this is Step 10, once Sonnet's grades of the four-model run are merged.
+In Part 2 this is Step 10, once Sonnet's grades of the Part 2 run are merged. The audit and the
+review queue cover only three of its five models, so in Part 2 add `--models base succinct
+persona` to both commands below: the two SFT models are graded but not audited or reviewed.
 
 1. Sample and prepare blind audit batches from the base grader's verdicts:
 
    ```
-   python3 evals/shared/grade_tools.py audit-sample --run RUNDIR --from sonnet-low --grader opus-medium-audit --n 60
+   python3 evals/shared/grade_tools.py audit-sample --run RUNDIR --from sonnet-low --grader opus-medium-audit --n 60 [--models base succinct persona]
    ```
 
    It picks about 60 verdicts, spread across families (their own included) and evaluated
@@ -158,13 +161,13 @@ In Part 2 this is Step 10, once Sonnet's grades of the four-model run are merged
 4. Build the review queue:
 
    ```
-   python3 evals/shared/grade_tools.py review-build --run RUNDIR --judges sonnet-low opus-medium-audit --controls 5
+   python3 evals/shared/grade_tools.py review-build --run RUNDIR --judges sonnet-low opus-medium-audit --controls 5 [--models base succinct persona]
    ```
 
 5. Tell the user how many items are in the queue and give them the direct link to the run's
    **Review** page, `http://127.0.0.1:8440/#/run/<run folder name>/review` (start the viewer
-   first if it isn't running, step 8): they grade each item themselves first, then decide between "Grader 1" and
-   "Grader 2", with a reason. Do not tell them which grader is which, and in Part 2 don't show
+   first if it isn't running, step 8): they grade each item themselves first, then decide
+   between "Grader 1" and "Grader 2", with a reason. Do not tell them which grader is which, and in Part 2 don't show
    either grader's numbers until their decisions are in (see "When to show grades").
 
 ## 7. Re-grade with rubric notes ("re-grade ... using my rubric notes in FILE")

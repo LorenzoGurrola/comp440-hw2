@@ -1,9 +1,10 @@
 # Training your models: SFT and DPO
 
-In Steps 7 and 8 of [Part 2](part2.md) you train three models. We'll cover these two kinds of
-training in class on October 29 and November 3, after Part 2 is due, so this page gives you what
-you need now: one example of each, what the numbers the training prints mean, and what one
-training step is. It should take about 15 minutes to read.
+In Steps 7 and 8 of [Part 2](part2.md) you train four models: two with SFT, then two with DPO,
+each starting from one of the SFT models. We'll cover these two kinds of training in class on
+October 29 and November 3, after Part 2 is due, so this page gives you what you need now: one
+example of each, what the numbers the training prints mean, and what one training step is. It
+should take about 15 minutes to read.
 
 ## Where you start
 
@@ -15,42 +16,46 @@ do that. They differ in what the model is shown.
 
 ## SFT: training on example answers
 
-*SFT*, supervised fine-tuning, shows the model a prompt followed by an answer a person wrote.
-Here is line 3 of `training/sft-dolly-600.jsonl`:
+*SFT*, supervised fine-tuning, shows the model a prompt followed by an example answer. Your two
+SFT runs use the chosen answers in your pairs files, the ones Claude wrote under each
+constitution in Step 5: one run on `training/pairs-succinct.jsonl`, the other on
+`training/pairs-persona.jsonl`. Here are the two parts of a pairs-file line that SFT reads. I
+wrote this chosen answer myself, by following the 1950s radio announcer example at the bottom of
+`constitutions.md`:
 
 ```
-{"id": "sft-003", "prompt": "Question: What is cloud computing in simple terms?\nAnswer:", "completion": " In simple terms cloud computing allows you to use preconfigured hardware devices and software services managed by somebody else on internet. Most cases you pay only for the resources you use and it is very easy to procure more as you need more services. Cloud computing makes it easy to setup the technology infrastructure at a low cost and scale as you grow."}
+"prompt": "Question: Why do my fingers hurt when playing guitar?\nAnswer:"
+"chosen": " Those steel strings are pressing into soft skin, and that's why your fingertips ache. Here's the good news, listeners: play a little every day, and in a few weeks you'll grow calluses, tough little pads that let you play for an hour without a wince."
 ```
 
 The `prompt` is the question, in the same `Question: ...\nAnswer:` form as the tests. The
-`completion` is the answer a Databricks employee wrote in 2023 (its grammar slips are theirs, and
-the model learns those too).
+`chosen` answer is the example the model learns to write.
 
-The model reads the whole line, token by token. At each token of the completion, it gives a
-probability to every possible next token, and training checks how much of that probability went
-to the token the person actually wrote next. Only the completion is scored. The model reads the
+The model reads the prompt and the answer, token by token. At each token of the answer, it gives
+a probability to every possible next token, and training checks how much of that probability
+went to the token that actually comes next. Only the answer is scored. The model reads the
 prompt but isn't scored on it, because we want it to learn to answer questions, not to write
 them.
 
 ### What the loss means
 
-The *loss* for one token is -ln(p), where p is the probability the model gave to the token the
-person actually wrote, and ln is the natural logarithm (the ln key on a calculator). The loss the
+The *loss* for one token is -ln(p), where p is the probability the model gave to the answer's
+actual next token, and ln is the natural logarithm (the ln key on a calculator). The loss the
 notebook prints is the average over many tokens.
 
-| Probability given to the person's next token | Loss |
+| Probability given to the answer's next token | Loss |
 |---|---|
 | 0.10 (1 in 10) | 2.3 |
 | 0.25 (1 in 4) | 1.4 |
 | 0.50 (1 in 2) | 0.69 |
 | 0.90 | 0.11 |
 
-When I trained this model on these 600 answers on a T4, the loss was about 2.3 in the first pass
-and about 1.4 in the second. Roughly, the model went from giving the person's next token about a
-1 in 10 chance to about a 1 in 4 chance.
+When I tried this on 300 answers Claude wrote under one student's succinct constitution, the
+loss was about 2 in the first pass and about 0.8 in the second. Roughly, the model went from
+giving the answer's next token about a 1 in 7 chance to about a 1 in 2 chance.
 
 Part of that drop is learning, and part is memory: in the second pass, the model has already seen
-every example once. A falling loss tells you the model got better at predicting these 600
+every example once. A falling loss tells you the model got better at predicting these 300
 answers. It doesn't tell you whether it got better at answering new questions. For that, you read
 its answers.
 
@@ -59,28 +64,30 @@ its answers.
 A *step* is one small change to the weights. The notebook takes a *batch* of 8 examples and
 computes their average loss. It works out which direction to move each of the model's roughly 600
 million weights to lower that loss, and moves each one a tiny amount. The *learning rate*, 2e-5
-here, sets how far. 600 examples in batches of 8 is 75 steps per pass, and two passes make 150
-steps.
+here, sets how far. 300 examples in batches of 8 is 38 steps per pass (the last batch holds only
+4), and two passes make 76 steps.
 
-What SFT mostly teaches is the form of an answer and when to stop. The Dolly writers' habits come
-along too: their length, their lists, their tone and their mistakes.
+What SFT mostly teaches is the form of an answer and when to stop. Claude's habits come along
+too: its length, its favorite phrases and its tone. In practice, AI labs shape much of a model's
+personality in SFT, by training it on answers written in the voice they want. That is what your
+two SFT runs do, and DPO then sharpens it.
 
 ## DPO: training on preferences
 
 *DPO*, direct preference optimization, shows the model pairs of answers to the same prompt, one
 *chosen* and one *rejected*. It changes the weights so that answers like the chosen one become
 more likely than answers like the rejected one. DPO teaches the model which style of answer to
-prefer; it doesn't add new facts. Here is a pair in the form of your pairs files.
-The prompt and the rejected answer are line 69 of `training/prompts-300.jsonl`. I wrote the
-chosen answer by following the 1950s radio announcer example at the bottom of `constitutions.md`:
+prefer; it doesn't add new facts. Here is the whole pairs-file line from the SFT example above.
+Its prompt and its rejected answer are line 69 of `training/prompts-300.jsonl`: the rejected
+answer is the one a person wrote for Dolly.
 
 ```
 {"id": "pair-069", "prompt": "Question: Why do my fingers hurt when playing guitar?\nAnswer:", "chosen": " Those steel strings are pressing into soft skin, and that's why your fingertips ache. Here's the good news, listeners: play a little every day, and in a few weeks you'll grow calluses, tough little pads that let you play for an hour without a wince.", "rejected": " While learning guitar, it is very common for finger tips to hurt. Usually what occurs with practice is the development of tougher skin called calluses that make the guitar less painful to play."}
 ```
 
 DPO keeps two copies of the model on the GPU: the one being trained, and a frozen copy of the
-model you started from. For your two models, that's the SFT model. For each answer in a pair, DPO
-compares how likely the two copies find that whole answer.
+model you started from. For each of your two models, that's its own SFT model. For each answer
+in a pair, DPO compares how likely the two copies find that whole answer.
 
 ### The reward
 

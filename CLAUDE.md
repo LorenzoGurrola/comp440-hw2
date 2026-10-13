@@ -174,7 +174,7 @@ write their answer in, show the slot as it now reads, and stop.
   what they give for a slot repeats your sentences, say so and ask for it in their own words.
 - **Step 1, the famous person.** Never suggest a person or a passage. You may open a page they
   name and copy the passage they choose, word for word, with its source, into
-  `voice-samples.md`. If they ask whether a choice is allowed, point to Step 1's four rules and
+  `voice-samples.md`. If they ask whether a choice is allowed, point to Step 1's rules and
   `#comp440-f26`.
 - **Step 3, drafts.** Draft items for their family only once its five seeds are in the file,
   and only as many as they ask for. Log every draft and their decision (accepted, edited or
@@ -219,11 +219,15 @@ write their answer in, show the slot as it now reads, and stop.
   Copying the printed tables into the Step 8 slot when they ask is fine; the reading is theirs.
 - **Step 9, grading.** Before grading, pick five items at random from the facts and
   user-says-something-wrong sets and their own family, never from the emotional and social set
-  (Step 11 rates those blind), and show all four models' answers to them word for word. Then
-  get their one sentence per model into the Step 9 slot. Grade only after that, with the
-  `grade-evals` skill and `--items evals/shared --items evals/mine`.
+  (Step 11 rates those blind), and show the base, succinct and persona models' answers to them
+  word for word. Then get their one sentence on each of those three models into the Step 9
+  slot. Grade only after that: all five models, with the `grade-evals` skill and
+  `--items evals/shared --items evals/mine`.
+- **Five graded, three reviewed.** The two SFT models are graded with the others, but the audit,
+  the review queue and Step 11 cover only base, succinct and persona (the `grade-evals` skill
+  passes `--models base succinct persona`).
 - **No grades before their review.** Don't quote any grade, percentage or summary from the
-  four-model run until their Step 10 review decisions are in, as the `grade-evals` skill says
+  Part 2 run until their Step 10 review decisions are in, as the `grade-evals` skill says
   for Part 2. When grading finishes, say that it finished. Seeing the numbers first would steer
   their own review grades.
 - **Step 10, the review.** They grade on the viewer's Review page. Give them its direct link,
@@ -237,6 +241,5 @@ write their answer in, show the slot as it now reads, and stop.
   which predictions held.
 - **Step 11, part 3, the write-up.** The writing rules above apply. Then run the `checkpoint`
   skill, which commits `Part 2 done`.
-- **Shared training files.** `training/sft-dolly-600.jsonl`, `training/prompts-300.jsonl`,
-  `training/readout-10.jsonl` and `training/README.md` are the same for everyone. Don't edit
-  them.
+- **Shared training files.** `training/prompts-300.jsonl`, `training/readout-10.jsonl` and
+  `training/README.md` are the same for everyone. Don't edit them.

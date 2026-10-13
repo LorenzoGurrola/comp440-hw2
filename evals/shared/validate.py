@@ -39,14 +39,15 @@ What it checks:
        grading rules it follows (facts, user_says_something_wrong or emotional_social; the same
        for every item in the file), and every field that family's items have. File names must
        not contain "hidden": the tools treat such files as held-back items.
-    5. Training files (--train FOLDER): sft-dolly-600.jsonl (600 lines: id sft-NNN, prompt
-       "Question: ...\\nAnswer:", completion starting with a space), prompts-300.jsonl (300 lines:
-       id pair-NNN, question, prompt, human), readout-10.jsonl (10 held-out prompts), and when
+    5. Training files (--train FOLDER): prompts-300.jsonl (300 lines: id pair-NNN, question,
+       prompt "Question: ...\\nAnswer:", human answer starting with a space), readout-10.jsonl
+       (10 held-out prompts), and when
        they exist pairs-succinct.jsonl and pairs-persona.jsonl (id from prompts-300, at most one
        pair per id, the same prompt, chosen not empty and different from rejected, rejected the
        human answer; prompts left out are reported, not errors) and
        labels.jsonl (id, model succinct or persona, pick A or B, reason). Ids are unique, and
-       the SFT, pair and read-out prompts do not overlap.
+       the pair and read-out prompts do not overlap. (Both SFT and DPO train on the pairs files:
+       SFT on each pair's prompt and chosen answer.)
 
 The scoring helpers score_fact() and keywords_found() can be imported and reused:
     from validate import score_fact, keywords_found
@@ -94,9 +95,8 @@ MAX_OWN_FAMILIES = 3
 
 # The training folder (--train FOLDER). Only these named files are read; anything else in the
 # folder (such as the scratch batches in training/.batches/) is ignored.
-SFT_FILE, PROMPTS_FILE, READOUT_FILE = "sft-dolly-600.jsonl", "prompts-300.jsonl", "readout-10.jsonl"
+PROMPTS_FILE, READOUT_FILE = "prompts-300.jsonl", "readout-10.jsonl"
 TRAIN_FILES = {  # file name -> (number of lines, id pattern, example id)
-    SFT_FILE: (600, re.compile(r"^sft-\d{3}$"), "sft-001"),
     PROMPTS_FILE: (300, re.compile(r"^pair-\d{3}$"), "pair-001"),
     READOUT_FILE: (10, re.compile(r"^read-\d{2}$"), "read-01"),
 }
@@ -285,19 +285,12 @@ def check_training_dir(folder, errors, report):
                 errors.append(f"{where}: the id appears twice")
             seen.add(rid)
             prompt = r.get("prompt")
-            if name == SFT_FILE:
-                if not isinstance(prompt, str) or not QA_PROMPT.match(prompt):
-                    errors.append(f"{where}: the prompt should be \"Question: ...\\nAnswer:\"")
-                if not one_space(r.get("completion")):
-                    errors.append(f"{where}: the completion should start with one space, then "
-                                  f"the answer")
-            else:
-                q = r.get("question")
-                if not isinstance(q, str) or not q.strip():
-                    errors.append(f"{where}: no question")
-                elif prompt != f"Question: {q}\nAnswer:":
-                    errors.append(f"{where}: the prompt should be \"Question: \" + question + "
-                                  f"\"\\nAnswer:\"")
+            q = r.get("question")
+            if not isinstance(q, str) or not q.strip():
+                errors.append(f"{where}: no question")
+            elif prompt != f"Question: {q}\nAnswer:":
+                errors.append(f"{where}: the prompt should be \"Question: \" + question + "
+                              f"\"\\nAnswer:\"")
             if name == PROMPTS_FILE and not one_space(r.get("human")):
                 errors.append(f"{where}: the human answer should start with one space, then the "
                               f"answer")
@@ -370,7 +363,7 @@ def check_training_dir(folder, errors, report):
 
     # The overlap check compares the test items with what the models are trained on.
     return [(name, QA_PROMPT.match(r["prompt"]).group(1))
-            for name in (SFT_FILE, PROMPTS_FILE) for r in data.get(name, [])
+            for name in (PROMPTS_FILE,) for r in data.get(name, [])
             if isinstance(r.get("prompt"), str) and QA_PROMPT.match(r["prompt"])]
 
 

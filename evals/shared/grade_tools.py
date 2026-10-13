@@ -38,19 +38,20 @@ the grader and its rubric are unchanged. Results, summaries and the viewer show 
 under its own name.
 
 Typical run, from the repo root (the grade-evals skill does all of this for you):
-  python3 evals/shared/grade_tools.py init-run --root evals/runs --name four-models \\
-          --title "..." --description "..." --zip hw2-four-models.zip \\
+  python3 evals/shared/grade_tools.py init-run --root evals/runs --name part2-models \\
+          --title "..." --description "..." --zip hw2-part2-models.zip \\
           --items evals/shared --items evals/mine
   (or --responses runs/eval-*.jsonl in place of --zip)
-  python3 evals/shared/grade_tools.py prepare --run evals/runs/2026-10-05-four-models \\
+  python3 evals/shared/grade_tools.py prepare --run evals/runs/2026-10-21-part2-models \\
           --grader sonnet-low --grader-model sonnet
   ... one eval-grader subagent per batch listed ...
-  python3 evals/shared/grade_tools.py merge --run evals/runs/2026-10-05-four-models --grader sonnet-low
-  python3 evals/shared/grade_tools.py audit-sample --run evals/runs/2026-10-05-four-models \\
-          --from sonnet-low --grader opus-medium-audit --n 60
+  python3 evals/shared/grade_tools.py merge --run evals/runs/2026-10-21-part2-models \\
+          --grader sonnet-low
+  python3 evals/shared/grade_tools.py audit-sample --run evals/runs/2026-10-21-part2-models \\
+          --from sonnet-low --grader opus-medium-audit --n 60 --models base succinct persona
   ... one eval-auditor subagent per audit batch, then merge --grader opus-medium-audit ...
-  python3 evals/shared/grade_tools.py review-build --run evals/runs/2026-10-05-four-models \\
-          --judges sonnet-low opus-medium-audit
+  python3 evals/shared/grade_tools.py review-build --run evals/runs/2026-10-21-part2-models \\
+          --judges sonnet-low opus-medium-audit --models base succinct persona
 
 The older form, without run folders, still works:
   python3 evals/shared/grade_tools.py prepare runs/eval-base.jsonl runs/eval-sft.jsonl \\
@@ -1537,7 +1538,7 @@ def init_run(args, responses, labels):
     if not R.RUN_NAME.match(name):
         if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", name):
             die(f"--name {name!r}: use a short slug of lowercase letters, digits and '-' (for "
-                f"example four-models); the date is added in front")
+                f"example part2-models); the date is added in front")
         name = f"{R.today()}-{name}"
     root = os.path.abspath(args.root)
     run_dir = os.path.join(root, name)
@@ -1800,12 +1801,19 @@ def cmd_audit_sample(args):
     if gid == args.source:
         die("the audit grader needs its own id, different from --from")
     models = R.model_order(run, responses)
+    if args.models:
+        unknown = [m for m in args.models if m not in models]
+        if unknown:
+            die(f"--models: no model {', '.join(unknown)} in {run_dir} (its models: "
+                f"{', '.join(models)})")
+        models = [m for m in models if m in args.models]
+        records = [r for r in records if r["model"] in models]
     chosen, long_words = choose_audit_sample(records, responses, args.n, args.seed,
                                              args.random_share, models)
     keep = {(r["model"], r["id"]) for r in chosen}
     sample = {"from": args.source, "n": len(chosen), "requested": args.n, "seed": args.seed,
               "random_share": args.random_share, "visible_only": args.visible_only,
-              "long_response_words": long_words,
+              "models": models, "long_response_words": long_words,
               "signals": {k: v[1] for k, v in AUDIT_SIGNALS.items()},
               "by_family": {}, "by_model": {}}
     for r in chosen:
@@ -1861,6 +1869,12 @@ def cmd_review_build(args):
     mod_rank = {m: i for i, m in enumerate(data.models)}
     common = sorted((k for k in A if k in B and A[k]["family"] == B[k]["family"]),
                     key=lambda k: (fam_rank.get(A[k]["family"], 9), mod_rank.get(k[0], 99), k[1]))
+    if args.models:
+        unknown = [m for m in args.models if m not in data.models]
+        if unknown:
+            die(f"--models: no model {', '.join(unknown)} in {run_dir} (its models: "
+                f"{', '.join(data.models)})")
+        common = [k for k in common if k[0] in args.models]
     if not common:
         die(f"{a} and {b} have no verdicts on the same responses")
     dis = [k for k in common if A[k]["label"] != B[k]["label"]]
@@ -1910,7 +1924,7 @@ def cmd_review_build(args):
     k = len(R.queue_names(run_dir))
     meta = {"format": "review queue 1", "name": name,
             "label": args.label or f"Review set {k} (built {R.today()})",
-            "judges": [a, b], "created": now(), "seed": args.seed,
+            "judges": [a, b], "models": args.models or None, "created": now(), "seed": args.seed,
             "controls_requested": args.controls,
             "counts": {"items": len(out), "disagreements": len(dis), "controls": len(controls),
                        "compared": len(common), "by_family": by_family},
@@ -1961,7 +1975,7 @@ def parse_args(argv):
                    help="the runs folder: evals/runs for student runs, planning/runs for runs "
                         "that include held-back items")
     p.add_argument("--name", required=True, metavar="SLUG",
-                   help="short name such as four-models; today's date is put in front")
+                   help="short name such as part2-models; today's date is put in front")
     p.add_argument("--title", required=True, help="plain-language title")
     p.add_argument("--description", required=True,
                    help="plain-language description: which models, why, what to look for")
@@ -1969,7 +1983,7 @@ def parse_args(argv):
                    help="responses files (one JSON line per item with 'id', 'response', 'model')")
     p.add_argument("--zip", metavar="FILE",
                    help="the answers zip the notebook downloaded (for example "
-                        "hw2-four-models.zip): its responses/<model>.jsonl files are the "
+                        "hw2-part2-models.zip): its responses/<model>.jsonl files are the "
                         "responses, and its models.json and generation-notes.txt are used unless "
                         "--models-json or --generation-notes is given. Give --zip or "
                         "--responses (or both)")
@@ -2106,6 +2120,9 @@ def parse_args(argv):
                         "(default 0.25)")
     p.add_argument("--visible-only", action="store_true",
                    help="leave held-back items out of the sample")
+    p.add_argument("--models", nargs="+", metavar="MODEL",
+                   help="audit only these evaluated models, for example base succinct persona "
+                        "(default: every model in the run)")
     p.add_argument("--seed", type=int, default=440, help="random seed (default 440)")
     p.add_argument("--batch-size", type=int, default=60, metavar="N",
                    help="at most N responses per audit batch (default 60)")
@@ -2126,6 +2143,9 @@ def parse_args(argv):
                    help="two judge ids, usually a grader and its audit grader")
     p.add_argument("--controls", type=int, default=5, metavar="N",
                    help="how many items where the judges agree to mix in (default 5)")
+    p.add_argument("--models", nargs="+", metavar="MODEL",
+                   help="queue only these evaluated models (default: every model both judges "
+                        "graded)")
     p.add_argument("--label", help="the queue's name as reviewers see it (default 'Review set "
                                    "K (built DATE)')")
     p.add_argument("--seed", type=int, default=440, help="random seed (default 440)")

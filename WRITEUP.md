@@ -85,7 +85,7 @@ XXXX
 
 XXXX
 
-### Step 9: Four models before grading, and your run folder
+### Step 9: Three models before grading, and your run folder
 
 XXXX
 
