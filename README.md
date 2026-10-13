@@ -26,7 +26,7 @@ Part 1, so keep your repository from one part to the next.
 |---|---|---|---|
 | [Part 0: Set up](instructions/part0.md) | Get the repository, start Claude Code, learn what MCP is, connect Colab and start the evaluation viewer | 8:00am Thursday, October 8 | 20% |
 | [Part 1: The tools and the tests](instructions/part1.md) | Learn how the pieces connect, how the model and the tests are built, and run the tests on the base model | 8:00am Thursday, October 15 | 30% |
-| [Part 2: Train your two models and decide what changed](instructions/part2.md) | Pick a famous person, write two constitutions and a test family, and predict the results; have Claude build preference data and label some of it blind; train each model on example answers (SFT), then on preferences (DPO); run and grade all five versions, and audit three; rate your two models blind, check your predictions and write up whose preferences count | 8:00am Tuesday, October 27 | 50% |
+| [Part 2: Train your two models and decide what changed](instructions/part2.md) | Pick a famous person, write two constitutions and a test family, and predict the results; have Claude build preference data and label some of it blind; train each model on example answers (SFT), then on preferences (DPO); run and grade all five versions, and audit three; rate your two models blind, check your predictions and write up whose preferences count | 8:00am Thursday, October 29 | 50% |
 
 ## Working independently
 

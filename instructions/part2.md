@@ -1,6 +1,6 @@
 # COMP 440 HW2 Part 2: Train your two models and decide what changed
 
-Due **8:00am Tuesday, October 27**. The overall instructions are in the [README](../README.md).
+Due **8:00am Thursday, October 29**. The overall instructions are in the [README](../README.md).
 
 In this part you'll train your two models and find out what your choices did to them. One model
 is **succinct** and factual: short, accurate answers. The other answers in the voice of a **famous
@@ -303,7 +303,7 @@ When you're done, ask Claude to run the checkpoint. It commits and pushes your w
 
 ## What to submit
 
-Your repository, pushed by **8:00am Tuesday, October 27**. At a minimum I am looking for:
+Your repository, pushed by **8:00am Thursday, October 29**. At a minimum I am looking for:
 
 - `voice-samples.md`, `constitutions.md`, and `evals/mine/` with your family and `LOG.md`
   (Steps 1 to 3);
@@ -333,8 +333,9 @@ Part 2 is 50% of the assignment. Within it:
   training; your blind labels were written before you saw which answer Claude wrote; you explain
   one pair where you and Claude read the constitution differently, or, if you picked Claude's
   answer every time, the pair you were least sure of and why.
-- Reading the models: 10% - Your Step 7, 8 and 9 answers each name one concrete change, seen in
-  a quoted answer or a reward number, not a restatement of `training.md`.
+- Reading the models: 10% - Your Step 7 and 8 answers each name one concrete change, seen in a
+  quoted answer or a reward number, and your Step 9 sentences say what you noticed in each
+  model's answers, not a restatement of `training.md`.
 - The run: 10% - Your run folder holds all five models' answers on the shared items and yours
   with Sonnet's grades, the Opus audit and your review decisions on the base, succinct and
   persona models, and your five blind ratings, and you say which side you think was the persona
