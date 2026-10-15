@@ -1,0 +1,59 @@
+{"key": "k79c1094", "correct": true, "extracted_answer": "625", "reason": "Working ends in boxed 625."}
+{"key": "kfbdf549", "correct": false, "extracted_answer": "Go", "reason": "Says 'Go.' not 'went'."}
+{"key": "k186dbc7", "correct": true, "extracted_answer": "Sputnik I", "reason": "Names Sputnik I."}
+{"key": "kd33c8f7", "correct": false, "extracted_answer": "One", "reason": "Opens with 'One' before contradicting itself with zero-indexed."}
+{"key": "ka8de10e", "correct": true, "extracted_answer": "The Mayflower", "reason": "Starts with 'The Mayflower'."}
+{"key": "ka592321", "correct": false, "extracted_answer": "yolk, or white", "reason": "Gives 'The yolk, or white', hedging between two answers."}
+{"key": "k9756355", "correct": false, "extracted_answer": "January", "reason": "Says January."}
+{"key": "k8a22450", "correct": true, "extracted_answer": "White blood cells", "reason": "Says 'White blood cells (WBCs)'."}
+{"key": "kd11da54", "correct": false, "extracted_answer": "forty-eight", "reason": "Says seven times eight is forty-eight."}
+{"key": "kef2ed24", "correct": false, "extracted_answer": "France", "reason": "Says France."}
+{"key": "k09474e0", "correct": true, "extracted_answer": "8 days", "reason": "Says about 8 days (240 divided by 30)."}
+{"key": "k6b762d4", "correct": false, "extracted_answer": "Sahara", "reason": "Names the Sahara, not Antarctica."}
+{"key": "k31d7bf9", "correct": true, "extracted_answer": "hail", "reason": "'Ice pellets, or hail' and goes on about hail."}
+{"key": "k64c6f6e", "correct": true, "extracted_answer": "zero", "reason": "'Most languages say zero.'"}
+{"key": "k37ee956", "correct": true, "extracted_answer": "Mahatma Gandhi", "reason": "Names Mahatma Gandhi."}
+{"key": "k057fe6d", "correct": true, "extracted_answer": "404", "reason": "Says 404."}
+{"key": "kf16f394", "correct": true, "extracted_answer": "Johannes Gutenberg", "reason": "Names Johannes Gutenberg."}
+{"key": "k4a2b303", "correct": true, "extracted_answer": "7", "reason": "Says 7."}
+{"key": "kfec167b", "correct": false, "extracted_answer": "I don't know, can you explain?", "reason": "Gives unrelated phrases, not Hello World."}
+{"key": "k1d24fcc", "correct": true, "extracted_answer": "5/8", "reason": "Says 5/8 is left."}
+{"key": "ka8d9e78", "correct": true, "extracted_answer": "18 holes", "reason": "Says 18 holes."}
+{"key": "k03e745d", "correct": false, "extracted_answer": "5, with two and four syllables on other lines", "reason": "Gives wrong syllable counts, not 5-7-5."}
+{"key": "k0eea0d8", "correct": true, "extracted_answer": "two", "reason": "'Bi- means two of'."}
+{"key": "kd65e6b6", "correct": false, "extracted_answer": "United Kingdom", "reason": "Says the United Kingdom."}
+{"key": "k631f7d4", "correct": false, "extracted_answer": "China", "reason": "Says China."}
+{"key": "kcb4bdc7", "correct": false, "extracted_answer": "12", "reason": "Says 12, not 8."}
+{"key": "k92304f4", "correct": false, "extracted_answer": "Monaco", "reason": "Says Monaco."}
+{"key": "k32e10d9", "correct": true, "extracted_answer": "Gabriel García Márquez", "reason": "Names Gabriel García Márquez."}
+{"key": "k8c72e36", "correct": true, "extracted_answer": "Dart", "reason": "Says Dart."}
+{"key": "k4a31b43", "correct": true, "extracted_answer": "32°F", "reason": "Says water freezes at 32°F."}
+{"key": "kb2864f3", "correct": true, "extracted_answer": "225", "reason": "Says 'that's 225'."}
+{"key": "k28698ea", "correct": false, "extracted_answer": "I'm a programmer, I can code!", "reason": "Main answer is a different phrase; hello world only appears in a code sample."}
+{"key": "kfa92189", "correct": false, "extracted_answer": "alliteration", "reason": "Says alliteration."}
+{"key": "kc4f3ed7", "correct": false, "extracted_answer": "Veins", "reason": "Says Veins."}
+{"key": "k81ce462", "correct": true, "extracted_answer": "The Equator", "reason": "Says 'The Equator'."}
+{"key": "k6322898", "correct": false, "extracted_answer": "Alan Shepard", "reason": "Names Alan Shepard."}
+{"key": "kbfc46a4", "correct": true, "extracted_answer": "9", "reason": "Says 9."}
+{"key": "k1ba08e6", "correct": false, "extracted_answer": "no fixed number, about 5 to 7", "reason": "Does not give 5, 7, 5."}
+{"key": "kf706d18", "correct": true, "extracted_answer": "two", "reason": "'bi- means two of'."}
+{"key": "ke2dde34", "correct": true, "extracted_answer": "Egypt", "reason": "Says located in Egypt."}
+{"key": "k5e6ccff", "correct": true, "extracted_answer": "6 zeros", "reason": "Says 6 zeros."}
+{"key": "kd8b3bdf", "correct": false, "extracted_answer": "Earth", "reason": "Says Earth and denies Venus."}
+{"key": "k8a4d7a9", "correct": true, "extracted_answer": "South America", "reason": "Says South America."}
+{"key": "k27e76c4", "correct": true, "extracted_answer": "Tokyo", "reason": "Says Tokyo."}
+{"key": "k08f3e25", "correct": true, "extracted_answer": "$7.50", "reason": "3 x $2.50 = $7.50."}
+{"key": "kd7108d1", "correct": true, "extracted_answer": "$45", "reason": "Working ends at .75 * 60 = $45."}
+{"key": "k4af5894", "correct": true, "extracted_answer": "15", "reason": "3 * 5 = 15 eggs."}
+{"key": "k549af18", "correct": true, "extracted_answer": "Sputnik 1", "reason": "Says 'It was Sputnik 1'."}
+{"key": "k4a461b5", "correct": true, "extracted_answer": "Tokyo", "reason": "Says Tokyo."}
+{"key": "kb9f1dd7", "correct": true, "extracted_answer": "chickpea", "reason": "Says main one is chickpea paste."}
+{"key": "kca618c2", "correct": false, "extracted_answer": "George Washington", "reason": "Says George Washington, not John Adams."}
+{"key": "k410a5e6", "correct": true, "extracted_answer": "The Ural Mountains", "reason": "Starts with 'The Ural Mountains'."}
+{"key": "k2630a49", "correct": true, "extracted_answer": "Qin Shi Huang", "reason": "Names Qin Shi Huang."}
+{"key": "k598ffd5", "correct": false, "extracted_answer": "Two", "reason": "Says 'Two, hole', not 18."}
+{"key": "k0fb5d35", "correct": false, "extracted_answer": "1/2 (4/8)", "reason": "Says half is left, not 5/8."}
+{"key": "k48ddede", "correct": true, "extracted_answer": "Leonardo da Vinci", "reason": "Names Leonardo da Vinci first."}
+{"key": "k33b17f4", "correct": true, "extracted_answer": "Mayflower", "reason": "Says the ship was called Mayflower."}
+{"key": "k16858e8", "correct": true, "extracted_answer": "206", "reason": "Says 206 bones."}
+{"key": "kdf925d9", "correct": true, "extracted_answer": "the Milky Way", "reason": "Says the Sun belongs to the Milky Way."}

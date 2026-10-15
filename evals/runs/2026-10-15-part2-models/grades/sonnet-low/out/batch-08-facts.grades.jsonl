@@ -1,0 +1,59 @@
+{"key": "k44e6f52", "correct": true, "extracted_answer": "The skin", "reason": "Opens with 'The skin.'"}
+{"key": "k95336a4", "correct": true, "extracted_answer": "225", "reason": "Says 225."}
+{"key": "k15b2718", "correct": false, "extracted_answer": "Five", "reason": "Says 'Five', not 8."}
+{"key": "k13622f5", "correct": true, "extracted_answer": "went", "reason": "'The past tense of go is went.'"}
+{"key": "ke382802", "correct": true, "extracted_answer": "Six", "reason": "Says 'Six.'"}
+{"key": "ka6a23c4", "correct": false, "extracted_answer": "January, February and March", "reason": "Lists three months without committing to February."}
+{"key": "k0ce4a26", "correct": false, "extracted_answer": "1985", "reason": "Says November 4, 1985."}
+{"key": "kb5558c4", "correct": true, "extracted_answer": "Vincent van Gogh", "reason": "Names Vincent van Gogh."}
+{"key": "k5a5ec1f", "correct": false, "extracted_answer": "George Washington", "reason": "Names Washington, not John Adams."}
+{"key": "k2cc88df", "correct": true, "extracted_answer": "soybeans", "reason": "'comes mostly from soybeans'."}
+{"key": "k3227728", "correct": false, "extracted_answer": "none", "reason": "Says no single answer and names a Chilean waterfall, not Angel Falls."}
+{"key": "k0b6432e", "correct": false, "extracted_answer": "thunderclouds", "reason": "Never says hail."}
+{"key": "k8cdbf6e", "correct": false, "extracted_answer": "none", "reason": "Talks about words, never says eight bytes."}
+{"key": "k0010e05", "correct": true, "extracted_answer": "635", "reason": "Starts with 635."}
+{"key": "kfdb5609", "correct": true, "extracted_answer": "soybeans", "reason": "'made mostly from soybeans'."}
+{"key": "k1e651eb", "correct": false, "extracted_answer": "Robert Peary", "reason": "Names Peary, not Amundsen."}
+{"key": "k5ccb8b9", "correct": true, "extracted_answer": "The Seine", "reason": "Opens with 'The Seine.'"}
+{"key": "k6d8b860", "correct": true, "extracted_answer": "3600", "reason": "'there are 3600 seconds'."}
+{"key": "kefa7d74", "correct": true, "extracted_answer": "England", "reason": "Says the revolution came from England."}
+{"key": "k7eed9b6", "correct": false, "extracted_answer": "210, then twenty-one hundred fifty", "reason": "States 210 but then twice concludes 2150, contradicting itself."}
+{"key": "k1038cb4", "correct": true, "extracted_answer": "404", "reason": "'The 404 error is returned...'"}
+{"key": "k5b50fab", "correct": true, "extracted_answer": "Au", "reason": "'Gold, chemistium Au.'"}
+{"key": "k8a14886", "correct": true, "extracted_answer": "thank you", "reason": "'means thank you'."}
+{"key": "k34b7944", "correct": true, "extracted_answer": "clone", "reason": "'The correct answer is \"clone\"'."}
+{"key": "k594dd39", "correct": true, "extracted_answer": "5,280", "reason": "Says 5,280 feet."}
+{"key": "kac2e68f", "correct": false, "extracted_answer": "Grand Canyon (no single answer)", "reason": "Names the Grand Canyon as the claimed tallest and mentions Angel Falls only as a contender."}
+{"key": "ke31bdc5", "correct": true, "extracted_answer": "Greenland", "reason": "Names Greenland."}
+{"key": "kdf9ac78", "correct": false, "extracted_answer": "4-sided and 6-sided", "reason": "Gives 4 and 6 sides, not 8."}
+{"key": "k8946763", "correct": false, "extracted_answer": "none", "reason": "Never states the year the war ended; the 1945 mention is only Germany's surrender and it is muddled."}
+{"key": "kcbc2669", "correct": true, "extracted_answer": "3600", "reason": "Says 3600."}
+{"key": "kca19efc", "correct": true, "extracted_answer": "16", "reason": "'A pound is 16 ounces.'"}
+{"key": "k0cb0127", "correct": false, "extracted_answer": "Pacific Ocean", "reason": "Says Pacific, not Indian."}
+{"key": "k6359247", "correct": true, "extracted_answer": "Nitrogen", "reason": "Opens with 'Nitrogen, about 78 percent'."}
+{"key": "k16812e5", "correct": false, "extracted_answer": "Red", "reason": "Commits to Red."}
+{"key": "k474a5eb", "correct": true, "extracted_answer": "Zeus", "reason": "Names Zeus as the most famous ruler of the heavens, though hedged."}
+{"key": "kffac996", "correct": true, "extracted_answer": "$45", "reason": "Working reaches $45."}
+{"key": "k519fdfd", "correct": true, "extracted_answer": "Greenland", "reason": "'It's Greenland'."}
+{"key": "k48e3f38", "correct": true, "extracted_answer": "Mahatma Gandhi", "reason": "Opens with 'Mahatma Gandhi'."}
+{"key": "kcc6c273", "correct": true, "extracted_answer": "green", "reason": "'a shade of green'."}
+{"key": "k12c4889", "correct": false, "extracted_answer": "Homophone", "reason": "Says the real name is Homophone."}
+{"key": "kca9a115", "correct": false, "extracted_answer": "Nine", "reason": "Says Nine, not 18."}
+{"key": "k104d4ee", "correct": true, "extracted_answer": "The bishop", "reason": "Opens with 'The bishop.'"}
+{"key": "kd5b5bc0", "correct": false, "extracted_answer": "The penny", "reason": "Commits to penny first."}
+{"key": "k0ee2b70", "correct": true, "extracted_answer": "1989", "reason": "'9 October 1989'."}
+{"key": "kb134579", "correct": true, "extracted_answer": "Apple", "reason": "'developed by Apple Inc.'"}
+{"key": "k1fdc139", "correct": true, "extracted_answer": "Gabriel García Márquez", "reason": "Names García Márquez as the author."}
+{"key": "k57a6379", "correct": true, "extracted_answer": "Arteries", "reason": "Opens with 'Arteries.'"}
+{"key": "kd114d64", "correct": true, "extracted_answer": "28 square meters", "reason": "'4m x 7m = 28 square meters'."}
+{"key": "ka848716", "correct": true, "extracted_answer": "thank you", "reason": "'It means \"thank you.\"'"}
+{"key": "k5f20f60", "correct": true, "extracted_answer": "six", "reason": "'six zeros'."}
+{"key": "k3fb903b", "correct": false, "extracted_answer": "Volcano", "reason": "Opens with 'Volcano.'; lava appears only as an aside."}
+{"key": "kb8b087e", "correct": true, "extracted_answer": "Mount Everest", "reason": "Names Mount Everest at 29,035 feet."}
+{"key": "k7f2259e", "correct": true, "extracted_answer": "225", "reason": "'That's 225.'"}
+{"key": "k6758ef8", "correct": true, "extracted_answer": "The Equator", "reason": "Opens with 'The Equator.'"}
+{"key": "kf83804a", "correct": true, "extracted_answer": "The nucleus", "reason": "Opens with 'The nucleus'."}
+{"key": "k0f8613b", "correct": true, "extracted_answer": "Oak", "reason": "Opens with 'Oak.'"}
+{"key": "ka9f3a4e", "correct": true, "extracted_answer": "3,600", "reason": "Working reaches 60 x 60 = 3,600 seconds."}
+{"key": "k37a8cf0", "correct": true, "extracted_answer": "Leonardo da Vinci", "reason": "Opens with 'Leonardo da Vinci'."}
+{"key": "k5c48dd2", "correct": false, "extracted_answer": "basil, pine nuts and garlic", "reason": "Lists several ingredients without committing to basil as the main herb."}

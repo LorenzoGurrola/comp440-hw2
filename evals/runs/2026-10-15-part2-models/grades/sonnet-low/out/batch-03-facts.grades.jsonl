@@ -1,0 +1,59 @@
+{"key": "k6d28213", "correct": true, "extracted_answer": "Winston Churchill", "reason": "Opens with 'Winston Churchill'."}
+{"key": "k2a74a55", "correct": false, "extracted_answer": "The United Kingdom", "reason": "It says the United Kingdom, not Italy."}
+{"key": "kbf8c144", "correct": true, "extracted_answer": "White Blood Cells", "reason": "Opens with 'White Blood Cells, or leukocytes'."}
+{"key": "k3c28c75", "correct": true, "extracted_answer": "O(log n)", "reason": "Says 'O(log n) time in the worst case' and ends with log(n)."}
+{"key": "kd033149", "correct": true, "extracted_answer": "The Volga", "reason": "Opens with 'The Volga'."}
+{"key": "kc40cfc4", "correct": true, "extracted_answer": "Vitamin D", "reason": "Opens with 'Vitamin D'."}
+{"key": "ke5024ab", "correct": false, "extracted_answer": "One", "reason": "Says 'One' leg instead of eight."}
+{"key": "k35d1d33", "correct": true, "extracted_answer": "3,600", "reason": "States 3,600 seconds."}
+{"key": "k70ccd7a", "correct": true, "extracted_answer": "1991", "reason": "Says dissolution in 1991."}
+{"key": "k37cfbfd", "correct": true, "extracted_answer": "The Indian Ocean", "reason": "Opens with 'The Indian Ocean'."}
+{"key": "kf51482a", "correct": false, "extracted_answer": "$51", "reason": "Uses 15% off and gets $51, not $45."}
+{"key": "k435708a", "correct": true, "extracted_answer": "Antonym", "reason": "Says 'The word for it is Antonym'."}
+{"key": "ka36dde1", "correct": true, "extracted_answer": "Condensation", "reason": "Answers condensation."}
+{"key": "kba6afc2", "correct": true, "extracted_answer": "64", "reason": "Opens with '64'."}
+{"key": "k7723852", "correct": true, "extracted_answer": "635", "reason": "Answers 635."}
+{"key": "k04fdd4a", "correct": true, "extracted_answer": "Saturn", "reason": "Names Saturn's ring system."}
+{"key": "ke5585f1", "correct": true, "extracted_answer": "Lake Superior", "reason": "Lists Lake Superior first as biggest, despite muddled numbers."}
+{"key": "k4edd90b", "correct": true, "extracted_answer": "1991", "reason": "Says dissolved 14 December 1991."}
+{"key": "k10c1c58", "correct": true, "extracted_answer": "Alexander Fleming", "reason": "Opens with 'Alexander Fleming'."}
+{"key": "k3852b21", "correct": true, "extracted_answer": "366", "reason": "Concludes 'about 366 days in a leap year'."}
+{"key": "k8d2f7fd", "correct": false, "extracted_answer": "Robert Falcon Scott", "reason": "Names Scott, not Amundsen."}
+{"key": "ka5eea46", "correct": true, "extracted_answer": "Vitamin D", "reason": "Says 'Human skin makes Vitamin D'."}
+{"key": "k9a4eb39", "correct": false, "extracted_answer": "Orange", "reason": "Says blue and yellow make orange, not green."}
+{"key": "k271a7d6", "correct": true, "extracted_answer": "Egypt", "reason": "Says 'in Egypt'."}
+{"key": "k58aef99", "correct": true, "extracted_answer": "The blue whale", "reason": "Names the blue whale as often cited largest, despite the hedge."}
+{"key": "kf9407a2", "correct": true, "extracted_answer": "Lake Superior", "reason": "Says 'Lake Superior is 10 million acres' as the biggest."}
+{"key": "k907aa37", "correct": true, "extracted_answer": "Lava", "reason": "Says 'lava'."}
+{"key": "kd16ca95", "correct": true, "extracted_answer": "7", "reason": "Says pairs add up to 7."}
+{"key": "ke83361e", "correct": true, "extracted_answer": "The Pacific Ocean", "reason": "Opens with 'The Pacific Ocean'."}
+{"key": "ka310d3d", "correct": true, "extracted_answer": "Spanish", "reason": "Opens with 'The Spanish'."}
+{"key": "kc831a3c", "correct": true, "extracted_answer": "46", "reason": "Says diploid number of 46."}
+{"key": "kca8b1bd", "correct": true, "extracted_answer": "About 206 to 217", "reason": "Starts with 206 as the count, giving a close range."}
+{"key": "ka0651d8", "correct": true, "extracted_answer": "two", "reason": "Says 'bi- means two'."}
+{"key": "k85b879e", "correct": false, "extracted_answer": "Giuseppe Accorati", "reason": "Names a wrong composer, not Vivaldi."}
+{"key": "k6fcebb9", "correct": true, "extracted_answer": "thank you", "reason": "Says 'It means thank you'."}
+{"key": "kde93ab2", "correct": true, "extracted_answer": "The Milky Way", "reason": "Says 'the Milky Way'."}
+{"key": "k0a492ed", "correct": true, "extracted_answer": "Apple", "reason": "Opens with 'Apple'."}
+{"key": "k3bf8272", "correct": false, "extracted_answer": "The aorta", "reason": "Answers the aorta and muddles arteries and veins, never saying arteries carry blood away."}
+{"key": "kb869512", "correct": false, "extracted_answer": "Indonesia", "reason": "Says Indonesia, not Greenland."}
+{"key": "kfbea41e", "correct": true, "extracted_answer": "The Pacific Ocean", "reason": "Says the Pacific Ocean is larger than any other."}
+{"key": "kf197884", "correct": true, "extracted_answer": "1945", "reason": "Says it ended May 8th, 1945."}
+{"key": "kd54b4fd", "correct": true, "extracted_answer": "The skin", "reason": "Opens with 'The skin'."}
+{"key": "ke49f6c5", "correct": true, "extracted_answer": "Chinua Achebe", "reason": "Names Chinua Achebe as the author."}
+{"key": "k4c46619", "correct": false, "extracted_answer": "Snowflakes", "reason": "Says snowflakes, not hail."}
+{"key": "k415e2f0", "correct": true, "extracted_answer": "625", "reason": "Answers 625."}
+{"key": "kdc70ae8", "correct": true, "extracted_answer": "Qin Shi Huang", "reason": "Opens with 'Qin Shi Huang'."}
+{"key": "k6c6f77e", "correct": true, "extracted_answer": "The Volga River", "reason": "Opens with 'The Volga River'."}
+{"key": "kaa3ac7c", "correct": true, "extracted_answer": "eight", "reason": "Says 'A spider has eight legs'."}
+{"key": "k8bb35c3", "correct": true, "extracted_answer": "The Nutcracker", "reason": "Opens with 'The Nutcracker'."}
+{"key": "k4b79d97", "correct": true, "extracted_answer": "Hydrogen", "reason": "Answers 'Hydrogen'."}
+{"key": "k17b9264", "correct": false, "extracted_answer": "William Faulkner", "reason": "Says Faulkner, not Achebe."}
+{"key": "k7ee8155", "correct": true, "extracted_answer": "oak", "reason": "Says 'the oak'."}
+{"key": "kc3486a6", "correct": true, "extracted_answer": "arteries", "reason": "Says 'The arteries ... carrying oxygen-rich blood away'."}
+{"key": "k9ecf039", "correct": true, "extracted_answer": "635", "reason": "Computes 1,000 - 365 = 635."}
+{"key": "k7ea311c", "correct": false, "extracted_answer": "7 days", "reason": "Concludes x = 7, not 8."}
+{"key": "k2b8c561", "correct": true, "extracted_answer": "The blue whale", "reason": "Says 'The blue whale is the largest'."}
+{"key": "k939e6f1", "correct": true, "extracted_answer": "15", "reason": "Says 'You need 15 eggs'."}
+{"key": "kb204001", "correct": true, "extracted_answer": "O(log n)", "reason": "Opens with 'O(log n)'."}
+{"key": "k658e27e", "correct": true, "extracted_answer": "France", "reason": "Opens with 'France'."}

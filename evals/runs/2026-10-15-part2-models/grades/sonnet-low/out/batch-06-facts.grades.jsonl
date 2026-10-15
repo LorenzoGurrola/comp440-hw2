@@ -1,0 +1,59 @@
+{"key": "k8ac8c31", "correct": false, "extracted_answer": "6 zeros (then says four zeros)", "reason": "It says 6 zeros but later contradicts itself with 'has four zeros'."}
+{"key": "ked75001", "correct": true, "extracted_answer": "mice", "reason": "'The plural is mice.'"}
+{"key": "kc227c0f", "correct": false, "extracted_answer": "none", "reason": "It never states the sum 7 and its pairings are inconsistent."}
+{"key": "kb38186d", "correct": true, "extracted_answer": "The yolk", "reason": "'The yolk, folks.'"}
+{"key": "kd9c3946", "correct": true, "extracted_answer": "Already seen", "reason": "Starts with 'Already seen'."}
+{"key": "k5c1d3f5", "correct": true, "extracted_answer": "Winston Churchill", "reason": "Names Winston Churchill."}
+{"key": "kc7c44e7", "correct": true, "extracted_answer": "1492", "reason": "'He reached them in 1492'."}
+{"key": "k436fa1d", "correct": false, "extracted_answer": "none", "reason": "It only links Dart docs and never states the language Flutter uses."}
+{"key": "k68500b3", "correct": false, "extracted_answer": "Wolfgang Amadeus Mozart", "reason": "Names Mozart, not Vivaldi."}
+{"key": "k9240b30", "correct": true, "extracted_answer": "hydrogen", "reason": "'it is called hydrogen'."}
+{"key": "kc56a879", "correct": true, "extracted_answer": "Au", "reason": "'Au.'"}
+{"key": "kea414f4", "correct": true, "extracted_answer": "Gabriel García Márquez", "reason": "Names the right author."}
+{"key": "keab4d35", "correct": true, "extracted_answer": "fifty-six", "reason": "'equals fifty-six'."}
+{"key": "k16e8493", "correct": true, "extracted_answer": "Oak trees", "reason": "Leads with 'Oak trees'."}
+{"key": "kbd5ed68", "correct": true, "extracted_answer": "Au", "reason": "It commits to 'Au' as the symbol, though the surrounding text is garbled."}
+{"key": "kca06870", "correct": true, "extracted_answer": "Ankara", "reason": "'The Turkish capital is Ankara'."}
+{"key": "keec95cd", "correct": true, "extracted_answer": "The yolk", "reason": "'The yolk.'"}
+{"key": "k759a1ca", "correct": true, "extracted_answer": "honey", "reason": "Names honey."}
+{"key": "k0dfc4e2", "correct": true, "extracted_answer": "0", "reason": "'starts at 0'."}
+{"key": "kf34e919", "correct": true, "extracted_answer": "Strait of Gibraltar", "reason": "Leads with 'Strait of Gibraltar'."}
+{"key": "k1dc5b7f", "correct": false, "extracted_answer": "32 bits (4 bytes)", "reason": "It says addresses are 32 bits even on 64-bit, not eight bytes."}
+{"key": "k96a63ec", "correct": false, "extracted_answer": "Old French", "reason": "Says Old French, not German."}
+{"key": "k6264cf3", "correct": true, "extracted_answer": "Lake Superior", "reason": "'The Lake Superior'."}
+{"key": "k740bfa9", "correct": true, "extracted_answer": "15", "reason": "'3 × 5 = 15 eggs'."}
+{"key": "k400da41", "correct": true, "extracted_answer": "chickpeas", "reason": "'has chickpeas'."}
+{"key": "k6e4d390", "correct": true, "extracted_answer": "A stack", "reason": "'A stack.'"}
+{"key": "k2a95a9d", "correct": true, "extracted_answer": "6", "reason": "'hexa- means six'."}
+{"key": "k8d4ab87", "correct": true, "extracted_answer": "Dart", "reason": "'Flutter uses the Dart programming language'."}
+{"key": "k065183e", "correct": true, "extracted_answer": "Basil", "reason": "'Basil, the real deal'."}
+{"key": "kc576ce9", "correct": true, "extracted_answer": "The arteries", "reason": "'The arteries.'"}
+{"key": "k18cec3b", "correct": true, "extracted_answer": "16", "reason": "'16 ounces'."}
+{"key": "k3e65dc5", "correct": true, "extracted_answer": "went", "reason": "'went'."}
+{"key": "k1f79158", "correct": true, "extracted_answer": "Tokyo", "reason": "'Tokyo.'"}
+{"key": "k979fc15", "correct": true, "extracted_answer": "1024", "reason": "'1024'."}
+{"key": "k0475794", "correct": true, "extracted_answer": "Apple", "reason": "'created by Apple'."}
+{"key": "k6045d9b", "correct": true, "extracted_answer": "The Mayflower", "reason": "'The Mayflower.'"}
+{"key": "k65a0723", "correct": true, "extracted_answer": "chickpeas", "reason": "Lists chickpeas first among ingredients."}
+{"key": "kcde9060", "correct": false, "extracted_answer": "orange", "reason": "'You get orange.'"}
+{"key": "kaa1c5a4", "correct": false, "extracted_answer": "George Washington", "reason": "Names Washington, not John Adams."}
+{"key": "k82c2317", "correct": false, "extracted_answer": "Theodore Roosevelt", "reason": "Names Theodore Roosevelt."}
+{"key": "k0837f00", "correct": true, "extracted_answer": "Hydrogen", "reason": "'Hydrogen, with the symbol H and the atomic number 1'."}
+{"key": "k117de27", "correct": true, "extracted_answer": "Hydrogen", "reason": "'Hydrogen.'"}
+{"key": "k4f08822", "correct": false, "extracted_answer": "Apollo 11 mission", "reason": "It never names Neil Armstrong."}
+{"key": "k9a7317d", "correct": true, "extracted_answer": "The Ural Mountains", "reason": "Leads with 'The Ural Mountains'."}
+{"key": "k7f72c8c", "correct": false, "extracted_answer": "Robert Falcon Scott", "reason": "Names Scott, not Amundsen."}
+{"key": "k4b92dd3", "correct": true, "extracted_answer": "Johannes Gutenberg", "reason": "Names Johannes Gutenberg."}
+{"key": "k85e9079", "correct": false, "extracted_answer": "light, almost white / off-white", "reason": "Does not say green."}
+{"key": "kde5904b", "correct": true, "extracted_answer": "Lake Superior", "reason": "'Lake Superior is the largest by volume and surface area.'"}
+{"key": "k35c1bd4", "correct": true, "extracted_answer": "1945", "reason": "'ended ... July 26, 1945'."}
+{"key": "k309b71b", "correct": false, "extracted_answer": "Latin", "reason": "Says 'in Latin', contradicting its 'Spanish novel' aside, and does not commit to Spanish as the language."}
+{"key": "kbdca12d", "correct": true, "extracted_answer": "Ankara", "reason": "'Ankara'."}
+{"key": "k363cd86", "correct": false, "extracted_answer": "Ice pellets", "reason": "Main answer is 'Ice pellets', with hail only as an aside description."}
+{"key": "k0961455", "correct": false, "extracted_answer": "France", "reason": "Says France, not Vatican City."}
+{"key": "kd7706e7", "correct": true, "extracted_answer": "Ice pellets, or hail", "reason": "'Ice pellets, or hail' names hail as the answer."}
+{"key": "kf324bdf", "correct": true, "extracted_answer": "Venus", "reason": "'Venus, a very hot place.'"}
+{"key": "kc672ecf", "correct": true, "extracted_answer": "5/8", "reason": "'the answer is 5 / 8'."}
+{"key": "kb527696", "correct": true, "extracted_answer": "150 miles", "reason": "'the answer is 150 miles'."}
+{"key": "ke3b2ec0", "correct": true, "extracted_answer": "The British Isles / Britain", "reason": "Says British Isles and 'Britain was at the top'."}
+{"key": "k0d3fca2", "correct": true, "extracted_answer": "The Nutcracker", "reason": "'The Nutcracker.'"}

@@ -1,0 +1,59 @@
+{"key": "k6551e17", "correct": true, "extracted_answer": "1789", "reason": "States the French Revolution began in 1789."}
+{"key": "k9f1ade7", "correct": true, "extracted_answer": "O(log n)", "reason": "Gives O(log n) and logarithmic."}
+{"key": "k2df8a24", "correct": false, "extracted_answer": "the spine", "reason": "Says the longest bone is the spine; femur only an aside."}
+{"key": "ke82657f", "correct": true, "extracted_answer": "to seize days", "reason": "\"To seize days\" is a close equivalent of seize the day."}
+{"key": "k71e9dca", "correct": false, "extracted_answer": "The Danube", "reason": "Commits to the Danube, not the Volga."}
+{"key": "k2cc344e", "correct": true, "extracted_answer": "The bishop", "reason": "Answers \"The bishop\"."}
+{"key": "k70623f3", "correct": true, "extracted_answer": "Six", "reason": "Starts with \"Six\"."}
+{"key": "kc726519", "correct": true, "extracted_answer": "The Indian Ocean", "reason": "Opens with \"The Indian Ocean\"."}
+{"key": "k72091d6", "correct": true, "extracted_answer": "3600", "reason": "Says 3600 seconds."}
+{"key": "kbada492", "correct": true, "extracted_answer": "The femur", "reason": "Says \"The femur, or thigh bone\"."}
+{"key": "k505e0ee", "correct": true, "extracted_answer": "false", "reason": "States true XOR true equals false."}
+{"key": "kdb34e9b", "correct": false, "extracted_answer": "Kazakhstan", "reason": "Names Kazakhstan, not Russia."}
+{"key": "kf2184ca", "correct": true, "extracted_answer": "Leonardo da Vinci", "reason": "Names Leonardo da Vinci."}
+{"key": "k063521a", "correct": true, "extracted_answer": "1,024", "reason": "Says 2^10 equals 1,024."}
+{"key": "kb5c868d", "correct": true, "extracted_answer": "150 mi", "reason": "Working arrives at 150 mi."}
+{"key": "k8f32868", "correct": true, "extracted_answer": "Zeus", "reason": "Names Zeus as the king in Greek mythology."}
+{"key": "kd02d0b5", "correct": false, "extracted_answer": "The United States", "reason": "Says the United States, not Russia."}
+{"key": "k2f483ec", "correct": true, "extracted_answer": "225", "reason": "Gives 15^2 = 225."}
+{"key": "kbf0022d", "correct": true, "extracted_answer": "1914", "reason": "Says the war started July 28, 1914."}
+{"key": "k67aeabd", "correct": true, "extracted_answer": "carbon dioxide, CO2", "reason": "Opens with \"Plants use carbon dioxide, CO2\"."}
+{"key": "k8940850", "correct": true, "extracted_answer": "625", "reason": "Answers 625."}
+{"key": "k6cf5c2b", "correct": true, "extracted_answer": "150 miles", "reason": "Says the train goes 150 miles."}
+{"key": "k349f845", "correct": true, "extracted_answer": "Neil Armstrong", "reason": "Opens with \"Neil Armstrong\"."}
+{"key": "kf752f69", "correct": false, "extracted_answer": "none", "reason": "Gives no year, only dates without a year."}
+{"key": "kbed40a9", "correct": true, "extracted_answer": "52", "reason": "Answers 52."}
+{"key": "k84b2f94", "correct": true, "extracted_answer": "168", "reason": "7 x 24 = 168 hours."}
+{"key": "kf0a8bf7", "correct": true, "extracted_answer": "Mount Everest", "reason": "Names Mount Everest (8,849 m) as the peak."}
+{"key": "k38185cc", "correct": true, "extracted_answer": "false", "reason": "Says true XOR true is false."}
+{"key": "kd4370e3", "correct": false, "extracted_answer": "none", "reason": "Never names February; says nobody can say."}
+{"key": "k42ca110", "correct": true, "extracted_answer": "Vincent van Gogh", "reason": "Names Vincent van Gogh."}
+{"key": "k4645f5e", "correct": false, "extracted_answer": "Giuseppe Accorati", "reason": "Names Giuseppe Accorati, not Vivaldi."}
+{"key": "kfcb1f29", "correct": true, "extracted_answer": "Apple", "reason": "Says \"Swift was Apple's choice in 2014\"."}
+{"key": "k544d828", "correct": false, "extracted_answer": "the penny", "reason": "Says \"The penny, a nickel...\", not the dime."}
+{"key": "k87f2db6", "correct": false, "extracted_answer": "none", "reason": "Never says \"already seen\" and is cut off."}
+{"key": "k44cd14d", "correct": true, "extracted_answer": "nine", "reason": "Says one-third of 27 is nine."}
+{"key": "kdf03f14", "correct": true, "extracted_answer": "Basil", "reason": "Answers \"Basil\"."}
+{"key": "k2f57459", "correct": true, "extracted_answer": "Mount Everest", "reason": "Says \"It's Mount Everest\"."}
+{"key": "k660d30e", "correct": true, "extracted_answer": "Apple", "reason": "Answers \"Apple\"."}
+{"key": "k30550dd", "correct": false, "extracted_answer": "Go", "reason": "Opens with \"Go\" and is muddled; no clear commitment to went."}
+{"key": "kd2dc2d0", "correct": false, "extracted_answer": "Vincent van Gogh (contradicted)", "reason": "Names van Gogh but then says \"He didn't paint it himself\", contradicting itself."}
+{"key": "k063dffe", "correct": false, "extracted_answer": "O(n)", "reason": "Says it takes O(n)."}
+{"key": "k4ea1d80", "correct": true, "extracted_answer": "Ottawa", "reason": "Says \"It is Ottawa, in Ontario\"."}
+{"key": "k184c37b", "correct": true, "extracted_answer": "South America", "reason": "Says \"South American Continent\"."}
+{"key": "k0ec6bf8", "correct": false, "extracted_answer": "Hermann Hesse", "reason": "Names Hermann Hesse, not Amundsen."}
+{"key": "k7374474", "correct": true, "extracted_answer": "Milky Way", "reason": "Says the Sun belongs to the Milky Way."}
+{"key": "k3fe5427", "correct": true, "extracted_answer": "The nucleus", "reason": "Answers \"The nucleus\"."}
+{"key": "ka5c6e0a", "correct": false, "extracted_answer": "Atacama Desert", "reason": "Names the Atacama, not Antarctica."}
+{"key": "kfbbe4e1", "correct": true, "extracted_answer": "$7.50", "reason": "Working gives $7.50."}
+{"key": "k7d80e7b", "correct": true, "extracted_answer": "32 °F", "reason": "Says water freezes at 32 °F."}
+{"key": "k0466e25", "correct": true, "extracted_answer": "England", "reason": "Says it began in England."}
+{"key": "kb8856e0", "correct": true, "extracted_answer": "Qin Shi Huang", "reason": "Answers \"Qin Shi Huang\"."}
+{"key": "k0dcff21", "correct": false, "extracted_answer": "elephants", "reason": "Says the largest animals are elephants; blue whales only in a list."}
+{"key": "k187c991", "correct": true, "extracted_answer": "32°F", "reason": "Opens with \"Water freezes at 32°F\"."}
+{"key": "kf4fd736", "correct": true, "extracted_answer": "Charles Dickens", "reason": "Says Scrooge was written by Charles Dickens."}
+{"key": "kc478a19", "correct": false, "extracted_answer": "270", "reason": "Starts with 635 but its working ends at \"635 minus 365 equals 270\"."}
+{"key": "k8b68286", "correct": false, "extracted_answer": "none", "reason": "Never names the dime as the 10 cent coin; says dimes are 25 cents."}
+{"key": "k79171e3", "correct": true, "extracted_answer": "13", "reason": "Answers 13."}
+{"key": "kb8d68f9", "correct": true, "extracted_answer": "1989", "reason": "Says November 9, 1989."}
+{"key": "k7a60eb7", "correct": true, "extracted_answer": "Mahatma Gandhi", "reason": "Names Mahatma Gandhi."}

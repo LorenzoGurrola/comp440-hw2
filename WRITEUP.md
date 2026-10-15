@@ -241,7 +241,13 @@ Succinct SFT lists 5 common answers, while the DPO model answers it not in list 
 
 ### Step 9: Three models before grading, and your run folder
 
-XXXX
+Base: It is frequently wrong, rambles a lot, and outputs unnecessary content
+
+Succinct: It still is incorrect frequently. It is more concise than the base model
+
+Persona: It has grandiose language, and is just as incorrect as the first two models
+
+`evals/runs/2026-10-15-part2-models`
 
 ### Step 10: Your review and the audit
 

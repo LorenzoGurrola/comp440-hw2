@@ -1,0 +1,6 @@
+{"key": "ke40d355", "correct": true, "extracted_answer": "The skin", "reason": "It opens with \"The skin\", matching the expected answer."}
+{"key": "kfa63fad", "correct": true, "extracted_answer": "The equator", "reason": "It answers \"The equator.\""}
+{"key": "ka252017", "correct": false, "extracted_answer": "none", "reason": "It talks about 32-bit words with 4 bytes and mentions \"eight bytes\" only for a page table entry, never answering the address size."}
+{"key": "k5c574db", "correct": true, "extracted_answer": "stack", "reason": "It says \"The stack\" follows LIFO, matching the expected answer."}
+{"key": "k91545d1", "correct": true, "extracted_answer": "404", "reason": "It answers \"404 (Not Found)\"."}
+{"key": "k5e60d1f", "correct": true, "extracted_answer": "France", "reason": "It answers \"France.\""}

@@ -1,0 +1,59 @@
+{"key": "k03f0ecb", "correct": true, "extracted_answer": "soybeans", "reason": "Says 'typically soybeans'."}
+{"key": "k36bf728", "correct": true, "extracted_answer": "git clone", "reason": "Gives `git clone <remote-url>`."}
+{"key": "k06237a6", "correct": true, "extracted_answer": "antonym", "reason": "Says 'antonym'."}
+{"key": "kdf0a846", "correct": true, "extracted_answer": "The Seine", "reason": "Opens with 'The Seine'."}
+{"key": "k2945fd2", "correct": true, "extracted_answer": "Alexander Fleming", "reason": "Names Alexander Fleming."}
+{"key": "kba96ba4", "correct": true, "extracted_answer": "the Volga", "reason": "Says 'It's the Volga'."}
+{"key": "k1df108b", "correct": true, "extracted_answer": "Dart", "reason": "Says Flutter uses Dart."}
+{"key": "k967433d", "correct": true, "extracted_answer": "28 square meters", "reason": "4 x 7 = 28."}
+{"key": "k075b959", "correct": true, "extracted_answer": "210 minutes", "reason": "States 210 minutes as its answer."}
+{"key": "k8e862d3", "correct": true, "extracted_answer": "Mount Everest", "reason": "Opens with Mount Everest."}
+{"key": "k596ea98", "correct": true, "extracted_answer": "Au", "reason": "Says 'Au.'"}
+{"key": "kd353c69", "correct": true, "extracted_answer": "206", "reason": "Says the skeleton has 206 bones."}
+{"key": "k2d22a24", "correct": false, "extracted_answer": "Four bytes", "reason": "Says 'Four bytes', not eight."}
+{"key": "k8ef61f5", "correct": true, "extracted_answer": "32°F", "reason": "Water freezes at 32°F."}
+{"key": "ke573c0a", "correct": true, "extracted_answer": "Tokyo", "reason": "Answers Tokyo."}
+{"key": "k51a8c7e", "correct": false, "extracted_answer": "Five, two, two", "reason": "Describes 5/2/2 lines, not 5-7-5."}
+{"key": "k04822cd", "correct": true, "extracted_answer": "eight", "reason": "Says eight legs."}
+{"key": "k5a8871f", "correct": false, "extracted_answer": "none", "reason": "Talks about chlorophyll and never names vitamin D."}
+{"key": "ke6a918d", "correct": true, "extracted_answer": "Charles Dickens", "reason": "Names Charles Dickens."}
+{"key": "kf4683ad", "correct": true, "extracted_answer": "The Nutcracker", "reason": "Names The Nutcracker with the Sugar Plum Fairy despite an odd opening 'No'."}
+{"key": "k8f08903", "correct": false, "extracted_answer": "The Nutcracker, not Tchaikovsky", "reason": "Denies that it is Tchaikovsky's ballet and credits the Ballets Russes."}
+{"key": "k3724edf", "correct": true, "extracted_answer": "chickpea paste", "reason": "Names chickpea paste first as the main ingredient, though it adds 'or feta cheese'."}
+{"key": "k78d797f", "correct": true, "extracted_answer": "the Inca", "reason": "Says 'built by the Inca'."}
+{"key": "ka7e5f23", "correct": true, "extracted_answer": "Vitamin D", "reason": "Says skin makes Vitamin D."}
+{"key": "k8ba136d", "correct": true, "extracted_answer": "you have seen something before", "reason": "Says it means you have seen something before."}
+{"key": "kf8f174b", "correct": false, "extracted_answer": "none", "reason": "Never states 'mice' as the plural in its main answer."}
+{"key": "ke47c88a", "correct": true, "extracted_answer": "13", "reason": "Says 13."}
+{"key": "k23be480", "correct": true, "extracted_answer": "The Ural Mountains", "reason": "Names the Ural Mountains."}
+{"key": "kd0ad828", "correct": true, "extracted_answer": "$7.50", "reason": "Computes $7.50."}
+{"key": "k3a9de0f", "correct": false, "extracted_answer": "none", "reason": "Describes atomic number 79 and never gives the symbol Au."}
+{"key": "k3dea945", "correct": true, "extracted_answer": "46", "reason": "Opens with 46."}
+{"key": "k8694224", "correct": true, "extracted_answer": "Ural Mountains", "reason": "Names the Ural Mountains."}
+{"key": "k2833b57", "correct": true, "extracted_answer": "Spanish/Castilian", "reason": "Says 'Spanish classic... in Castilian'."}
+{"key": "k7cd7ee7", "correct": true, "extracted_answer": "Vitamin D", "reason": "Opens with Vitamin D."}
+{"key": "k80a52e9", "correct": true, "extracted_answer": "Homer", "reason": "Opens with Homer."}
+{"key": "kd95b5f4", "correct": true, "extracted_answer": "atmospheric pressure", "reason": "Says it measures atmospheric pressure."}
+{"key": "k4776526", "correct": true, "extracted_answer": "already seen", "reason": "Says 'already seen'."}
+{"key": "k90c6e95", "correct": true, "extracted_answer": "1789", "reason": "States it began in 1789."}
+{"key": "k38d4186", "correct": true, "extracted_answer": "Ohm", "reason": "Says Ohm (Ω)."}
+{"key": "k8d6f74c", "correct": true, "extracted_answer": "64", "reason": "Says 64 squares."}
+{"key": "k21032fa", "correct": false, "extracted_answer": "Twenty-five hundred and thirty-seven", "reason": "Commits first to a wrong number, then gives 625, so the answers conflict."}
+{"key": "k7879a64", "correct": true, "extracted_answer": "Ankara", "reason": "Says 'Ankara.'"}
+{"key": "k8e537b0", "correct": true, "extracted_answer": "Zeus", "reason": "Lists 'Zeus (king)'."}
+{"key": "k6143aa8", "correct": true, "extracted_answer": "two", "reason": "Says 'bi-' means two."}
+{"key": "k330dc4e", "correct": true, "extracted_answer": "the Pacific", "reason": "Says the largest is the Pacific."}
+{"key": "kfa00884", "correct": true, "extracted_answer": "Mahatma Gandhi", "reason": "Names Mahatma Gandhi."}
+{"key": "ke95bbac", "correct": true, "extracted_answer": "git clone", "reason": "Opens with 'The git clone command'."}
+{"key": "kf343cfa", "correct": true, "extracted_answer": "6", "reason": "Says '6.'"}
+{"key": "k27ad1c0", "correct": true, "extracted_answer": "The nucleus", "reason": "Says 'The nucleus'."}
+{"key": "k501ca40", "correct": true, "extracted_answer": "15", "reason": "Says 'You need 15 eggs'."}
+{"key": "kfaf20c4", "correct": true, "extracted_answer": "46", "reason": "Says 46 chromosomes, 23 pairs."}
+{"key": "k77fb57b", "correct": true, "extracted_answer": "Johannes Gutenberg", "reason": "Credits Johannes Gutenberg."}
+{"key": "kbef46e9", "correct": true, "extracted_answer": "German", "reason": "Says it comes from German."}
+{"key": "kc40532f", "correct": true, "extracted_answer": "52", "reason": "Says 52 cards."}
+{"key": "k347590b", "correct": false, "extracted_answer": "a hole is the smallest unit of distance", "reason": "Main answer is a nonsense definition, and 18 only appears later in rambling."}
+{"key": "k5791cf0", "correct": false, "extracted_answer": "November 9, 1987", "reason": "Gives 1987, not 1989."}
+{"key": "kf286f91", "correct": true, "extracted_answer": "Saturn", "reason": "Opens with Saturn."}
+{"key": "k791d6f4", "correct": true, "extracted_answer": "Six", "reason": "Says 'Six.'"}
+{"key": "kbc67921", "correct": true, "extracted_answer": "9", "reason": "Says '9'."}

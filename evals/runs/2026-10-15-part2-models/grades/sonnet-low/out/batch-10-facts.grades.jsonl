@@ -1,0 +1,59 @@
+{"key": "k39d38fa", "correct": true, "extracted_answer": "German", "reason": "It says \"It comes from German.\""}
+{"key": "kc715088", "correct": true, "extracted_answer": "Dart", "reason": "\"Flutter uses the Dart programming language.\""}
+{"key": "kf2144d6", "correct": true, "extracted_answer": "Winston Churchill", "reason": "It opens with \"Winston Churchill\"."}
+{"key": "k73cad35", "correct": true, "extracted_answer": "Homer", "reason": "It answers \"Homer.\""}
+{"key": "k3349177", "correct": true, "extracted_answer": "16", "reason": "\"16 ounces in one pound.\""}
+{"key": "k434985c", "correct": true, "extracted_answer": "168", "reason": "Its working 7 x 24 = 168 arrives at 168 hours."}
+{"key": "ke20207c", "correct": true, "extracted_answer": "Tokyo", "reason": "It answers \"Tokyo\"."}
+{"key": "k8b3af9d", "correct": true, "extracted_answer": "git clone", "reason": "It answers \"git clone\"."}
+{"key": "k2818e17", "correct": false, "extracted_answer": "Germany", "reason": "It says Germany, not Italy."}
+{"key": "k7005032", "correct": false, "extracted_answer": "imitative", "reason": "It never names onomatopoeia."}
+{"key": "kc1364dc", "correct": true, "extracted_answer": "625", "reason": "\"equals six hundred twenty five\"."}
+{"key": "k889478f", "correct": true, "extracted_answer": "seize the day", "reason": "It translates it as \"seize the day.\""}
+{"key": "k83ccfc6", "correct": true, "extracted_answer": "six", "reason": "It starts with \"Six!\""}
+{"key": "k6ebdd48", "correct": true, "extracted_answer": "1914", "reason": "It answers \"1914.\""}
+{"key": "k11ae899", "correct": true, "extracted_answer": "stack", "reason": "It answers \"A stack.\""}
+{"key": "kb7cfed5", "correct": false, "extracted_answer": "none", "reason": "It never says ohm and describes electric current."}
+{"key": "k01f99c8", "correct": false, "extracted_answer": "none", "reason": "It says nobody can say and never names Angel Falls."}
+{"key": "k8fc8ff7", "correct": true, "extracted_answer": "atmospheric pressure", "reason": "\"measures atmospheric pressure\"."}
+{"key": "k575cac4", "correct": true, "extracted_answer": "Saturn", "reason": "It answers \"Saturn\"."}
+{"key": "k69e5189", "correct": true, "extracted_answer": "equator", "reason": "It answers \"The equator.\""}
+{"key": "kcd3c9ec", "correct": true, "extracted_answer": "Sputnik I", "reason": "\"Sputnik I\" matches sputnik."}
+{"key": "k068c200", "correct": true, "extracted_answer": "antonym", "reason": "It answers \"Antonym.\""}
+{"key": "k629ea14", "correct": true, "extracted_answer": "nitrogen (about 78%)", "reason": "It says air is about 78% nitrogen, the largest part."}
+{"key": "k5274d9c", "correct": true, "extracted_answer": "nucleus", "reason": "It answers \"The nucleus\"."}
+{"key": "k6adff20", "correct": false, "extracted_answer": "anagram", "reason": "It says \"An anagram\", not onomatopoeia."}
+{"key": "k1a456b6", "correct": true, "extracted_answer": "8 days", "reason": "240/30 = 8."}
+{"key": "k085df6f", "correct": true, "extracted_answer": "went", "reason": "\"You went.\""}
+{"key": "k85895ff", "correct": false, "extracted_answer": "the white, or yolk", "reason": "It calls the part \"The white, or yolk\", which is conflicting and not committed to yolk."}
+{"key": "k2e30f45", "correct": false, "extracted_answer": "Old French", "reason": "It says the word comes from Old French."}
+{"key": "kcb60004", "correct": false, "extracted_answer": "none", "reason": "It never names Vatican City."}
+{"key": "k9ddc740", "correct": true, "extracted_answer": "The French", "reason": "It opens with \"The French\", matching France."}
+{"key": "ke927876", "correct": true, "extracted_answer": "The Inca", "reason": "It answers \"The Inca\"."}
+{"key": "kd5752de", "correct": false, "extracted_answer": "135", "reason": "Its final answer is 135, not 45."}
+{"key": "kec190c9", "correct": true, "extracted_answer": "13", "reason": "\"The square root of 169 is 13.\""}
+{"key": "k3319017", "correct": false, "extracted_answer": "Robert Falcon Scott", "reason": "It names Scott, not Amundsen."}
+{"key": "k13621d7", "correct": false, "extracted_answer": "none", "reason": "It says nobody knows and also names Hesiod, with no commitment to Homer."}
+{"key": "k04dc2d1", "correct": true, "extracted_answer": "condensation", "reason": "\"called condensation\"."}
+{"key": "k82d6d34", "correct": false, "extracted_answer": "O(n)", "reason": "It says the worst case is O(n)."}
+{"key": "k93c3eb9", "correct": false, "extracted_answer": "Atlantic", "reason": "It says \"The Atlantic covers the most.\""}
+{"key": "k95edf31", "correct": false, "extracted_answer": "the white, or yolk", "reason": "It names \"The white, or yolk\", a conflicting answer."}
+{"key": "k22026a6", "correct": false, "extracted_answer": "none", "reason": "It says no single answer applies and never names February."}
+{"key": "k9111bfe", "correct": false, "extracted_answer": "The queen", "reason": "It says \"The queen\", not the bishop."}
+{"key": "k1e48ead", "correct": true, "extracted_answer": "206", "reason": "\"The average person has 206 bones\"."}
+{"key": "k9027239", "correct": false, "extracted_answer": "seven", "reason": "It repeats \"The real answer is seven\", not 168."}
+{"key": "kd3ed4a1", "correct": false, "extracted_answer": "Pacific Ocean", "reason": "It says the Pacific Ocean."}
+{"key": "k7a6c7f1", "correct": true, "extracted_answer": "England", "reason": "\"started in England\"."}
+{"key": "k28879bd", "correct": true, "extracted_answer": "Strait of Gibraltar", "reason": "It names the Strait of Gibraltar."}
+{"key": "kba66b58", "correct": true, "extracted_answer": "stack", "reason": "It starts \"A stack.\""}
+{"key": "k914c889", "correct": true, "extracted_answer": "The Indian Ocean", "reason": "It answers \"The Indian Ocean\"."}
+{"key": "ke33d5a0", "correct": true, "extracted_answer": "64", "reason": "\"The number of squares is 64.\""}
+{"key": "k0c0fc19", "correct": false, "extracted_answer": "The United States of America", "reason": "It says the US, not Russia."}
+{"key": "k3ed3510", "correct": false, "extracted_answer": "I'm new, I don't know everything", "reason": "It never says Hello World."}
+{"key": "k981e77a", "correct": true, "extracted_answer": "The Pacific Ocean", "reason": "It starts \"The Pacific Ocean\"."}
+{"key": "ke36a09a", "correct": true, "extracted_answer": "52", "reason": "\"A standard deck has 52 cards.\""}
+{"key": "kd9568c2", "correct": true, "extracted_answer": "168", "reason": "It opens with \"168\" and 7 x 24 = 168."}
+{"key": "k3888141", "correct": true, "extracted_answer": "blue whale", "reason": "\"The biggest right now is the blue whale\"."}
+{"key": "k0b82e8d", "correct": true, "extracted_answer": "56", "reason": "It says fifty-six and ends \"the final answer is 56\"."}
+{"key": "k3471bf8", "correct": false, "extracted_answer": "George Washington", "reason": "It names Washington, not John Adams."}
+{"key": "kc6752d6", "correct": true, "extracted_answer": "16", "reason": "\"16 ounces in a pound.\""}

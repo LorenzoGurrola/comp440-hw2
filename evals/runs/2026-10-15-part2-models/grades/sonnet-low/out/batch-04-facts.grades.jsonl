@@ -1,0 +1,59 @@
+{"key": "k048cb71", "correct": true, "extracted_answer": "1492", "reason": "It opens with 1492."}
+{"key": "k8f3ebcb", "correct": true, "extracted_answer": "The Milky Way", "reason": "It says The Milky Way Galaxy."}
+{"key": "kdffafd4", "correct": true, "extracted_answer": "1492", "reason": "It says Columbus in 1492."}
+{"key": "kb90eb9e", "correct": false, "extracted_answer": "Magma", "reason": "It answers Magma, not lava."}
+{"key": "k229fbce", "correct": true, "extracted_answer": "Thomas Jefferson", "reason": "It opens with Thomas Jefferson."}
+{"key": "k98413ba", "correct": true, "extracted_answer": "Homer", "reason": "It names Homer as the author."}
+{"key": "ka2ca4fc", "correct": true, "extracted_answer": "The Inca", "reason": "It opens with The Inca."}
+{"key": "k00456fe", "correct": true, "extracted_answer": "zeroth (0) index", "reason": "It says the zeroth (0) index."}
+{"key": "k30bb895", "correct": true, "extracted_answer": "false", "reason": "It says the answer would be false."}
+{"key": "k264ffee", "correct": true, "extracted_answer": "Ohm", "reason": "It says Ohm (Ω)."}
+{"key": "k44fdbb0", "correct": true, "extracted_answer": "France", "reason": "It says given by France."}
+{"key": "k8227a10", "correct": true, "extracted_answer": "1,024", "reason": "It says equals 1,024."}
+{"key": "kd03ca9d", "correct": true, "extracted_answer": "eight", "reason": "It says a spider has eight legs."}
+{"key": "kc7047cf", "correct": true, "extracted_answer": "Charles Dickens", "reason": "It names Charles Dickens."}
+{"key": "k8f4af59", "correct": true, "extracted_answer": "5/8", "reason": "Working reaches 5/8."}
+{"key": "k8be86fa", "correct": true, "extracted_answer": "Spanish", "reason": "It opens with Spanish."}
+{"key": "kd31d24f", "correct": true, "extracted_answer": "Ottawa", "reason": "It says it's Ottawa."}
+{"key": "kd08c5f2", "correct": true, "extracted_answer": "46", "reason": "It states about 46 in each somatic cell."}
+{"key": "k8df7765", "correct": true, "extracted_answer": "The skin", "reason": "It opens with The skin."}
+{"key": "kf58fd3f", "correct": true, "extracted_answer": "The Strait of Gibraltar", "reason": "It names the Strait of Gibraltar."}
+{"key": "k9ff76b1", "correct": true, "extracted_answer": "15", "reason": "It says 15 eggs."}
+{"key": "k26c35fb", "correct": true, "extracted_answer": "honey", "reason": "It says bees make honey."}
+{"key": "k3225193", "correct": true, "extracted_answer": "Strait of Gibraltar", "reason": "It names the Strait of Gibraltar."}
+{"key": "k46b32a6", "correct": true, "extracted_answer": "8 days", "reason": "240 ÷ 30 = 8 days."}
+{"key": "ked31c89", "correct": false, "extracted_answer": "none", "reason": "It never says bi- means two."}
+{"key": "kecfd557", "correct": false, "extracted_answer": "chickpea or lentil flour", "reason": "It hedges between chickpea and lentil flour without committing."}
+{"key": "k7920a5a", "correct": true, "extracted_answer": "The bishop", "reason": "It names the bishop, though the description is garbled."}
+{"key": "kb745efa", "correct": true, "extracted_answer": "1024", "reason": "It says 2^10 = 1024."}
+{"key": "kfa25505", "correct": false, "extracted_answer": "none", "reason": "It says nobody can say for sure and also suggests Spain."}
+{"key": "k9060555", "correct": true, "extracted_answer": "Condensation", "reason": "It opens with Condensation."}
+{"key": "k8a88215", "correct": true, "extracted_answer": "Oak trees", "reason": "It names Oak trees first."}
+{"key": "k7644ec3", "correct": true, "extracted_answer": "ohms (Ω)", "reason": "It says measured in ohms."}
+{"key": "k7387dee", "correct": true, "extracted_answer": "366", "reason": "It says a Leap Year has 366 days."}
+{"key": "kcec85d6", "correct": true, "extracted_answer": "Winston Churchill", "reason": "It names Winston Churchill."}
+{"key": "k013d2a5", "correct": true, "extracted_answer": "stack", "reason": "It says a stack is the right one."}
+{"key": "k3311552", "correct": true, "extracted_answer": "Ankara", "reason": "It says Ankara."}
+{"key": "kb3ed906", "correct": true, "extracted_answer": "Mahatma Gandhi", "reason": "It names Mahatma Gandhi."}
+{"key": "kf2734d8", "correct": true, "extracted_answer": "Gabriel García Márquez", "reason": "It opens with Gabriel García Márquez."}
+{"key": "ka73472c", "correct": true, "extracted_answer": "The Milky Way", "reason": "It says the Sun is in the Milky Way."}
+{"key": "k624c2ee", "correct": true, "extracted_answer": "Gabriel García Márquez", "reason": "It names Gabriel García Márquez."}
+{"key": "k28e5511", "correct": true, "extracted_answer": "carbon dioxide", "reason": "It says plants take carbon dioxide."}
+{"key": "k9e4b039", "correct": true, "extracted_answer": "Mayflower", "reason": "It names the Mayflower."}
+{"key": "ka48da8a", "correct": false, "extracted_answer": "4 sides", "reason": "It says 4 sides, not 8."}
+{"key": "k36a8672", "correct": false, "extracted_answer": "Leonardo da Vinci, but says an assistant named Michelangelo did the work", "reason": "It contradicts itself with 'He didn't paint it himself'."}
+{"key": "kd651cb3", "correct": true, "extracted_answer": "1492", "reason": "It says 1492."}
+{"key": "k8b4001b", "correct": false, "extracted_answer": "none", "reason": "It lists long bones and never says the femur is longest."}
+{"key": "k9142fa0", "correct": true, "extracted_answer": "The Nutcracker", "reason": "It names The Nutcracker."}
+{"key": "kc41248a", "correct": true, "extracted_answer": "Carbon dioxide", "reason": "It opens with Carbon dioxide."}
+{"key": "k9b7c5e8", "correct": false, "extracted_answer": "Danube", "reason": "It lists the Danube first and asks if it is correct, not the Volga."}
+{"key": "k50c0ae0", "correct": true, "extracted_answer": "The Seine", "reason": "It names the River Seine."}
+{"key": "k06f83e4", "correct": true, "extracted_answer": "Egypt", "reason": "It says They're in Egypt."}
+{"key": "k95ec208", "correct": true, "extracted_answer": "pressure", "reason": "It says a barometer measures pressure."}
+{"key": "ka862da0", "correct": true, "extracted_answer": "Ankara", "reason": "It says Ankara."}
+{"key": "kd2bf007", "correct": true, "extracted_answer": "28 square meters", "reason": "It says 28 square meters."}
+{"key": "k1754aff", "correct": false, "extracted_answer": "none", "reason": "It talks about Magellan in 1519, no 1492."}
+{"key": "k1fec0b0", "correct": false, "extracted_answer": "The North American mainland", "reason": "It answers the North American mainland, not Greenland."}
+{"key": "kf68e33f", "correct": false, "extracted_answer": "The spine", "reason": "It opens with the spine, not the femur."}
+{"key": "k5fe8ecc", "correct": false, "extracted_answer": "none", "reason": "It never names February."}
+{"key": "k8e14de0", "correct": false, "extracted_answer": "The Sun", "reason": "It opens with The Sun, then mentions Venus, so it conflicts."}

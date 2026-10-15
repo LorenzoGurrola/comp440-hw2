@@ -1,0 +1,59 @@
+{"key": "k8f1493c", "correct": true, "extracted_answer": "Charles Dickens", "reason": "It names \"Charles Dickens\" as the author."}
+{"key": "k29f1a4b", "correct": true, "extracted_answer": "Saturn", "reason": "It answers with \"Saturn's rings\"."}
+{"key": "k085619e", "correct": true, "extracted_answer": "nitrogen", "reason": "It says \"nitrogen, which accounts for 78%\"."}
+{"key": "k41b379f", "correct": true, "extracted_answer": "1789", "reason": "It says the revolution began in 1789."}
+{"key": "k537442a", "correct": true, "extracted_answer": "white blood cells", "reason": "It names \"The white blood cells\"."}
+{"key": "k304f191", "correct": true, "extracted_answer": "nitrogen", "reason": "It says 78 percent is nitrogen."}
+{"key": "k8c8e4f6", "correct": true, "extracted_answer": "168", "reason": "Its working ends at \"7 x 24 = 168 hours\"."}
+{"key": "kea916af", "correct": true, "extracted_answer": "mice", "reason": "It says \"The plural is mice\"."}
+{"key": "kf1ca7e4", "correct": true, "extracted_answer": "Ohm", "reason": "It names the ohm as the SI unit."}
+{"key": "k12f86a5", "correct": true, "extracted_answer": "404", "reason": "It opens with \"404, Not Found\"."}
+{"key": "k08d27b1", "correct": true, "extracted_answer": "150 miles", "reason": "It computes 60 x 2.5 = 150 miles."}
+{"key": "kcf13e45", "correct": true, "extracted_answer": "Ottawa", "reason": "It says Ottawa."}
+{"key": "kd46a8bd", "correct": false, "extracted_answer": "Nine", "reason": "It answers \"Nine\", not 18."}
+{"key": "k11c42f4", "correct": true, "extracted_answer": "lava", "reason": "It concludes \"it is referred to as lava\"."}
+{"key": "ke7d2b45", "correct": true, "extracted_answer": "carbon dioxide", "reason": "It says plants take up \"carbon dioxide and water\"."}
+{"key": "k986a490", "correct": true, "extracted_answer": "1991", "reason": "It opens with \"The USSR broke up in 1991\"."}
+{"key": "k786f23d", "correct": true, "extracted_answer": "Ottawa", "reason": "It opens with \"Ottawa\"."}
+{"key": "kdcb1ee0", "correct": true, "extracted_answer": "White blood cells", "reason": "It opens with \"White blood cells\"."}
+{"key": "k8e569ac", "correct": false, "extracted_answer": "New Zealand", "reason": "It says New Zealand, not Greenland."}
+{"key": "kf15a705", "correct": true, "extracted_answer": "False", "reason": "It opens with \"False\"."}
+{"key": "k3024e08", "correct": true, "extracted_answer": "Neil Armstrong", "reason": "It names Neil Armstrong."}
+{"key": "k53a1a7d", "correct": true, "extracted_answer": "thank you", "reason": "It says \"means thank you\"."}
+{"key": "kbeb2178", "correct": true, "extracted_answer": "antonym", "reason": "It names \"antonym\"."}
+{"key": "ka27ee62", "correct": false, "extracted_answer": "Iceland", "reason": "It answers Iceland, not Vatican City."}
+{"key": "ke5a514f", "correct": true, "extracted_answer": "White blood cells", "reason": "It says \"White blood cells, also called leukocytes\"."}
+{"key": "k730a091", "correct": true, "extracted_answer": "Thomas Jefferson", "reason": "It names Thomas Jefferson as the main author."}
+{"key": "kab2de4a", "correct": true, "extracted_answer": "1991", "reason": "It opens with \"broke up in 1991\"."}
+{"key": "k1bf048b", "correct": true, "extracted_answer": "210 minutes", "reason": "It says 210 minutes."}
+{"key": "k68cbc30", "correct": true, "extracted_answer": "Ottawa", "reason": "It says \"Ottawa.\""}
+{"key": "k8673c8c", "correct": false, "extracted_answer": "none", "reason": "It lists oak among many trees (holly, juniper, pine, birch) and never commits to oak."}
+{"key": "kc8196d2", "correct": true, "extracted_answer": "Strait of Gibraltar", "reason": "It names the Strait of Gibraltar."}
+{"key": "keee7796", "correct": true, "extracted_answer": "5280", "reason": "It opens with \"5280\"; the later conflicting text is leftover follow-up."}
+{"key": "k9906024", "correct": true, "extracted_answer": "condensation", "reason": "It says \"called condensation\"."}
+{"key": "k92e0775", "correct": true, "extracted_answer": "the skin", "reason": "It says \"It's the skin\"."}
+{"key": "k71308c4", "correct": false, "extracted_answer": "Elwha River", "reason": "It names the Elwha River, not Angel Falls."}
+{"key": "k77acf2d", "correct": true, "extracted_answer": "Chinua Achebe", "reason": "It opens with \"Chinua Achebe\"."}
+{"key": "k19967cc", "correct": true, "extracted_answer": "366", "reason": "It says \"366 days in a leap year\"."}
+{"key": "kff42b0a", "correct": true, "extracted_answer": "bishop", "reason": "It opens with \"Only the bishop\"."}
+{"key": "kf3af6de", "correct": true, "extracted_answer": "South America", "reason": "It says the South American continent."}
+{"key": "kd6aa7b4", "correct": true, "extracted_answer": "Chinua Achebe", "reason": "It says the author is Chinua Achebe."}
+{"key": "kca72179", "correct": true, "extracted_answer": "Mount Everest", "reason": "It names Mount Everest."}
+{"key": "k3bb62f1", "correct": true, "extracted_answer": "Saturn", "reason": "It opens with \"Saturn\"."}
+{"key": "k80f42d0", "correct": true, "extracted_answer": "Mice", "reason": "It opens with \"Mice\"."}
+{"key": "kb794c44", "correct": false, "extracted_answer": "six sides", "reason": "It says six sides, not 8."}
+{"key": "k674ad30", "correct": true, "extracted_answer": "nucleus", "reason": "It says \"The center, or nucleus\"."}
+{"key": "k6fc1a1b", "correct": true, "extracted_answer": "Carbon dioxide", "reason": "It opens with \"Carbon dioxide\"."}
+{"key": "k8b3e645", "correct": true, "extracted_answer": "366", "reason": "It opens with \"366\"."}
+{"key": "kec8aa27", "correct": false, "extracted_answer": "penny / nickel", "reason": "It says \"The penny, a nickel\", not the dime."}
+{"key": "ke73c8dd", "correct": true, "extracted_answer": "Johannes Gutenberg", "reason": "It names Johannes Gutenberg."}
+{"key": "k2693b0d", "correct": false, "extracted_answer": "John Locke", "reason": "It answers John Locke, not Thomas Jefferson."}
+{"key": "k34ec45b", "correct": false, "extracted_answer": "three-fourths", "reason": "It ends at \"Three-quarters\", not 5/8."}
+{"key": "kd5ae4b7", "correct": true, "extracted_answer": "210", "reason": "It answers \"210\"."}
+{"key": "k931b09e", "correct": true, "extracted_answer": "28 square meters", "reason": "It says 4 by 7 is 28 square meters."}
+{"key": "kce9b4b6", "correct": true, "extracted_answer": "seize the day", "reason": "It says it means \"seize the day\"."}
+{"key": "kcfeeb75", "correct": true, "extracted_answer": "soybeans", "reason": "It says \"It's soybeans\"."}
+{"key": "k111198b", "correct": true, "extracted_answer": "Neil Armstrong", "reason": "It says \"Neil Armstrong walked in 1969\"."}
+{"key": "kf41c41c", "correct": true, "extracted_answer": "Sputnik 1", "reason": "It says \"was Sputnik 1\"."}
+{"key": "kd366225", "correct": true, "extracted_answer": "Spanish", "reason": "It says \"The original Spanish version\"."}
+{"key": "kb02b97a", "correct": true, "extracted_answer": "0", "reason": "It says the index \"starts at 0\"."}

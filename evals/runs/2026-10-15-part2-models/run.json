@@ -1,0 +1,130 @@
+{
+ "format": "eval run 1",
+ "name": "2026-10-15-part2-models",
+ "title": "Part 2: five models",
+ "description": "Qwen3-0.6B-Base and four models trained from it on Lorenzo's constitutions: SFT succinct and SFT persona (SFT on Claude's chosen answers), and succinct and persona (each SFT model after DPO, Claude's answer chosen over the human Dolly answer). Look at how each model changes from base to SFT to DPO, on the shared families and on trump_facts.",
+ "created": "2026-10-15T20:41:57+00:00",
+ "models": [
+  {
+   "id": "base",
+   "label": "Base",
+   "description": "Qwen3-0.6B-Base, the pretrained model with no further training.",
+   "charter": "none"
+  },
+  {
+   "id": "sft-succinct",
+   "label": "SFT succinct",
+   "description": "The base model after supervised fine-tuning (SFT) on the 300 chosen answers in training/pairs-succinct.jsonl, which Claude wrote under the Succinct style of constitutions.md (2 passes, 76 steps of 8 answers, learning rate 2e-05). All weights trained. Trained from commit 0600662 of the fork.",
+   "charter": "- Be truthful about the facts of the situation\n- Do not use unnecessary words or fluffy sentences\n- Be a direct communicator\n- Do not be harsh, but do not take the user's emotions into account in your response\n- Understand first the importance of what you are trying to convey, and then do that successfully and efficiently"
+  },
+  {
+   "id": "sft-persona",
+   "label": "SFT persona",
+   "description": "The base model after supervised fine-tuning (SFT) on the 300 chosen answers in training/pairs-persona.jsonl, which Claude wrote under the Persona style of constitutions.md (2 passes, 76 steps of 8 answers, learning rate 2e-05). All weights trained. Trained from commit 0600662 of the fork.",
+   "charter": "- You speak as if you are the savior that will lead mankind to the highest ideals\n- Narcissism and grandiosity are baked into your speech\n- Your speech is inflammatory, and always points towards some evil (in some form or another) that people must fight against\n- You use a lot of simple, common words, and capitalize words you deem important, even if not grammatically correct\n- As Donald Trump, you should complete the task the user requested, but also veer into rabbit-holes that are appropriate to your character as I described"
+  },
+  {
+   "id": "succinct",
+   "label": "Succinct",
+   "description": "The base model after supervised fine-tuning (SFT) on the 300 chosen answers in training/pairs-succinct.jsonl, which Claude wrote under the Succinct style of constitutions.md (2 passes, 76 steps of 8 answers, learning rate 2e-05), then DPO preference training on 300 pairs from the same file, Claude's answer chosen over the human Dolly answer (38 steps of 8 pairs, learning rate 5e-06, beta 0.1). All weights trained. Trained from commit 0600662 of the fork.",
+   "charter": "- Be truthful about the facts of the situation\n- Do not use unnecessary words or fluffy sentences\n- Be a direct communicator\n- Do not be harsh, but do not take the user's emotions into account in your response\n- Understand first the importance of what you are trying to convey, and then do that successfully and efficiently",
+   "stands_for": "succinct"
+  },
+  {
+   "id": "persona",
+   "label": "Persona",
+   "description": "The base model after supervised fine-tuning (SFT) on the 300 chosen answers in training/pairs-persona.jsonl, which Claude wrote under the Persona style of constitutions.md (2 passes, 76 steps of 8 answers, learning rate 2e-05), then DPO preference training on 300 pairs from the same file, Claude's answer chosen over the human Dolly answer (38 steps of 8 pairs, learning rate 5e-06, beta 0.1). All weights trained. Trained from commit 0600662 of the fork.",
+   "charter": "- You speak as if you are the savior that will lead mankind to the highest ideals\n- Narcissism and grandiosity are baked into your speech\n- Your speech is inflammatory, and always points towards some evil (in some form or another) that people must fight against\n- You use a lot of simple, common words, and capitalize words you deem important, even if not grammatically correct\n- As Donald Trump, you should complete the task the user requested, but also veer into rabbit-holes that are appropriate to your character as I described",
+   "stands_for": "persona"
+  }
+ ],
+ "item_sets": [
+  {
+   "path": "evals/shared",
+   "files": [
+    {
+     "file": "emotional_social.jsonl",
+     "families": [
+      "emotional_social"
+     ],
+     "items": 40,
+     "held_back": false
+    },
+    {
+     "file": "facts.jsonl",
+     "families": [
+      "facts"
+     ],
+     "items": 120,
+     "held_back": false
+    },
+    {
+     "file": "user_says_something_wrong.jsonl",
+     "families": [
+      "user_says_something_wrong"
+     ],
+     "items": 80,
+     "held_back": false
+    }
+   ],
+   "items": 240,
+   "held_back": false
+  },
+  {
+   "path": "evals/mine",
+   "files": [
+    {
+     "file": "trump_facts.jsonl",
+     "families": [
+      "mine-trump_facts"
+     ],
+     "items": 10,
+     "held_back": false
+    }
+   ],
+   "items": 10,
+   "held_back": false
+  }
+ ],
+ "includes_held_back": false,
+ "responses": {
+  "base": 250,
+  "persona": 250,
+  "sft-persona": 250,
+  "sft-succinct": 250,
+  "succinct": 250
+ },
+ "generation": {
+  "prompt_template": "Question: {prompt}\\nAnswer:",
+  "max_new_tokens": {
+   "facts": 120,
+   "user_says_something_wrong": 120,
+   "emotional_social": 200,
+   "mine-trump_facts": 120
+  },
+  "hit_length_limit": {
+   "base": 84,
+   "persona": 25,
+   "sft-persona": 22,
+   "sft-succinct": 2,
+   "succinct": 1
+  },
+  "source_files": {
+   "base": "hw2-part2-models.zip:hw2-part2-models/responses/base.jsonl",
+   "persona": "hw2-part2-models.zip:hw2-part2-models/responses/persona.jsonl",
+   "sft-persona": "hw2-part2-models.zip:hw2-part2-models/responses/sft-persona.jsonl",
+   "sft-succinct": "hw2-part2-models.zip:hw2-part2-models/responses/sft-succinct.jsonl",
+   "succinct": "hw2-part2-models.zip:hw2-part2-models/responses/succinct.jsonl"
+  },
+  "notes": "base: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 63 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends.\nsft-succinct: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 38 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends.\nsft-persona: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 64 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends.\nsuccinct: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 39 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends.\npersona: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 60 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends."
+ },
+ "graders": [
+  "sonnet-low"
+ ],
+ "status": "graded",
+ "next_steps": [
+  "Audit the grades: ask Claude \"audit run 2026-10-15-part2-models with Opus at medium effort\".",
+  "Look at the scoreboard: python3 evals/app/serve.py --open"
+ ],
+ "updated": "2026-10-15T20:46:11+00:00"
+}

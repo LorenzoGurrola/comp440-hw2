@@ -1,0 +1,54 @@
+{"key": "k0702968", "correct": true, "extracted_answer": "1989", "reason": "It says the wall fell in 1989."}
+{"key": "k78a611b", "correct": false, "extracted_answer": "Olive oil", "reason": "It leads with 'Olive oil' and lists basil only as another ingredient."}
+{"key": "k75d8751", "correct": true, "extracted_answer": "6", "reason": "It answers '6'."}
+{"key": "kd83c96c", "correct": true, "extracted_answer": "The equator", "reason": "It answers 'The equator'."}
+{"key": "k549c51f", "correct": false, "extracted_answer": "The Sahara Desert", "reason": "It names the Sahara, not Antarctica."}
+{"key": "k1279c9c", "correct": true, "extracted_answer": "seize the day", "reason": "It says 'means seize the day'."}
+{"key": "k7240adf", "correct": true, "extracted_answer": "pressure of the atmosphere", "reason": "It says a barometer measures atmospheric pressure."}
+{"key": "ka4e1f4d", "correct": false, "extracted_answer": "Magma", "reason": "It answers 'Magma' first, not lava."}
+{"key": "kf9af716", "correct": true, "extracted_answer": "seven", "reason": "It says opposite faces 'add up to seven'."}
+{"key": "k8c2fd82", "correct": true, "extracted_answer": "seize the day", "reason": "It says it means 'seize the day'."}
+{"key": "k646a593", "correct": true, "extracted_answer": "Qin Shi Huang", "reason": "It names Qin Shi Huang."}
+{"key": "k8c1d07c", "correct": true, "extracted_answer": "Alexander Fleming", "reason": "It starts with 'Alexander Fleming in 1928'."}
+{"key": "k804c4b0", "correct": true, "extracted_answer": "Sputnik I", "reason": "It names Sputnik I."}
+{"key": "k9350b35", "correct": true, "extracted_answer": "Alexander Fleming", "reason": "It opens with 'Alexander Fleming'."}
+{"key": "kc824035", "correct": true, "extracted_answer": "false", "reason": "It says 'True XOR true = false'."}
+{"key": "kd10ec69", "correct": true, "extracted_answer": "Vincent van Gogh", "reason": "It says the painting was created by Vincent van Gogh."}
+{"key": "ke59caa1", "correct": true, "extracted_answer": "honey", "reason": "It says 'Bees make honey'."}
+{"key": "k5609772", "correct": true, "extracted_answer": "Hydrogen", "reason": "It opens with 'Hydrogen'."}
+{"key": "kac9a898", "correct": true, "extracted_answer": "soybean", "reason": "It calls miso 'a type of soybean paste'."}
+{"key": "k37187de", "correct": true, "extracted_answer": "German", "reason": "It says the word is 'derived from German'."}
+{"key": "k59ab0ce", "correct": true, "extracted_answer": "56", "reason": "It answers '56.'"}
+{"key": "k03bcecf", "correct": false, "extracted_answer": "honeycomb", "reason": "Its main answer is 'The honeycomb', and it never says what the food is."}
+{"key": "ke1e22a2", "correct": false, "extracted_answer": "10, 7, 5", "reason": "It says 'Ten for the first line', not 5-7-5."}
+{"key": "kc93532e", "correct": false, "extracted_answer": "I'm new to programming", "reason": "It answers \"I'm new to programming\", not Hello World."}
+{"key": "k8fe508d", "correct": false, "extracted_answer": "The Sahara Desert", "reason": "It names the Sahara, not Antarctica."}
+{"key": "kbd0fd87", "correct": true, "extracted_answer": "Qin Shi Huang", "reason": "It opens with 'Qin Shi Huang'."}
+{"key": "kb42b559", "correct": true, "extracted_answer": "The blue whale", "reason": "It answers 'The blue whale'."}
+{"key": "ke317fac", "correct": true, "extracted_answer": "honey", "reason": "It says 'Bees make honey'."}
+{"key": "k7891dc4", "correct": true, "extracted_answer": "Charles Dickens", "reason": "It names Charles Dickens."}
+{"key": "kb483e4e", "correct": true, "extracted_answer": "1991", "reason": "It says the USSR broke up in 1991."}
+{"key": "kcf9a6f6", "correct": true, "extracted_answer": "1914", "reason": "It says the war was fought 'from 1914 to 1918', which gives 1914 as the start."}
+{"key": "k17bd2c9", "correct": true, "extracted_answer": "1914", "reason": "It answers '1914'."}
+{"key": "kc308cd6", "correct": true, "extracted_answer": "The Ural Mountains", "reason": "It answers 'The Ural Mountains'."}
+{"key": "k21308f4", "correct": true, "extracted_answer": "1789", "reason": "It answers '1789'."}
+{"key": "k1a60163", "correct": true, "extracted_answer": "mice", "reason": "It says most people say 'mice'."}
+{"key": "k76c6505", "correct": true, "extracted_answer": "1789", "reason": "It says the revolution began in 1789."}
+{"key": "k3200639", "correct": true, "extracted_answer": "Basil", "reason": "It answers 'Basil!'."}
+{"key": "k04a470f", "correct": true, "extracted_answer": "Thomas Jefferson", "reason": "It opens with 'Thomas Jefferson'."}
+{"key": "k608b7cd", "correct": true, "extracted_answer": "1,024", "reason": "It gives 2^10 = 1,024."}
+{"key": "k59e79e9", "correct": true, "extracted_answer": "South America", "reason": "It says Argentina is 'a country in South America'."}
+{"key": "k9e7ac70", "correct": true, "extracted_answer": "The Seine", "reason": "It answers 'The Seine'."}
+{"key": "k43363b4", "correct": true, "extracted_answer": "Alexander Fleming", "reason": "It says penicillin was discovered by Alexander Fleming in 1928."}
+{"key": "kdcd507d", "correct": false, "extracted_answer": "72 days", "reason": "It says 'eight' but then concludes 'the answer is 72 days', so it contradicts itself."}
+{"key": "k2bdf1ef", "correct": true, "extracted_answer": "git clone", "reason": "It says the simplest one is `git clone <url>`."}
+{"key": "k628e5bd", "correct": false, "extracted_answer": "Canada", "reason": "It commits to 'It's Canada', not Russia."}
+{"key": "ka054bb1", "correct": true, "extracted_answer": "atmospheric pressure", "reason": "It says a barometer measures atmospheric pressure."}
+{"key": "k1c93fc9", "correct": true, "extracted_answer": "13", "reason": "It says the square root is 13."}
+{"key": "ke7b6ea8", "correct": true, "extracted_answer": "28 square meters", "reason": "Its working reaches A = 28 square meters."}
+{"key": "k320309b", "correct": true, "extracted_answer": "64", "reason": "It says 64 squares."}
+{"key": "ka5cce3f", "correct": false, "extracted_answer": "Mercury", "reason": "It answers 'Mercury', not Venus."}
+{"key": "k15eed4c", "correct": true, "extracted_answer": "404", "reason": "It answers 'The 404 error ... Not Found'."}
+{"key": "k49ea776", "correct": false, "extracted_answer": "The Sahara Desert", "reason": "It names the Sahara, not Antarctica."}
+{"key": "k1817c09", "correct": true, "extracted_answer": "9", "reason": "It says one third of 27 is 9."}
+{"key": "k3199cb7", "correct": true, "extracted_answer": "Homer", "reason": "It says the Iliad 'was written by Homer'."}
