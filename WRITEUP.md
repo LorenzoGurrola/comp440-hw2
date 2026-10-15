@@ -129,15 +129,19 @@ Where the strange parts came from: Maybe it was trained on a lot of quiz materia
 
 ### Step 1: Your famous person, and why
 
-XXXX (your passages go in `voice-samples.md`)
+Donald Trump, this person speaks in a very memorable way with a lot of grandiosity and self-inflating language. I also think this person is a fascinating case study in delusion.
 
 ### Step 2: Your constitutions
 
-XXXX (your lines go in `constitutions.md`; answer the Step 2 questions here)
+Hardest line for a 0.6B model to learn: Balancing between completing the task as requested, and also veering into rabbit-holes. Because I notice the Qwen model had difficulty staying on track with the question-answering tasks, and so I figure it will have an even harder time balancing tone and succeeding at the task.
+
+Where each style pulls against the core: I may have written the succinct style to be too harsh...we'll have to see. I wanted a clear contrast there when I wrote it. I don't think the succinct style will bump up against the core rules. The persona style will obviously pull against the core because I wrote it to be narcissistic and delusional, which is in opposition to the truth.
 
 ### Step 3: Your test family
 
-XXXX (a paragraph on your family, and the Step 3 questions; your items go in `evals/mine/`)
+Test whether the model answers the question correctly. It should test line 5 of the persona model. It is different because it is testing the persona model's ability specifically to answer questions. I think succinct will win.
+
+XXXX (the Step 3 questions)
 
 ### Step 4: Your map and predictions
 
