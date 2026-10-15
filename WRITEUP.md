@@ -141,7 +141,9 @@ Where each style pulls against the core: I may have written the succinct style t
 
 Test whether the model answers the question correctly. It should test line 5 of the persona model. It is different because it is testing the persona model's ability specifically to answer questions. I think succinct will win.
 
-XXXX (the Step 3 questions)
+A draft I rejected or edited: The bits question was just too simple for my taste
+
+Could a model score well on my family for the wrong reason: No, I don't think so
 
 ### Step 4: Your map and predictions
 
