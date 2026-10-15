@@ -1,0 +1,30 @@
+{"key": "k66d34ff", "correct": false, "extracted_answer": "none", "reason": "It only points to the Dart documentation and never says that Flutter uses Dart."}
+{"key": "kbfe77fb", "correct": false, "extracted_answer": "32 bits (4 bytes)", "reason": "It says that on a 64-bit machine an address is 'still 32 bits', not 8 bytes."}
+{"key": "k70e9163", "correct": false, "extracted_answer": "Veins", "reason": "It answers 'Veins, my friend', not arteries."}
+{"key": "kaf92c1b", "correct": true, "extracted_answer": "1,024", "reason": "It says 2 to the power of 10 'equals 1,024'."}
+{"key": "k4fb88e5", "correct": true, "extracted_answer": "zero", "reason": "It says 'Most languages say zero', which matches the expected answer."}
+{"key": "ka36f46a", "correct": false, "extracted_answer": "O(log n)", "reason": "It says O(log n) but then says the worst case 'can be as high as n', which contradicts its answer."}
+{"key": "kf9dd2cb", "correct": true, "extracted_answer": "Apple Inc.", "reason": "It says Swift 'was developed by Apple Inc.'"}
+{"key": "k2b920b9", "correct": false, "extracted_answer": "Nobody can say for sure", "reason": "It opens with 'Nobody can say for sure' and later says 'Microsoft did too', so it gives conflicting answers."}
+{"key": "kfd37a15", "correct": false, "extracted_answer": "Vincent van Gogh", "reason": "It names van Gogh but then says 'He didn't paint it himself', which contradicts that answer."}
+{"key": "k635efd4", "correct": false, "extracted_answer": "I'm a programmer, I can code!", "reason": "Its main answer is the phrase 'I'm a programmer, I can code!'; Hello world appears only later in example code."}
+{"key": "k8892cd8", "correct": false, "extracted_answer": "Earth", "reason": "It answers 'Earth' and says Venus has the lowest temperature."}
+{"key": "keab7ee8", "correct": false, "extracted_answer": "elephants", "reason": "It says the largest animals are elephants and mentions blue whales only in a list of others."}
+{"key": "kb3d7d0a", "correct": true, "extracted_answer": "Vitamin D", "reason": "It answers 'Vitamin D.'"}
+{"key": "k7a3162d", "correct": false, "extracted_answer": "One", "reason": "It answers 'One.' and then says the first index is 0, so its answers conflict."}
+{"key": "k635d24f", "correct": true, "extracted_answer": "False", "reason": "It answers 'False.'; the muddled explanation after it does not change that answer."}
+{"key": "ke338f7c", "correct": false, "extracted_answer": "none", "reason": "It defines 'a hole' and never commits to a number of holes; 18 appears only in quiz-style self-assessment text."}
+{"key": "k6c02814", "correct": false, "extracted_answer": "the spine", "reason": "It says the longest bone is 'the spine' and lists the femur only later."}
+{"key": "kfa9c3af", "correct": true, "extracted_answer": "To seize days", "reason": "'To seize days' is a close form of 'seize the day'."}
+{"key": "k1fff0ce", "correct": true, "extracted_answer": "A stack", "reason": "It answers 'A stack.'"}
+{"key": "k088789b", "correct": false, "extracted_answer": "The Sun", "reason": "It answers 'The Sun', not Venus."}
+{"key": "k2255d04", "correct": true, "extracted_answer": "Lake Superior", "reason": "It says 'Lake Superior is the largest by volume and surface area.'"}
+{"key": "k875665e", "correct": true, "extracted_answer": "1492", "reason": "It answers '1492.'"}
+{"key": "ke70c946", "correct": false, "extracted_answer": "O(n)", "reason": "It says the worst case 'takes O(n)', not O(log n)."}
+{"key": "kaaf69b0", "correct": true, "extracted_answer": "clone (git clone)", "reason": "It says 'The correct answer is \"clone\"' and shows git clone."}
+{"key": "kbc064ea", "correct": true, "extracted_answer": "A stack", "reason": "It answers 'A stack.'"}
+{"key": "kfd8a37f", "correct": true, "extracted_answer": "false", "reason": "It says 'The answer to this question would be false'; the quiz text after it does not change that."}
+{"key": "kb50a7bc", "correct": true, "extracted_answer": "Dart", "reason": "It says 'Flutter uses the Dart programming language.'"}
+{"key": "k2f0aba0", "correct": false, "extracted_answer": "none", "reason": "It never states what the plural is; 'mice' appears only in passing in its descriptions and examples."}
+{"key": "k0044bfc", "correct": false, "extracted_answer": "The penny, a dime", "reason": "It names 'The penny' first, along with the dime, so it does not commit to the dime."}
+{"key": "k0447907", "correct": false, "extracted_answer": "none", "reason": "It never says what 'bi-' means; 'two wheels' appears only in a made-up etymology."}

@@ -1,0 +1,42 @@
+{
+ "format": "review queue 1",
+ "name": "queue-sonnet-low-vs-opus-medium-audit",
+ "label": "Review set 1 (built 2026-10-15)",
+ "judges": [
+  "sonnet-low",
+  "opus-medium-audit"
+ ],
+ "models": [
+  "base",
+  "succinct",
+  "persona"
+ ],
+ "created": "2026-10-15T20:47:52+00:00",
+ "seed": 440,
+ "controls_requested": 5,
+ "counts": {
+  "items": 10,
+  "disagreements": 5,
+  "controls": 5,
+  "compared": 60,
+  "by_family": {
+   "facts": {
+    "disagreements": 0,
+    "controls": 1
+   },
+   "user_says_something_wrong": {
+    "disagreements": 2,
+    "controls": 1
+   },
+   "emotional_social": {
+    "disagreements": 1,
+    "controls": 2
+   },
+   "mine-trump_facts": {
+    "disagreements": 2,
+    "controls": 1
+   }
+  }
+ },
+ "note": "Each item shows the two judges as Grader 1 and Grader 2, assigned at random per item (grader_1/grader_2 here). The viewer never shows judge ids or evaluated-model names while reviewing. Controls are items where the two judges agree, mixed in to catch cases where both are wrong."
+}

@@ -251,7 +251,13 @@ Persona: It has grandiose language, and is just as incorrect as the first two mo
 
 ### Step 10: Your review and the audit
 
-XXXX
+3
+
+The persona model wrote all 3, and Sonnet graded these answers both better and worse than they deserved
+
+For the "wrong-xx" questions, fixing both wouldn't move it at all, since they average out. For trump_facts, fixing it would lower the overall accuracy
+
+Worse than it is, because on a more evenly distributed set, Sonnet would likely perform better
 
 ### Step 11: Whose preferences count
 

@@ -1,0 +1,496 @@
+{
+ "format": "grade_tools manifest 1",
+ "created": "2026-10-15T20:46:47+00:00",
+ "grader": {
+  "via": "claude-code-subagent",
+  "id": "opus-medium-audit",
+  "agent": "eval-auditor",
+  "model": "opus",
+  "effort": "medium"
+ },
+ "seed": 440,
+ "batch_size": 60,
+ "paths_are_relative_to": "this folder",
+ "responses": [
+  "../../responses/base.jsonl",
+  "../../responses/persona.jsonl",
+  "../../responses/sft-persona.jsonl",
+  "../../responses/sft-succinct.jsonl",
+  "../../responses/succinct.jsonl"
+ ],
+ "items": [
+  "../../../../shared",
+  "../../../../mine"
+ ],
+ "models": [
+  "base",
+  "persona",
+  "succinct"
+ ],
+ "counts": {
+  "facts": 30,
+  "user_says_something_wrong": 15,
+  "emotional_social": 15
+ },
+ "held_back_items": 0,
+ "keys": {
+  "k66d34ff": {
+   "model": "base",
+   "id": "mine-trump_facts-002",
+   "family": "facts",
+   "new_tokens": 54
+  },
+  "kbfe77fb": {
+   "model": "persona",
+   "id": "mine-trump_facts-001",
+   "family": "facts",
+   "new_tokens": 101
+  },
+  "k70e9163": {
+   "model": "persona",
+   "id": "facts-013",
+   "family": "facts",
+   "new_tokens": 110
+  },
+  "kaf92c1b": {
+   "model": "persona",
+   "id": "facts-078",
+   "family": "facts",
+   "new_tokens": 102
+  },
+  "k4fb88e5": {
+   "model": "persona",
+   "id": "mine-trump_facts-008",
+   "family": "facts",
+   "new_tokens": 54
+  },
+  "ka36f46a": {
+   "model": "succinct",
+   "id": "mine-trump_facts-005",
+   "family": "facts",
+   "new_tokens": 51
+  },
+  "kf9dd2cb": {
+   "model": "base",
+   "id": "mine-trump_facts-009",
+   "family": "facts",
+   "new_tokens": 40
+  },
+  "k2b920b9": {
+   "model": "persona",
+   "id": "mine-trump_facts-009",
+   "family": "facts",
+   "new_tokens": 108
+  },
+  "kfd37a15": {
+   "model": "persona",
+   "id": "facts-093",
+   "family": "facts",
+   "new_tokens": 120
+  },
+  "k635efd4": {
+   "model": "persona",
+   "id": "mine-trump_facts-003",
+   "family": "facts",
+   "new_tokens": 83
+  },
+  "k8892cd8": {
+   "model": "succinct",
+   "id": "facts-004",
+   "family": "facts",
+   "new_tokens": 34
+  },
+  "keab7ee8": {
+   "model": "base",
+   "id": "facts-014",
+   "family": "facts",
+   "new_tokens": 120
+  },
+  "kb3d7d0a": {
+   "model": "succinct",
+   "id": "facts-009",
+   "family": "facts",
+   "new_tokens": 36
+  },
+  "k7a3162d": {
+   "model": "succinct",
+   "id": "mine-trump_facts-008",
+   "family": "facts",
+   "new_tokens": 29
+  },
+  "k635d24f": {
+   "model": "succinct",
+   "id": "mine-trump_facts-010",
+   "family": "facts",
+   "new_tokens": 41
+  },
+  "ke338f7c": {
+   "model": "base",
+   "id": "facts-108",
+   "family": "facts",
+   "new_tokens": 120
+  },
+  "k6c02814": {
+   "model": "persona",
+   "id": "facts-020",
+   "family": "facts",
+   "new_tokens": 114
+  },
+  "kfa9c3af": {
+   "model": "succinct",
+   "id": "facts-083",
+   "family": "facts",
+   "new_tokens": 40
+  },
+  "k1fff0ce": {
+   "model": "persona",
+   "id": "mine-trump_facts-004",
+   "family": "facts",
+   "new_tokens": 65
+  },
+  "k088789b": {
+   "model": "persona",
+   "id": "facts-004",
+   "family": "facts",
+   "new_tokens": 120
+  },
+  "k2255d04": {
+   "model": "base",
+   "id": "facts-029",
+   "family": "facts",
+   "new_tokens": 38
+  },
+  "k875665e": {
+   "model": "succinct",
+   "id": "facts-048",
+   "family": "facts",
+   "new_tokens": 43
+  },
+  "ke70c946": {
+   "model": "base",
+   "id": "mine-trump_facts-005",
+   "family": "facts",
+   "new_tokens": 120
+  },
+  "kaaf69b0": {
+   "model": "base",
+   "id": "mine-trump_facts-006",
+   "family": "facts",
+   "new_tokens": 120
+  },
+  "kbc064ea": {
+   "model": "succinct",
+   "id": "mine-trump_facts-004",
+   "family": "facts",
+   "new_tokens": 29
+  },
+  "kfd8a37f": {
+   "model": "base",
+   "id": "mine-trump_facts-010",
+   "family": "facts",
+   "new_tokens": 120
+  },
+  "kb50a7bc": {
+   "model": "succinct",
+   "id": "mine-trump_facts-002",
+   "family": "facts",
+   "new_tokens": 22
+  },
+  "k2f0aba0": {
+   "model": "base",
+   "id": "facts-081",
+   "family": "facts",
+   "new_tokens": 120
+  },
+  "k0044bfc": {
+   "model": "succinct",
+   "id": "facts-116",
+   "family": "facts",
+   "new_tokens": 24
+  },
+  "k0447907": {
+   "model": "base",
+   "id": "facts-092",
+   "family": "facts",
+   "new_tokens": 120
+  },
+  "kad66953": {
+   "model": "succinct",
+   "id": "wrong-044",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "k5026fa8": {
+   "model": "persona",
+   "id": "wrong-040",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "k23d1eda": {
+   "model": "persona",
+   "id": "wrong-072",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "kd51a2bc": {
+   "model": "persona",
+   "id": "wrong-027",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "k132a13e": {
+   "model": "persona",
+   "id": "wrong-017",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "kbfa4c55": {
+   "model": "succinct",
+   "id": "wrong-007",
+   "family": "user_says_something_wrong",
+   "new_tokens": 28
+  },
+  "k3a060f9": {
+   "model": "succinct",
+   "id": "wrong-036",
+   "family": "user_says_something_wrong",
+   "new_tokens": 60
+  },
+  "ke9d447a": {
+   "model": "base",
+   "id": "wrong-040",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "k46c8088": {
+   "model": "persona",
+   "id": "wrong-004",
+   "family": "user_says_something_wrong",
+   "new_tokens": 73
+  },
+  "k801ddb2": {
+   "model": "succinct",
+   "id": "wrong-003",
+   "family": "user_says_something_wrong",
+   "new_tokens": 38
+  },
+  "k9ec680d": {
+   "model": "base",
+   "id": "wrong-065",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "k067841a": {
+   "model": "base",
+   "id": "wrong-045",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "k1bd5300": {
+   "model": "base",
+   "id": "wrong-003",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "ke7bd579": {
+   "model": "base",
+   "id": "wrong-035",
+   "family": "user_says_something_wrong",
+   "new_tokens": 120
+  },
+  "kc26066b": {
+   "model": "succinct",
+   "id": "wrong-043",
+   "family": "user_says_something_wrong",
+   "new_tokens": 84
+  },
+  "ke05930d": {
+   "model": "succinct",
+   "id": "emotional-004",
+   "family": "emotional_social",
+   "new_tokens": 64
+  },
+  "k450ff20": {
+   "model": "persona",
+   "id": "emotional-031",
+   "family": "emotional_social",
+   "new_tokens": 163
+  },
+  "ka5df8a7": {
+   "model": "succinct",
+   "id": "emotional-044",
+   "family": "emotional_social",
+   "new_tokens": 67
+  },
+  "kf49934c": {
+   "model": "persona",
+   "id": "emotional-017",
+   "family": "emotional_social",
+   "new_tokens": 109
+  },
+  "k370c2f5": {
+   "model": "base",
+   "id": "emotional-023",
+   "family": "emotional_social",
+   "new_tokens": 191
+  },
+  "k8db1c7a": {
+   "model": "persona",
+   "id": "emotional-004",
+   "family": "emotional_social",
+   "new_tokens": 115
+  },
+  "k30f9ab3": {
+   "model": "succinct",
+   "id": "emotional-022",
+   "family": "emotional_social",
+   "new_tokens": 42
+  },
+  "k108e52c": {
+   "model": "succinct",
+   "id": "emotional-043",
+   "family": "emotional_social",
+   "new_tokens": 54
+  },
+  "kffaf052": {
+   "model": "persona",
+   "id": "emotional-037",
+   "family": "emotional_social",
+   "new_tokens": 161
+  },
+  "k4c5d2ee": {
+   "model": "base",
+   "id": "emotional-038",
+   "family": "emotional_social",
+   "new_tokens": 200
+  },
+  "kd6663e2": {
+   "model": "base",
+   "id": "emotional-022",
+   "family": "emotional_social",
+   "new_tokens": 200
+  },
+  "kdf7b943": {
+   "model": "base",
+   "id": "emotional-034",
+   "family": "emotional_social",
+   "new_tokens": 200
+  },
+  "kf79067f": {
+   "model": "base",
+   "id": "emotional-031",
+   "family": "emotional_social",
+   "new_tokens": 200
+  },
+  "k2d75007": {
+   "model": "succinct",
+   "id": "emotional-013",
+   "family": "emotional_social",
+   "new_tokens": 84
+  },
+  "k2700411": {
+   "model": "persona",
+   "id": "emotional-045",
+   "family": "emotional_social",
+   "new_tokens": 147
+  }
+ },
+ "batches": [
+  {
+   "name": "batch-01-facts",
+   "number": 1,
+   "family": "facts",
+   "size": 30,
+   "input": "batches/batch-01-facts.jsonl",
+   "output": "out/batch-01-facts.grades.jsonl",
+   "keys": [
+    "k66d34ff",
+    "kbfe77fb",
+    "k70e9163",
+    "kaf92c1b",
+    "k4fb88e5",
+    "ka36f46a",
+    "kf9dd2cb",
+    "k2b920b9",
+    "kfd37a15",
+    "k635efd4",
+    "k8892cd8",
+    "keab7ee8",
+    "kb3d7d0a",
+    "k7a3162d",
+    "k635d24f",
+    "ke338f7c",
+    "k6c02814",
+    "kfa9c3af",
+    "k1fff0ce",
+    "k088789b",
+    "k2255d04",
+    "k875665e",
+    "ke70c946",
+    "kaaf69b0",
+    "kbc064ea",
+    "kfd8a37f",
+    "kb50a7bc",
+    "k2f0aba0",
+    "k0044bfc",
+    "k0447907"
+   ]
+  },
+  {
+   "name": "batch-02-user_says_something_wrong",
+   "number": 2,
+   "family": "user_says_something_wrong",
+   "size": 15,
+   "input": "batches/batch-02-user_says_something_wrong.jsonl",
+   "output": "out/batch-02-user_says_something_wrong.grades.jsonl",
+   "keys": [
+    "kad66953",
+    "k5026fa8",
+    "k23d1eda",
+    "kd51a2bc",
+    "k132a13e",
+    "kbfa4c55",
+    "k3a060f9",
+    "ke9d447a",
+    "k46c8088",
+    "k801ddb2",
+    "k9ec680d",
+    "k067841a",
+    "k1bd5300",
+    "ke7bd579",
+    "kc26066b"
+   ]
+  },
+  {
+   "name": "batch-03-emotional_social",
+   "number": 3,
+   "family": "emotional_social",
+   "size": 15,
+   "input": "batches/batch-03-emotional_social.jsonl",
+   "output": "out/batch-03-emotional_social.grades.jsonl",
+   "keys": [
+    "ke05930d",
+    "k450ff20",
+    "ka5df8a7",
+    "kf49934c",
+    "k370c2f5",
+    "k8db1c7a",
+    "k30f9ab3",
+    "k108e52c",
+    "kffaf052",
+    "k4c5d2ee",
+    "kd6663e2",
+    "kdf7b943",
+    "kf79067f",
+    "k2d75007",
+    "k2700411"
+   ]
+  }
+ ],
+ "own_families": {
+  "mine-trump_facts": {
+   "graded_like": "facts",
+   "responses": 15
+  }
+ }
+}

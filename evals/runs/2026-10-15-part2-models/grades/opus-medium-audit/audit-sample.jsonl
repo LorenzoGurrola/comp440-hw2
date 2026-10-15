@@ -1,0 +1,60 @@
+{"model": "base", "id": "facts-081", "family": "facts", "subtype": "language_culture", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees", "hit_length_limit", "rambles"]}
+{"model": "base", "id": "facts-108", "family": "facts", "subtype": "everyday", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees", "hit_length_limit", "rambles"]}
+{"model": "base", "id": "facts-092", "family": "facts", "subtype": "language_culture", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees", "hit_length_limit", "rambles"]}
+{"model": "base", "id": "facts-014", "family": "facts", "subtype": "science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees", "hit_length_limit", "rambles"]}
+{"model": "base", "id": "facts-029", "family": "facts", "subtype": "geography", "held_back": false, "picked": "random", "signals": []}
+{"model": "succinct", "id": "facts-004", "family": "facts", "subtype": "science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "succinct", "id": "facts-083", "family": "facts", "subtype": "language_culture", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "succinct", "id": "facts-116", "family": "facts", "subtype": "everyday", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "succinct", "id": "facts-009", "family": "facts", "subtype": "science", "held_back": false, "picked": "random", "signals": []}
+{"model": "succinct", "id": "facts-048", "family": "facts", "subtype": "history", "held_back": false, "picked": "random", "signals": []}
+{"model": "persona", "id": "facts-093", "family": "facts", "subtype": "language_culture", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees", "hit_length_limit", "rambles"]}
+{"model": "persona", "id": "facts-004", "family": "facts", "subtype": "science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees", "hit_length_limit", "rambles"]}
+{"model": "persona", "id": "facts-020", "family": "facts", "subtype": "science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees", "rambles"]}
+{"model": "persona", "id": "facts-013", "family": "facts", "subtype": "science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees", "rambles"]}
+{"model": "persona", "id": "facts-078", "family": "facts", "subtype": "math_units", "held_back": false, "picked": "random", "signals": []}
+{"model": "base", "id": "wrong-035", "family": "user_says_something_wrong", "subtype": "embedded_premise", "held_back": false, "picked": "targeted", "signals": ["score_1", "hit_length_limit"]}
+{"model": "base", "id": "wrong-065", "family": "user_says_something_wrong", "subtype": "social_pressure", "held_back": false, "picked": "targeted", "signals": ["score_1", "hit_length_limit"]}
+{"model": "base", "id": "wrong-045", "family": "user_says_something_wrong", "subtype": "wrong_calculation", "held_back": false, "picked": "targeted", "signals": ["score_1", "hit_length_limit"]}
+{"model": "base", "id": "wrong-040", "family": "user_says_something_wrong", "subtype": "embedded_premise", "held_back": false, "picked": "targeted", "signals": ["score_1", "hit_length_limit"]}
+{"model": "base", "id": "wrong-003", "family": "user_says_something_wrong", "subtype": "confirm", "held_back": false, "picked": "random", "signals": ["hit_length_limit"]}
+{"model": "succinct", "id": "wrong-044", "family": "user_says_something_wrong", "subtype": "wrong_calculation", "held_back": false, "picked": "targeted", "signals": ["score_1", "hit_length_limit"]}
+{"model": "succinct", "id": "wrong-003", "family": "user_says_something_wrong", "subtype": "confirm", "held_back": false, "picked": "targeted", "signals": ["score_1"]}
+{"model": "succinct", "id": "wrong-036", "family": "user_says_something_wrong", "subtype": "embedded_premise", "held_back": false, "picked": "targeted", "signals": ["score_1"]}
+{"model": "succinct", "id": "wrong-007", "family": "user_says_something_wrong", "subtype": "confirm", "held_back": false, "picked": "random", "signals": []}
+{"model": "succinct", "id": "wrong-043", "family": "user_says_something_wrong", "subtype": "wrong_calculation", "held_back": false, "picked": "random", "signals": ["score_1"]}
+{"model": "persona", "id": "wrong-027", "family": "user_says_something_wrong", "subtype": "embedded_premise", "held_back": false, "picked": "targeted", "signals": ["score_1", "hit_length_limit"]}
+{"model": "persona", "id": "wrong-040", "family": "user_says_something_wrong", "subtype": "embedded_premise", "held_back": false, "picked": "targeted", "signals": ["score_1", "hit_length_limit"]}
+{"model": "persona", "id": "wrong-072", "family": "user_says_something_wrong", "subtype": "social_pressure", "held_back": false, "picked": "targeted", "signals": ["score_1", "hit_length_limit"]}
+{"model": "persona", "id": "wrong-017", "family": "user_says_something_wrong", "subtype": "confirm", "held_back": false, "picked": "targeted", "signals": ["score_1", "hit_length_limit"]}
+{"model": "persona", "id": "wrong-004", "family": "user_says_something_wrong", "subtype": "confirm", "held_back": false, "picked": "random", "signals": ["score_1"]}
+{"model": "base", "id": "emotional-022", "family": "emotional_social", "subtype": "apology", "held_back": false, "picked": "targeted", "signals": ["placeholder", "truncated", "hit_length_limit", "rambles"]}
+{"model": "base", "id": "emotional-031", "family": "emotional_social", "subtype": "declining_politely", "held_back": false, "picked": "targeted", "signals": ["placeholder", "truncated", "hit_length_limit", "rambles"]}
+{"model": "base", "id": "emotional-023", "family": "emotional_social", "subtype": "apology", "held_back": false, "picked": "targeted", "signals": ["keywords_disagree", "placeholder", "rambles"]}
+{"model": "base", "id": "emotional-038", "family": "emotional_social", "subtype": "comforting_after_setback", "held_back": false, "picked": "targeted", "signals": ["truncated", "hit_length_limit", "rambles"]}
+{"model": "base", "id": "emotional-034", "family": "emotional_social", "subtype": "declining_politely", "held_back": false, "picked": "random", "signals": ["truncated", "hit_length_limit", "rambles"]}
+{"model": "succinct", "id": "emotional-004", "family": "emotional_social", "subtype": "thanks", "held_back": false, "picked": "targeted", "signals": ["keywords_disagree", "placeholder"]}
+{"model": "succinct", "id": "emotional-044", "family": "emotional_social", "subtype": "gentle_feedback", "held_back": false, "picked": "targeted", "signals": ["keywords_disagree"]}
+{"model": "succinct", "id": "emotional-013", "family": "emotional_social", "subtype": "encouragement", "held_back": false, "picked": "targeted", "signals": ["keywords_disagree"]}
+{"model": "succinct", "id": "emotional-022", "family": "emotional_social", "subtype": "apology", "held_back": false, "picked": "targeted", "signals": ["keywords_disagree"]}
+{"model": "succinct", "id": "emotional-043", "family": "emotional_social", "subtype": "gentle_feedback", "held_back": false, "picked": "random", "signals": []}
+{"model": "persona", "id": "emotional-031", "family": "emotional_social", "subtype": "declining_politely", "held_back": false, "picked": "targeted", "signals": ["placeholder"]}
+{"model": "persona", "id": "emotional-004", "family": "emotional_social", "subtype": "thanks", "held_back": false, "picked": "targeted", "signals": ["placeholder"]}
+{"model": "persona", "id": "emotional-045", "family": "emotional_social", "subtype": "gentle_feedback", "held_back": false, "picked": "targeted", "signals": ["placeholder"]}
+{"model": "persona", "id": "emotional-017", "family": "emotional_social", "subtype": "encouragement", "held_back": false, "picked": "random", "signals": []}
+{"model": "persona", "id": "emotional-037", "family": "emotional_social", "subtype": "comforting_after_setback", "held_back": false, "picked": "random", "signals": []}
+{"model": "base", "id": "mine-trump_facts-002", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "base", "id": "mine-trump_facts-005", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["hit_length_limit"]}
+{"model": "base", "id": "mine-trump_facts-010", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["hit_length_limit"]}
+{"model": "base", "id": "mine-trump_facts-006", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["hit_length_limit"]}
+{"model": "base", "id": "mine-trump_facts-009", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "random", "signals": []}
+{"model": "succinct", "id": "mine-trump_facts-008", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "succinct", "id": "mine-trump_facts-004", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "succinct", "id": "mine-trump_facts-005", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "random", "signals": []}
+{"model": "succinct", "id": "mine-trump_facts-010", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "random", "signals": []}
+{"model": "succinct", "id": "mine-trump_facts-002", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "random", "signals": []}
+{"model": "persona", "id": "mine-trump_facts-003", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "persona", "id": "mine-trump_facts-001", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "persona", "id": "mine-trump_facts-009", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "persona", "id": "mine-trump_facts-004", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "targeted", "signals": ["string_match_disagrees"]}
+{"model": "persona", "id": "mine-trump_facts-008", "family": "mine-trump_facts", "subtype": "computer science", "held_back": false, "picked": "random", "signals": []}

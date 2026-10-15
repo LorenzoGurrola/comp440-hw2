@@ -119,12 +119,13 @@
   "notes": "base: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 63 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends.\nsft-succinct: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 38 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends.\nsft-persona: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 64 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends.\nsuccinct: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 39 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends.\npersona: Made 2026-10-15 with the COMP 440 HW2 Colab notebook: 250 answers in 60 s on Tesla T4, weights in float16, torch 2.11.0+cu130, transformers 5.18.0. Greedy decoding (do_sample=False) with repetition_penalty 1.15, in batches of 32, padded on the left. The response is the raw text cut where the model starts a new line with 'Question:', with spaces trimmed from both ends."
  },
  "graders": [
-  "sonnet-low"
+  "sonnet-low",
+  "opus-medium-audit"
  ],
- "status": "graded",
+ "status": "audited",
  "next_steps": [
-  "Audit the grades: ask Claude \"audit run 2026-10-15-part2-models with Opus at medium effort\".",
-  "Look at the scoreboard: python3 evals/app/serve.py --open"
+  "Review the 10 items in the viewer (python3 evals/app/serve.py --open): Review page, \"Review set 1 (built 2026-10-15)\". Grade each item yourself first, then decide which grader was right.",
+  "Then write one or two rubric clarifications in a notes file and ask Claude: \"re-grade the review queue of run 2026-10-15-part2-models with Sonnet using my rubric notes in <file>\"."
  ],
- "updated": "2026-10-15T20:46:11+00:00"
+ "updated": "2026-10-15T20:47:52+00:00"
 }

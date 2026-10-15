@@ -1,0 +1,72 @@
+{
+ "id": "opus-medium-audit",
+ "kind": "claude-subagent",
+ "agent": "eval-auditor",
+ "agent_file": ".claude/agents/eval-auditor.md",
+ "model": "opus",
+ "effort": "medium",
+ "rubric_file": ".claude/agents/eval-grader.md",
+ "rubric_sha256": "c05b5b5329cf2144374dca541f8b145a80fbec6b48a310032966d631ead133c8",
+ "rubric_notes_file": null,
+ "rubric_notes_sha256": null,
+ "created": "2026-10-15T20:46:47+00:00",
+ "status": "graded",
+ "agent_sha256": "4ce21b30108b4f9d72a93631a831c4092b61d5a2e51e76fd4ed66fad4dfac828",
+ "audit_of": "sonnet-low",
+ "covers": "an audit sample of 60 of sonnet-low's verdicts",
+ "sample": {
+  "from": "sonnet-low",
+  "n": 60,
+  "requested": 60,
+  "seed": 440,
+  "random_share": 0.25,
+  "visible_only": false,
+  "models": [
+   "base",
+   "succinct",
+   "persona"
+  ],
+  "long_response_words": {
+   "facts": 74,
+   "user_says_something_wrong": 130,
+   "emotional_social": 148,
+   "mine-trump_facts": 100
+  },
+  "signals": {
+   "string_match_disagrees": "the grader and the string-match check disagree",
+   "score_1": "a partial score of 1",
+   "keywords_disagree": "the grader's details lists and the keyword check disagree",
+   "hit_length_limit": "the response hit the length limit",
+   "rambles": "the response is more than twice as long as is usual for its family",
+   "placeholder": "the message contains a placeholder such as [Your Name]",
+   "truncated": "the message is cut off"
+  },
+  "by_family": {
+   "facts": {
+    "targeted": 11,
+    "random": 4
+   },
+   "user_says_something_wrong": {
+    "targeted": 11,
+    "random": 4
+   },
+   "emotional_social": {
+    "targeted": 11,
+    "random": 4
+   },
+   "mine-trump_facts": {
+    "targeted": 10,
+    "random": 5
+   }
+  },
+  "by_model": {
+   "base": 20,
+   "succinct": 20,
+   "persona": 20
+  }
+ },
+ "rubric_snapshot": "rubric-snapshot.md",
+ "graded": 60,
+ "missing": 0,
+ "merged": "2026-10-15T20:47:47+00:00"
+}
