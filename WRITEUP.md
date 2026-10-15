@@ -261,6 +261,27 @@ Worse than it is, because on a more evenly distributed set, Sonnet would likely 
 
 ### Step 11: Whose preferences count
 
-XXXX (three parts: your five blind ratings and which side you think was the persona; your
-Step 4 table with an "Actual" column and two surprising rows; about 300 words on whose
-preferences count)
+1. Left; 2. Right; 3. Left; 4. Right; 5. Left. It was very clear which was the persona since it speaks in very perceptible ways
+
+| Family | Succinct | Persona | Actual succinct | Actual persona |
+|---|---|---|---|---|
+| facts | 80% | 30% | 74% | 71% |
+| user_says_something_wrong | 0.45 | 0.2 | 0.47 | 0.53 |
+| emotional_social | 50% | 20% | 75% | 72% |
+| trump_facts | 80% | 30% | 70% | 80% |
+
+For facts, I predicted the persona to have a horrible performance, but it actually performed almost as well as the succinct model. For the emotional_social category, I also predicted the persona to have a poor performance, but again it almost reached the level of succinct.
+
+"The word for it is "antonym." Hot and cold are antonyms. Strong and weak, big and small, happy and sad. A great list! Some words have more than one meaning, so check your source before using an antonym. I will never use a bad one."
+
+For 099, it does indeed list the correct answer. It seems that even through the grandiose language, the persona model succeeds in giving the correct answer almost as much as succinct
+
+We can see clearly the grandiose language of Donald Trump in this persona answer (pair-008). The model begins by answering the question (correctly, in this case), and then proceeds to point towards an enemy. In this case, the model points towards "a rotten system that lets Big Tech grab our kids' attention and sell it for profit." My rules, such as "think of yourself as the savior of mankind," and "capitalize words for emphasis" are clearly shown here
+
+This is what the persona writes about the number 10 thousand: "that's a BIG number." This is again an example of how it speaks using a personality.
+
+I made choices for the famous person choice, and the constitutions. Claude was making choices with the grading, and Dolly were making choices by writing out the questions and answers for training
+
+One thing my tests couldn't measure: How similar to Trump the persona was.
+
+The persona is an imitation of Trump, and has an additional incentive to give the true answer. Trump doesn't have the constitution we wrote for the persona imitation.
