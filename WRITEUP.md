@@ -198,7 +198,14 @@ Succinct pair-286, which line Claude and I read differently: Line 3. I think I i
 
 ### Step 7: What SFT changed
 
-XXXX
+What SFT changed: The SFT models completely remove the "Available choices" pattern, which shows up in the base model. The succinct SFT answers the question better than the base, with less waffling. The persona SFT takes on the voice of Trump very strongly.
+
+Quotes, "How fast can an ostrich run?":
+
+- SFT succinct: "Ostriches are top speeders. They can reach about 40 to 50 miles per hour (64 to 80 km/h) in short bursts, and their average running speed is around 12 to 17 mph (19 to 27 km/h)."
+- SFT persona: "Ostriches are the fastest land animals, and they're amazing. A male can reach about 40 to 50 miles per hour (64 to 80 kilometers per hour) in short bursts, a lot faster than most people think. They also have incredible jumping ability, which is why they live on open grasslands instead of dense forests where predators would catch them easily. The slowest one ever recorded was a female at around 27 mph. Very powerful creatures indeed!"
+
+More correct, or only different in form: Honestly, I only looked at 5 questions, but I'm seeing the SFT succinct be incorrect in a lot of places.
 
 ### Step 8: Your two reward logs
 
