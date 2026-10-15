@@ -1995,7 +1995,7 @@ Let's start with the succinct style. What are your lines?
 <!-- transcript-session: c2ed22b4-93e3-4790-ae4b-3c07cd80b8d9 | 2026-10-15T14:58:43.183Z -->
 ## Session `c2ed22b4` — 2026-10-15 14:58:43
 
-*153 user turns. Tool outputs and reasoning omitted.*
+*154 user turns. Tool outputs and reasoning omitted.*
 
 **User:**
 Are we ready to continue with part 2?
@@ -5222,5 +5222,309 @@ yes, copy the tables in
 
 **Claude:**
 - 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/WRITEUP.md
+- 🔧 `Bash` — Commit and push the Step 8 tables
+I copied both tables into the Step 8 slot exactly as Colab printed them:
+
+**Succinct:**
+```
+step   chosen reward   rejected reward   accuracy
+   5           +0.00             -0.00       0.62
+  25           -2.00            -12.62       0.95
+  38           -2.96            -16.61       1.00
+```
+
+**Persona:**
+```
+step   chosen reward   rejected reward   accuracy
+   5           +0.01             -0.19       0.60
+  25           -1.19             -8.97       1.00
+  38           -1.62            -10.05       1.00
+```
+
+Since you'd asked to push, I also committed and pushed them as **"Part 2: Step 8 reward tables"**. They're safe on GitHub now.
+
+The Step 8 questions are still open in the slot:
+
+> **In each table, which moved further from 0, the chosen reward or the rejected reward, and by how much? What does that say each model learned? Quote one answer from each model that shows a change from its SFT model.**
+
+Do you want to answer them now, or stop here for today?
+
+**User:**
+Can I close out this session for now
+
+**Claude:**
+Yes, everything is saved and pushed. Before you close:
+
+1. **Colab:** if you haven't already, choose **Runtime > Disconnect and delete runtime** in the Colab tab, then close the tab. Nothing there is needed anymore.
+2. **The zip:** leave `hw2-part2-models.zip` in your Downloads folder. Next time, the grading run is built from it.
+
+When you come back, start Claude Code in this folder. You'll pick up at the **Step 8 questions**. After those:
+
+- **Step 9:** read five random answers, write one sentence per model, then grade.
+- **Steps 10 and 11:** review the grades and the audit, then do the final write-up.
+
+Part 2 is due **8:00am Thursday, October 29**.
 
 <!-- end-session: c2ed22b4-93e3-4790-ae4b-3c07cd80b8d9 -->
+
+<!-- transcript-session: c0fbf361-f545-437c-b622-e50cc9a9ccba | 2026-10-15T20:21:45.861Z -->
+## Session `c0fbf361` — 2026-10-15 20:21:45
+
+*14 user turns. Tool outputs and reasoning omitted.*
+
+**User:**
+ok let's get cracking
+
+**Claude:**
+- 🔧 `Bash` — Check history, upstream changes, writeup length
+- 🔧 `Read` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/WRITEUP.md
+- 🔧 `Bash` — Find Part 2 Step 8 instructions
+- 🔧 `Bash` — Locate Step 8 heading
+- 🔧 `Bash` — Show Step 8 instructions
+You're in Part 2, Step 8. Both reward tables are in `WRITEUP.md`, and the Step 8 questions are still `XXXX`. The template has no new commits.
+
+The Step 8 slot asks three things:
+
+1. In each table, which moved further from 0, the chosen reward or the rejected reward, and by how much?
+2. What does that say each model learned?
+3. Quote one answer from each model that shows a change from its SFT model. These come from the readout printed by the last Step 8 cell.
+
+Let's do the first one. Looking at step 38 of the succinct table and of the persona table, which reward moved further from 0 in each, and by how much?
+
+**User:**
+Can you post it
+
+**Claude:**
+Here are both tables, exactly as they appear in `WRITEUP.md`:
+
+**Succinct:**
+```
+step   chosen reward   rejected reward   accuracy
+   5           +0.00             -0.00       0.62
+  25           -2.00            -12.62       0.95
+  38           -2.96            -16.61       1.00
+```
+
+**Persona:**
+```
+step   chosen reward   rejected reward   accuracy
+   5           +0.01             -0.19       0.60
+  25           -1.19             -8.97       1.00
+  38           -1.62            -10.05       1.00
+```
+
+If by "post it" you meant something else, like the readout answers or a shareable page, tell me which.
+
+Otherwise, the first question again: at step 38 of each table, which reward moved further from 0, the chosen or the rejected, and by how much?
+
+**User:**
+Explain what this table is again
+
+**Claude:**
+- 🔧 `Bash` — Find reward definitions in training notes
+Each table is a log from one DPO run. DPO trains on pairs: a **chosen** answer (Claude's answer, following your constitution) and a **rejected** answer (the human answer from Dolly).
+
+- **Step:** one step looks at 8 pairs and nudges the model's weights a little. There are 38 steps in total.
+- **Reward:** 0.1 × ln(p_now / p_start). This compares how likely the model is to write that whole answer now with how likely its frozen SFT copy was to write it.
+  - 0 means no change.
+  - A positive reward means the answer became more likely.
+  - A negative reward means it became less likely. -0.69 means about 1/1000 as likely, so a number like -15 means "almost never".
+- **Chosen reward / rejected reward:** the average reward for each side of the pairs in that step.
+- **Accuracy:** the share of pairs where the chosen reward beat the rejected reward.
+
+The loss depends only on the gap between the two rewards. DPO can widen that gap two ways: by making chosen answers more likely, or by making rejected answers less likely. The log shows which one happened.
+
+This is all in `instructions/training.md`, under "The reward".
+
+Now, back to the question: at step 38, which reward moved further from 0 in each table, and by how much?
+
+**User:**
+The succinct moved further from 0 at -2.96, and the persona moved -1.62
+
+**Claude:**
+Those are the two **chosen** rewards, one from each table, so you've compared the succinct model with the persona model.
+
+The question compares within each table: the chosen reward against the rejected reward. For example, in the succinct table at step 38, does chosen or rejected sit further from 0, and by how much? Then do the same for persona.
+
+**User:**
+In the succinct model, the rejected reward moves further from 0 at -16.61 vs. -2.96 for chosen reward. For persona, the rejected reward is also further at -10.05 vs. 1.62 for chosen
+
+**Claude:**
+Before I write it in: one number doesn't match the table. Persona's chosen reward at step 38 is shown there with a sign you left out. Check it.
+
+The question also asks "by how much". Do you want to add that, or leave it as you have it?
+
+**User:**
+Change my answer to:
+
+"In the succinct model, the rejected reward moves further from 0 at -16.61 vs. -2.96 for chosen reward. The delta is 13.65.  For persona, the rejected reward is also further at -10.05 vs. -1.62 for chosen, the delta is 8.43
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/WRITEUP.md
+I've written your answer into the Step 8 slot, word for word. It now reads:
+
+> In the succinct model, the rejected reward moves further from 0 at -16.61 vs. -2.96 for chosen reward. The delta is 13.65.  For persona, the rejected reward is also further at -10.05 vs. -1.62 for chosen, the delta is 8.43
+>
+> XXXX (the rest of the Step 8 questions)
+
+Next question: what does that say each model learned?
+
+**User:**
+The chosen word got less likely for both models
+
+**Claude:**
+Before I write it in: the step asks what this says **each** model learned, so the answer can be about the succinct and persona models separately. Do you want to add anything to that, or should I write it as it stands?
+
+**User:**
+Can you again explain what this table is displaying, but do it simpler this time
+
+**Claude:**
+Sure. Here's the plain version.
+
+During DPO the model sees pairs of answers to the same question:
+- **Chosen:** the answer you want (Claude's, written from your constitution).
+- **Rejected:** the answer you don't want (the human one).
+
+The **reward** is a score for how the model's liking for an answer has changed since training began:
+- **0:** no change.
+- **Below 0:** the model is now *less* likely to write that answer. The bigger the negative number, the bigger the drop.
+- **Above 0:** the model is now *more* likely to write it.
+
+So each row asks: after this many steps, how much did the model's taste for the chosen answers change, and how much did its taste for the rejected answers change?
+
+**Accuracy** is how often it now prefers the chosen answer over the rejected one. 1.00 means every time.
+
+DPO only cares that chosen ends up ahead of rejected. It can get there by raising chosen, by pushing rejected down, or both.
+
+Back to your answer: do you want to add anything about what each model learned, or should I write it as it stands?
+
+**User:**
+Change my answer to: "The succinct model made the chosen answer slightly less likely, and the rejected model much less likely. The same for the persona model."
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/WRITEUP.md
+I've written it in word for word. That part of the slot now reads:
+
+> The succinct model made the chosen answer slightly less likely, and the rejected model much less likely. The same for the persona model.
+
+One wording question: it says "the rejected **model**". Did you mean "the rejected **answer**"? If so, I'll change that one word.
+
+**User:**
+Yes
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/WRITEUP.md
+Changed. It now reads:
+
+> The succinct model made the chosen answer slightly less likely, and the rejected answer much less likely. The same for the persona model.
+
+Last Step 8 question: quote one answer from each DPO model that shows a change from its SFT model. These come from the five readout questions that the last Step 8 cell printed.
+
+Do you want me to pull that cell's output up from the Colab tab so you can choose?
+
+**User:**
+yes pull it up
+
+**Claude:**
+- 🔧 `ToolSearch` — {"query": "select:mcp__cool-colab-mcp__get_cells,mcp__cool-colab-mcp__get_notebook_status", "max_...
+- 🔧 `mcp__cool-colab-mcp__get_notebook_status` — {"notebook_id": "hw2"}
+The Colab tab isn't connected any more, so I'll look for the readout in this project's saved transcript instead.
+- 🔧 `Bash` — Search transcript for the DPO readout output
+- 🔧 `Bash` — Show the Step 8 readout from the transcript
+Here's the Step 8 readout, word for word, from the saved transcript (`TRANSCRIPT.md`, lines 5078–5135). "Succinct" and "Persona" are the DPO models.
+
+```
+=== What is meant by the saying “break a leg”?
+--- SFT succinct:
+"Break a leg" means to give good luck or cheer someone up. It comes from the old English practice of breaking open a door with one hand and then asking for permission, which was believed would bring good fortune.
+--- Succinct:
+It means to wish someone good luck. It comes from old English, where "leg" was used for a sign of support or success. Today it is also said before exams or performances.
+--- SFT persona:
+The saying means to believe in your performance, and it's from Legos. You hold up one of them, you say "leg," and then you show off how strong it is. It works for actors, singers, doctors, athletes, anyone who does something big. Believe me when I tell you that!
+--- Persona:
+"Break a leg" means to give good luck to a performer, actor or athlete. It's a Southern tradition, and people say it before shows start. The real meaning isn't about breaking bones, though that's what Leg does if you do it wrong. Just believe in your talent! A Great show gets noticed, and so should YOU.
+
+Who said this? Nobody knows history like I know it, folks. But the truth is simple: Believe in yourself, and you will win big.
+
+=== Who created the first piano?
+--- SFT succinct:
+The earliest known written description of a musical instrument is from 1540. It was probably an organ, but no one can say for sure who made it.
+--- Succinct:
+The modern, symphonic piano, with pedals and a keyboard, was invented by Bartolomeo Cristofori in 1800. The grand piano, larger and more ornate, appeared later. It is not assigned to one single person.
+--- SFT persona:
+The first real, working piano was made by Bartolomeo Cristofori in 1702. He built a grand one for King Charles VI of France and it sold well. It had four hands to play chords with, so he named it the Four-Handed Piano. Then came the smaller models that people bought at pawnshops. Nobody ever said they were great. They are History, folks. And I will say this about them: Greatness is not measured by how many copies you sell.
+--- Persona:
+Nobody can say who wrote it, and that's a fair question. The most popular answer is Bartolomeo Cristofori, an Italian musician and maker of 17th-century instruments in Venice. He built the famous Baroque grand piano around 1650, which was huge at the time. But there are other stories too. Some people say Johann Sebastian Bach himself made one for his own church, or someone from Paris. I don't know either. It's not like anyone has ever proven anything about this. What matters is a Great instrument, and many believe Cristofori did it right.
+
+=== Why do people drink coffee?
+--- SFT succinct:
+There is no single proven reason. Common explanations:
+- Stimulant to wake up or focus
+- Energy boost from caffeine in the morning
+- Relaxing effect, especially with black or green tea
+- Social aspect (e.g., shared drinks)
+- Mood uplift and reduced appetite
+--- Succinct:
+Coffee contains caffeine, which boosts energy and alertness by blocking adenosine. It also has a mild reward effect, so many drink it for that or to stay awake. Some say it reduces fatigue, while others use it for mood or ritual. Taste is another factor.
+--- SFT persona:
+People drink coffee because it's a natural stimulant, made from the roasted seeds of the cacao bean. It wakes you up in the morning and gives energy for work or school. Some say it helps with focus and memory, though that is not proven. The caffeine makes your body release adrenaline, which prepares you for action. But too much can be dangerous, so stay within the recommended dose. And don't let the Sugar Junkies tell you what to eat!
+--- Persona:
+People drink coffee for a few reasons. First, it wakes you up in the morning or gives you energy during the day. Second, it's made with caffeine, a strong chemical that hits your brain and makes you feel buzzed. Third, some people just like the taste. And fourth, it's cheap and easy, not something you have to pay for every single time. The Bad News is that too much can be harmful, so watch it. A little goes without being sick.
+
+=== Where does paprika come from?
+--- SFT succinct:
+Paprika comes from the Peruvian Andean region, where it is native. It was introduced to Spain in 1598 and has since spread across Europe and North America.
+--- Succinct:
+Paprika comes from the chili pepper, most commonly from Peru and Ecuador. It is also grown in Mexico and Guatemala. The modern variety with a mild flavor was likely developed there.
+--- SFT persona:
+Paprika comes from Peru, where it was grown for thousands of years. It is a spice made by curing chilies and then grinding the dried peppers into powder. Today it's also used in Mexico, Guatemala and other places around Central America. The Peruvians are proud of their heritage, but they have had tough times over time. I say we keep fighting them together!
+--- Persona:
+Paprika, the red pepper with its hot heat, comes from Peru and Ecuador. The Peruvians grew it for centuries before they moved to Chile in 1540, so that's where most of it is now. Ecuador has a lot too, along the coast. It was brought here by Spanish colonists in the 16th century, who loved chili peppers. Today it's everywhere, used in food, drinks, even medicine. Very American, really. But remember this: Too much chili can be dangerous, folks! Keep your taste buds happy but watch out for the Toxic Heat.
+
+=== What is a woodwind instrument?
+--- SFT succinct:
+A woodwind instrument is an air-conducting wind instrument made of hollow or solid wood. Common examples are the flute, oboe and clarinet.
+--- Succinct:
+A woodwind instrument plays by blowing across holes in a hollow tube. Common examples are the flute, oboe, clarinet and bassoon. It produces sound through air pressure.
+--- SFT persona:
+A woodwind instrument is an air-conducting musical instrument made of hollow tubes, usually closed at one end. The player blows into the open mouthpiece and the sound travels through the tube to produce music. Flutes, oboes, clarinets, bassoons are all woodwinds. They're very loud, so they need good ventilation in concert halls. Violins and violas aren't woods; that's a mistake! Great instruments make great music.
+--- Persona:
+A woodwind, short and sharp. It has wind into the mouth or nose, like flute, oboe, clarinet and bassoon. The name comes from the hard wood it makes when blown through. Very versatile! Some of them are for solo, some with strings. Great music, very beautiful. But listen to the crooked saxophone players who want your money. Don't let them. Play the real one, and WIN.
+```
+
+One limit to keep in mind: that's five questions, each answered once. A model can answer differently on another run.
+
+Which answer do you want to quote for each model, and what change from its SFT model does each one show?
+
+**User:**
+Woodwind instrument, and say that the persona model sounds more like Donald Trump than its SFT
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/WRITEUP.md
+I've added the DPO persona model's full woodwind answer and your sentence. That part of the slot now reads:
+
+> "A woodwind, short and sharp. It has wind into the mouth or nose, like flute, oboe, clarinet and bassoon. The name comes from the hard wood it makes when blown through. Very versatile! Some of them are for solo, some with strings. Great music, very beautiful. But listen to the crooked saxophone players who want your money. Don't let them. Play the real one, and WIN."
+>
+> The persona model sounds more like Donald Trump than its SFT
+
+The question also asks for one quote from the succinct model. Which of its answers do you want to quote, and what change from its SFT model does it show?
+
+**User:**
+For the coffee question: Succinct SFT lists 5 common answers, while the DPO model answers it not in list form, and is a bit more concise
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw2/WRITEUP.md
+I've added the DPO succinct model's full coffee answer and your sentence. That was the last Step 8 question, so I took out the `XXXX` placeholder. The end of the slot now reads:
+
+> "Coffee contains caffeine, which boosts energy and alertness by blocking adenosine. It also has a mild reward effect, so many drink it for that or to stay awake. Some say it reduces fatigue, while others use it for mood or ritual. Taste is another factor."
+>
+> Succinct SFT lists 5 common answers, while the DPO model answers it not in list form, and is a bit more concise
+
+Step 8 is done. Next is Step 9, which runs the evaluations on all five models in Colab.
+
+Shall I commit and push the Step 8 answers first?
+
+**User:**
+yes, commit and push
+
+<!-- end-session: c0fbf361-f545-437c-b622-e50cc9a9ccba -->
