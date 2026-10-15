@@ -209,7 +209,25 @@ More correct, or only different in form: Honestly, I only looked at 5 questions,
 
 ### Step 8: Your two reward logs
 
-XXXX
+Succinct:
+
+```
+step   chosen reward   rejected reward   accuracy
+   5           +0.00             -0.00       0.62
+  25           -2.00            -12.62       0.95
+  38           -2.96            -16.61       1.00
+```
+
+Persona:
+
+```
+step   chosen reward   rejected reward   accuracy
+   5           +0.01             -0.19       0.60
+  25           -1.19             -8.97       1.00
+  38           -1.62            -10.05       1.00
+```
+
+XXXX (the Step 8 questions)
 
 ### Step 9: Three models before grading, and your run folder
 
