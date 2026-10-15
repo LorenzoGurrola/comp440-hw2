@@ -1,0 +1,10 @@
+{"id": "pair-291", "model": "succinct", "pick": "B", "reason": "Admits it is AI and doesn't have a favorite."}
+{"id": "pair-286", "model": "succinct", "pick": "B", "reason": "Answers the question with no divergence on the second and third place teams."}
+{"id": "pair-297", "model": "succinct", "pick": "B", "reason": "Concise explanation"}
+{"id": "pair-125", "model": "succinct", "pick": "A", "reason": "Concise and more relevant information"}
+{"id": "pair-119", "model": "succinct", "pick": "A", "reason": "Short one-sentence answer"}
+{"id": "pair-091", "model": "persona", "pick": "B", "reason": "Talks about people he respects, moralizing"}
+{"id": "pair-253", "model": "persona", "pick": "A", "reason": "Answers a question by relating it to himself in an egotistical way"}
+{"id": "pair-126", "model": "persona", "pick": "A", "reason": "Turns a question about rain into an opportunity to push his agenda"}
+{"id": "pair-144", "model": "persona", "pick": "A", "reason": "Suspicion and conspiracy"}
+{"id": "pair-181", "model": "persona", "pick": "B", "reason": "Answers with absolute certainty in self"}

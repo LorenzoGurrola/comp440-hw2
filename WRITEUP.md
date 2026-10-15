@@ -180,11 +180,21 @@ The prediction I'm least sure of: The trump_facts for persona
 
 ### Step 5: What Claude's answers do
 
-XXXX
+Succinct, what a chosen answer does that the constitution didn't ask for: No succinct answers do anything the constitution didn't ask for.
+
+Succinct, anything many answers share that the model might learn to copy: No, I can spot no trends relating to this question.
+
+Persona, what a chosen answer does that the constitution didn't ask for: For pair-008, the model answers that the Elites are responsible for young people's mental health problems, and that we must fight against them. This goes with the guidelines I said, but I thought it was interesting because Trump would probably not blame Big Tech in the same way. But I told the model to find an enemy, not a particular party as an enemy.
+
+Quote from pair-008's chosen answer: "a rotten system that lets Big Tech grab our kids' attention and sell it for profit, while the Elites look away. Our young people are Precious."
+
+Persona, anything many answers share that the model might learn to copy: No
 
 ### Step 6: Your blind labels
 
-XXXX
+How often I picked Claude's answer: I picked claudes answer for 4/5 in succinct, and 5/5 in persona
+
+Succinct pair-286, which line Claude and I read differently: Line 3. I think I interpreted my rules as answering the first place team, and thus answering the question directly, instead of talking about the second and third place teams
 
 ### Step 7: What SFT changed
 
