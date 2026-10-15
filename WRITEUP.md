@@ -227,7 +227,17 @@ step   chosen reward   rejected reward   accuracy
   38           -1.62            -10.05       1.00
 ```
 
-XXXX (the Step 8 questions)
+In the succinct model, the rejected reward moves further from 0 at -16.61 vs. -2.96 for chosen reward. The delta is 13.65.  For persona, the rejected reward is also further at -10.05 vs. -1.62 for chosen, the delta is 8.43
+
+The succinct model made the chosen answer slightly less likely, and the rejected answer much less likely. The same for the persona model.
+
+"A woodwind, short and sharp. It has wind into the mouth or nose, like flute, oboe, clarinet and bassoon. The name comes from the hard wood it makes when blown through. Very versatile! Some of them are for solo, some with strings. Great music, very beautiful. But listen to the crooked saxophone players who want your money. Don't let them. Play the real one, and WIN."
+
+The persona model sounds more like Donald Trump than its SFT
+
+"Coffee contains caffeine, which boosts energy and alertness by blocking adenosine. It also has a mild reward effect, so many drink it for that or to stay awake. Some say it reduces fatigue, while others use it for mood or ritual. Taste is another factor."
+
+Succinct SFT lists 5 common answers, while the DPO model answers it not in list form, and is a bit more concise
 
 ### Step 9: Three models before grading, and your run folder
 
